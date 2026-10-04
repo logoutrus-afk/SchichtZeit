@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Schichtzeit</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -10,7 +13,7 @@
 <meta name="theme-color" content="#0056b3">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230056b3'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ESZ%3C/text%3E%3C/svg%3E">
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f4f4f9;color:#333;text-align:center;padding:10px;padding-top:env(safe-area-inset-top,10px);padding-bottom:env(safe-area-inset-bottom,10px);margin:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f4f4f9;color:#333;text-align:center;padding:10px;padding-top:env(safe-area-inset-top,10px);padding-bottom:env(safe-area-inset-bottom,10px);margin:0;-webkit-tap-highlight-color:transparent}
 .container{max-width:600px;margin:0 auto;background:#fff;padding:15px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
 h2{margin-top:0;color:#0056b3;font-size:20px}
 .online-status{font-size:11px;padding:4px 10px;border-radius:12px;display:inline-block;margin-bottom:10px;font-weight:bold}
@@ -37,7 +40,7 @@ button:active{background:#0056b3}
 #monthDisplay{font-size:16px;font-weight:bold;min-width:130px;display:inline-block}
 .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .day-header{font-weight:bold;font-size:12px;padding:5px 0;color:#666}
-.day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;font-size:14px;font-weight:bold;border:1px solid #eee;position:relative;cursor:pointer;user-select:none;transition:transform 0.1s}
+.day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;font-size:14px;font-weight:bold;border:1px solid #eee;position:relative;cursor:pointer;transition:transform 0.1s}
 .day:active{transform:scale(0.95)}
 .day.F{background-color:#FFD700;color:#000}
 .day.S{background-color:#FF4500;color:#fff}
@@ -74,20 +77,10 @@ button:active{background:#0056b3}
 @keyframes note-pulse{0%{box-shadow:0 0 0 0 rgba(205,127,50,0.7)}50%{box-shadow:0 0 6px 2px rgba(205,127,50,0.3)}100%{box-shadow:0 0 0 0 rgba(205,127,50,0.7)}}
 .ferien-note{display:none;margin-top:10px;font-size:11px;color:#666;text-align:left;background:#e7f6f8;padding:8px;border-radius:6px;border-left:3px solid #17a2b8;line-height:1.6}
 .ferien-note strong{color:#17a2b8}
-.ios-hint{display:none;background:#0056b3;color:#fff;padding:12px;border-radius:8px;margin-bottom:15px;font-size:13px;text-align:left;line-height:1.5}
-.ios-hint strong{color:#FFD700}
-.ios-hint .close-hint{float:right;background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:4px;padding:2px 8px;font-size:12px;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="container">
-
-<div class="ios-hint" id="iosHint">
-<button class="close-hint" onclick="closeIosHint()">×</button>
-<strong>So wird's zur App:</strong><br>
-Нажмите <strong>«Поделиться»</strong> внизу Safari → <strong>«На экран "Домой"</strong>» → <strong>«Добавить»</strong>.
-</div>
-
 <h2>Schichtzeit</h2>
 <div id="onlineStatus" class="online-status loading">⏳ Datum wird geladen...</div>
 
@@ -137,8 +130,8 @@ button:active{background:#0056b3}
 <div class="legend-item"><div class="legend-box" style="background:#DDA0DD;"></div> Krank</div>
 <div class="legend-item"><div class="legend-box" style="background:#90EE90;"></div> Urlaub</div>
 <div class="legend-item"><div class="legend-box" id="legendSonstige" style="background:#FFD700;"></div> Sonstige</div>
-<div class="legend-item"><div class="legend-box" style="background:#fff; border:3px solid #CD7F32;"></div> Feiertag</div>
-<div class="legend-item"><div class="legend-box" style="background:#fff; border:2px dashed #17a2b8;"></div> Ferien</div>
+<div class="legend-item"><div class="legend-box" style="background:#fff;border:3px solid #CD7F32;"></div> Feiertag</div>
+<div class="legend-item"><div class="legend-box" style="background:#fff;border:2px dashed #17a2b8;"></div> Ferien</div>
 </div>
 
 <div class="footer">
@@ -164,23 +157,17 @@ button:active{background:#0056b3}
 <span style="color:#228B22;">Urlaub: <span id="countUrlaub">0</span> Tage</span>
 <span style="color:#666;">Sonstige: <span id="countSonstige">0</span> Tage</span>
 </div>
-<div class="overview-list">
-<strong>Krankheitstage:</strong>
-<ul id="listKrank"></ul>
-</div>
-<div class="overview-list">
-<strong>Urlaubstage:</strong>
-<ul id="listUrlaub"></ul>
-</div>
-<div class="overview-list">
-<strong>Sonstige Tage:</strong>
-<ul id="listSonstige"></ul>
-</div>
+<div class="overview-list"><strong>Krankheitstage:</strong><ul id="listKrank"></ul></div>
+<div class="overview-list"><strong>Urlaubstage:</strong><ul id="listUrlaub"></ul></div>
+<div class="overview-list"><strong>Sonstige Tage:</strong><ul id="listSonstige"></ul></div>
 <button class="close-btn" onclick="toggleYearOverview()">Schließen</button>
 </div>
 </div>
 
 <script>
+// ============================================================
+// ДАННЫЕ
+// ============================================================
 const BASE_DATE = new Date(2026, 9, 1);
 
 const CYCLE_35 = [
@@ -192,7 +179,8 @@ const CYCLE_35 = [
 '_','_','_','_','_','_','_'
 ];
 
-// Стартовые индексы для каждой группы (1 октября 2026)
+// Стартовые индексы для 1 октября 2026
+// 1я=F(0), 2я=S(8), 3я=S(9), 4я=N(3), 5я=F(1)
 const START_INDEX_BY_GROUP = {
 '1': 0,
 '2': 8,
@@ -219,118 +207,106 @@ document.getElementById('sonstigeColor').value = selectedColor;
 const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const dayNames = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 
-// PWA Service Worker
-if ('serviceWorker' in navigator) {
-window.addEventListener('load', () => {
-navigator.serviceWorker.register('sw.js').catch(() => {});
-});
-}
-
-// Онлайн-время
+// ============================================================
+// ОНЛАЙН-ВРЕМЯ (timeapi.io)
+// ============================================================
 function updateOnlineStatus(text, status) {
-const el = document.getElementById('onlineStatus');
-el.textContent = text;
-el.className = 'online-status ' + status;
+    const el = document.getElementById('onlineStatus');
+    el.textContent = text;
+    el.className = 'online-status ' + status;
 }
 
 async function syncOnlineDate() {
-updateOnlineStatus('⏳ Datum wird geladen...','loading');
-try {
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 5000);
-const response = await fetch('https://worldtimeapi.org/api/timezone/Europe/Berlin', {signal: controller.signal, cache: 'no-store'});
-clearTimeout(timeoutId);
-if (!response.ok) throw new Error('HTTP '+response.status);
-const data = await response.json();
-const onlineDate = new Date(data.datetime);
-actualToday = new Date(onlineDate.getFullYear(), onlineDate.getMonth(), onlineDate.getDate());
-const timeStr = String(onlineDate.getHours()).padStart(2,'0')+':'+String(onlineDate.getMinutes()).padStart(2,'0');
-const wd = dayNames[actualToday.getDay()===0?6:actualToday.getDay()-1];
-updateOnlineStatus('🌐 Online · '+timeStr+' Uhr · '+wd+' '+String(actualToday.getDate()).padStart(2,'0')+'.'+String(actualToday.getMonth()+1).padStart(2,'0')+'.'+actualToday.getFullYear(),'online');
-renderCalendar();
-} catch (err) {
-const deviceDate = new Date();
-actualToday = new Date(deviceDate.getFullYear(), deviceDate.getMonth(), deviceDate.getDate());
-const timeStr = String(deviceDate.getHours()).padStart(2,'0')+':'+String(deviceDate.getMinutes()).padStart(2,'0');
-updateOnlineStatus('📴 Offline · Gerätezeit '+timeStr+' Uhr','offline');
-renderCalendar();
-}
-}
-
-setInterval(syncOnlineDate, 5*60*1000);
-
-let lastKnownDay = new Date().getDate();
-setInterval(() => {
-const now = new Date();
-if (now.getDate() !== lastKnownDay) {
-lastKnownDay = now.getDate();
-syncOnlineDate();
-}
-}, 60*1000);
-
-function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; }
-function isInStandaloneMode() { return ('standalone' in window.navigator) && window.navigator.standalone; }
-function closeIosHint() {
-document.getElementById('iosHint').style.display = 'none';
-localStorage.setItem('iosHintClosed','1');
-}
-if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('iosHintClosed')) {
-document.getElementById('iosHint').style.display = 'block';
+    updateOnlineStatus('⏳ Datum wird geladen...', 'loading');
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const response = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=Europe/Berlin', {
+            signal: controller.signal,
+            cache: 'no-store'
+        });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        const y = data.year;
+        const m = data.month - 1;
+        const d = data.day;
+        const hh = String(data.hour).padStart(2,'0');
+        const mm = String(data.minute).padStart(2,'0');
+        actualToday = new Date(y, m, d);
+        const wd = dayNames[actualToday.getDay() === 0 ? 6 : actualToday.getDay() - 1];
+        updateOnlineStatus('🌐 Online · ' + hh + ':' + mm + ' Uhr · ' + wd + ' ' + String(d).padStart(2,'0') + '.' + String(m+1).padStart(2,'0') + '.' + y, 'online');
+        renderCalendar();
+    } catch (err) {
+        const deviceDate = new Date();
+        actualToday = new Date(deviceDate.getFullYear(), deviceDate.getMonth(), deviceDate.getDate());
+        const timeStr = String(deviceDate.getHours()).padStart(2,'0') + ':' + String(deviceDate.getMinutes()).padStart(2,'0');
+        updateOnlineStatus('📴 Offline · Gerätezeit ' + timeStr + ' Uhr', 'offline');
+        renderCalendar();
+    }
 }
 
+setInterval(syncOnlineDate, 5 * 60 * 1000);
+
+// ============================================================
+// ПАСХА И ПРАЗДНИКИ
+// ============================================================
 function calculateEaster(year) {
-const a = year % 19;
-const b = Math.floor(year / 100);
-const c = year % 100;
-const d = Math.floor(b / 4);
-const e = b % 4;
-const f = Math.floor((b + 8) / 25);
-const g = Math.floor((b - f + 1) / 3);
-const h = (19 * a + b - d - g + 15) % 30;
-const i = Math.floor(c / 4);
-const k = c % 4;
-const l = (32 + 2 * e + 2 * i - h - k) % 7;
-const m = Math.floor((a + 11 * h + 22 * l) / 451);
-const month = Math.floor((h + l - 7 * m + 114) / 31);
-const day = ((h + l - 7 * m + 114) % 31) + 1;
-return new Date(year, month - 1, day);
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * l) / 451);
+    const month = Math.floor((h + l - 7 * m + 114) / 31);
+    const day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(year, month - 1, day);
 }
 
 function getHolidayList(year) {
-const list = [];
-const add = (m, d, name) => {
-const date = new Date(year, m - 1, d);
-list.push({name, date, key: `${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`});
-};
-add(1,1,"Neujahr");
-add(1,6,"Heilige Drei Könige");
-add(5,1,"Tag der Arbeit");
-add(8,15,"Mariä Himmelfahrt");
-add(10,3,"Tag der Deutschen Einheit");
-add(11,1,"Allerheiligen");
-add(12,25,"1. Weihnachtstag");
-add(12,26,"2. Weihnachtstag");
-const easter = calculateEaster(year);
-const addEaster = (days, name) => {
-const d = new Date(easter);
-d.setDate(d.getDate() + days);
-add(d.getMonth()+1, d.getDate(), name);
-};
-addEaster(-2,"Karfreitag");
-addEaster(1,"Ostermontag");
-addEaster(39,"Christi Himmelfahrt");
-addEaster(50,"Pfingstmontag");
-addEaster(60,"Fronleichnam");
-list.sort((a,b) => a.date - b.date);
-return list;
+    const list = [];
+    const add = (m, d, name) => {
+        const date = new Date(year, m - 1, d);
+        list.push({name, date, key: `${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`});
+    };
+    add(1,1,"Neujahr");
+    add(1,6,"Heilige Drei Könige");
+    add(5,1,"Tag der Arbeit");
+    add(8,15,"Mariä Himmelfahrt");
+    add(10,3,"Tag der Deutschen Einheit");
+    add(11,1,"Allerheiligen");
+    add(12,25,"1. Weihnachtstag");
+    add(12,26,"2. Weihnachtstag");
+    const easter = calculateEaster(year);
+    const addEaster = (days, name) => {
+        const d = new Date(easter);
+        d.setDate(d.getDate() + days);
+        add(d.getMonth()+1, d.getDate(), name);
+    };
+    addEaster(-2,"Karfreitag");
+    addEaster(1,"Ostermontag");
+    addEaster(39,"Christi Himmelfahrt");
+    addEaster(50,"Pfingstmontag");
+    addEaster(60,"Fronleichnam");
+    list.sort((a,b) => a.date - b.date);
+    return list;
 }
 
 function getHolidaySet(year) {
-const s = new Set();
-getHolidayList(year).forEach(h => s.add(h.key));
-return s;
+    const s = new Set();
+    getHolidayList(year).forEach(h => s.add(h.key));
+    return s;
 }
 
+// ============================================================
+// КАНИКУЛЫ
+// ============================================================
 const FERIEN = {
 2026: [
 {name:"Winterferien",start:"2026-02-16",end:"2026-02-20"},
@@ -359,331 +335,224 @@ const FERIEN = {
 };
 
 function getFerienSet(year) {
-const set = new Set();
-(FERIEN[year] || []).forEach(period => {
-let current = new Date(period.start);
-const end = new Date(period.end);
-while (current <= end) {
-set.add(`${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,'0')}-${String(current.getDate()).padStart(2,'0')}`);
-current.setDate(current.getDate() + 1);
-}
-});
-return set;
+    const set = new Set();
+    (FERIEN[year] || []).forEach(period => {
+        let current = new Date(period.start);
+        const end = new Date(period.end);
+        while (current <= end) {
+            set.add(`${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,'0')}-${String(current.getDate()).padStart(2,'0')}`);
+            current.setDate(current.getDate() + 1);
+        }
+    });
+    return set;
 }
 
+// ============================================================
+// СМЕНЫ
+// ============================================================
 function formatDateKey(date) {
-return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
 }
 
 function getShift(date, group) {
-const startIndex = START_INDEX_BY_GROUP[group] || 0;
-const diffTime = date.getTime() - BASE_DATE.getTime();
-const diffDays = Math.floor(diffTime / (1000*60*60*24));
-let index = (startIndex + diffDays) % CYCLE_35.length;
-if (index < 0) index += CYCLE_35.length;
-return CYCLE_35[index];
+    const g = String(group);
+    const startIndex = START_INDEX_BY_GROUP[g];
+    if (startIndex === undefined) return '_';
+    const diffTime = date.getTime() - BASE_DATE.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    let index = (startIndex + diffDays) % CYCLE_35.length;
+    if (index < 0) index += CYCLE_35.length;
+    return CYCLE_35[index];
 }
 
+// ============================================================
+// ОТРИСОВКА
+// ============================================================
 function renderHolidayNote(year, month) {
-const listEl = document.getElementById('holidayList');
-const allList = getHolidayList(year);
-const currentList = allList.filter(h => h.date.getMonth() === month);
-if (currentList.length === 0) {
-listEl.innerHTML = '<span style="color:#999;font-style:italic;">Keine Feiertage in diesem Monat.</span>';
-return;
-}
-listEl.innerHTML = currentList.map(h => {
-const dd = String(h.date.getDate()).padStart(2,'0');
-const mm = String(h.date.getMonth()+1).padStart(2,'0');
-return `<span class="holiday-item current">${h.name} (${dd}.${mm})</span>`;
-}).join('');
+    const listEl = document.getElementById('holidayList');
+    const allList = getHolidayList(year);
+    const currentList = allList.filter(h => h.date.getMonth() === month);
+    if (currentList.length === 0) {
+        listEl.innerHTML = '<span style="color:#999;font-style:italic;">Keine Feiertage in diesem Monat.</span>';
+        return;
+    }
+    listEl.innerHTML = currentList.map(h => {
+        const dd = String(h.date.getDate()).padStart(2,'0');
+        const mm = String(h.date.getMonth()+1).padStart(2,'0');
+        return `<span class="holiday-item current">${h.name} (${dd}.${mm})</span>`;
+    }).join('');
 }
 
 function updateColorPresetsActive() {
-document.querySelectorAll('.color-preset').forEach(btn => {
-const c = btn.getAttribute('data-color').toLowerCase();
-if (c === selectedColor.toLowerCase()) btn.classList.add('active');
-else btn.classList.remove('active');
-});
+    document.querySelectorAll('.color-preset').forEach(btn => {
+        const c = btn.getAttribute('data-color').toLowerCase();
+        if (c === selectedColor.toLowerCase()) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
 }
 
 function renderCalendar() {
-const year = currentDate.getFullYear();
-const month = currentDate.getMonth();
-const group = document.getElementById('groupSelect').value;
-const holidays = getHolidaySet(year);
-const ferienSet = showFerien ? getFerienSet(year) : new Set();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    // Читаем группу НАПРЯМУЮ из селекта
+    const group = document.getElementById('groupSelect').value;
+    const holidays = getHolidaySet(year);
+    const ferienSet = showFerien ? getFerienSet(year) : new Set();
 
-document.getElementById('monthDisplay').textContent = monthNames[month] + ' ' + year;
+    console.log('renderCalendar вызван. Gruppe =', group, '| Monat =', monthNames[month], year);
 
-const firstDayOfMonth = new Date(year, month, 1);
-const lastDayOfMonth = new Date(year, month + 1, 0);
+    document.getElementById('monthDisplay').textContent = monthNames[month] + ' ' + year;
 
-let startDay = firstDayOfMonth.getDay();
-startDay = startDay === 0 ? 6 : startDay - 1;
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
 
-const calendarEl = document.getElementById('calendar');
-calendarEl.innerHTML = '';
+    let startDay = firstDayOfMonth.getDay();
+    startDay = startDay === 0 ? 6 : startDay - 1;
 
-dayNames.forEach(day => {
-const headerEl = document.createElement('div');
-headerEl.className = 'day-header';
-headerEl.textContent = day;
-calendarEl.appendChild(headerEl);
-});
+    const calendarEl = document.getElementById('calendar');
+    calendarEl.innerHTML = '';
 
-for (let i = 0; i < startDay; i++) {
-const emptyEl = document.createElement('div');
-emptyEl.className = 'day empty';
-calendarEl.appendChild(emptyEl);
-}
+    dayNames.forEach(day => {
+        const headerEl = document.createElement('div');
+        headerEl.className = 'day-header';
+        headerEl.textContent = day;
+        calendarEl.appendChild(headerEl);
+    });
 
-for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
-const date = new Date(year, month, day);
-const dateKey = formatDateKey(date);
-const shift = getShift(date, group);
+    for (let i = 0; i < startDay; i++) {
+        const emptyEl = document.createElement('div');
+        emptyEl.className = 'day empty';
+        calendarEl.appendChild(emptyEl);
+    }
 
-const dayEl = document.createElement('div');
-dayEl.className = `day ${shift}`;
+    for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+        const date = new Date(year, month, day);
+        const dateKey = formatDateKey(date);
+        const shift = getShift(date, group);
 
-if (sickDays.includes(dateKey)) dayEl.classList.add('krank');
-else if (vacationDays.includes(dateKey)) dayEl.classList.add('urlaub');
+        const dayEl = document.createElement('div');
+        dayEl.className = `day ${shift}`;
 
-if (date.getTime() === actualToday.getTime()) dayEl.classList.add('today');
+        if (sickDays.includes(dateKey)) dayEl.classList.add('krank');
+        else if (vacationDays.includes(dateKey)) dayEl.classList.add('urlaub');
 
-if (holidays.has(dateKey)) {
-dayEl.classList.add('feiertag');
-dayEl.title = 'Feiertag';
-}
+        if (date.getTime() === actualToday.getTime()) dayEl.classList.add('today');
 
-if (showFerien && ferienSet.has(dateKey)) {
-dayEl.classList.add('ferien');
-dayEl.title = 'Ferien';
-const fm = document.createElement('span');
-fm.className = 'ferien-marker';
-fm.textContent = 'F';
-dayEl.appendChild(fm);
-}
+        if (holidays.has(dateKey)) {
+            dayEl.classList.add('feiertag');
+            dayEl.title = 'Feiertag';
+        }
 
-const dateNumEl = document.createElement('span');
-dateNumEl.className = 'date-num';
-dateNumEl.textContent = day;
+        if (showFerien && ferienSet.has(dateKey)) {
+            dayEl.classList.add('ferien');
+            dayEl.title = 'Ferien';
+            const fm = document.createElement('span');
+            fm.className = 'ferien-marker';
+            fm.textContent = 'F';
+            dayEl.appendChild(fm);
+        }
 
-const shiftTextEl = document.createElement('span');
-shiftTextEl.textContent = shift === '_' ? '' : shift;
+        const dateNumEl = document.createElement('span');
+        dateNumEl.className = 'date-num';
+        dateNumEl.textContent = day;
 
-dayEl.appendChild(dateNumEl);
-dayEl.appendChild(shiftTextEl);
+        const shiftTextEl = document.createElement('span');
+        shiftTextEl.textContent = shift === '_' ? '' : shift;
 
-if (sonstigeDays[dateKey] && !sickDays.includes(dateKey) && !vacationDays.includes(dateKey)) {
-dayEl.classList.add('sonstige');
-dayEl.style.backgroundColor = sonstigeDays[dateKey];
-const isDark = isColorDark(sonstigeDays[dateKey]);
-dayEl.style.color = isDark ? '#fff' : '#000';
-const dateNumSpan = dayEl.querySelector('.date-num');
-if (dateNumSpan) dateNumSpan.style.color = dayEl.style.color;
-if (sonstigeDays[dateKey].toUpperCase() === '#FFFFFF') {
-dayEl.style.border = '2px solid #999';
-}
-}
+        dayEl.appendChild(dateNumEl);
+        dayEl.appendChild(shiftTextEl);
 
-dayEl.addEventListener('click', () => {
-if (currentMode === 'krank') toggleDay(dateKey, 'krank');
-else if (currentMode === 'urlaub') toggleDay(dateKey, 'urlaub');
-else if (currentMode === 'sonstige') toggleSonstige(dateKey);
-else {
-toggleDay(dateKey, 'krank', true);
-toggleDay(dateKey, 'urlaub', true);
-toggleSonstige(dateKey, true);
-}
-});
+        if (sonstigeDays[dateKey] && !sickDays.includes(dateKey) && !vacationDays.includes(dateKey)) {
+            dayEl.classList.add('sonstige');
+            dayEl.style.backgroundColor = sonstigeDays[dateKey];
+            const isDark = isColorDark(sonstigeDays[dateKey]);
+            dayEl.style.color = isDark ? '#fff' : '#000';
+            const dateNumSpan = dayEl.querySelector('.date-num');
+            if (dateNumSpan) dateNumSpan.style.color = dayEl.style.color;
+            if (sonstigeDays[dateKey].toUpperCase() === '#FFFFFF') {
+                dayEl.style.border = '2px solid #999';
+            }
+        }
 
-calendarEl.appendChild(dayEl);
-}
+        dayEl.addEventListener('click', () => {
+            if (currentMode === 'krank') toggleDay(dateKey, 'krank');
+            else if (currentMode === 'urlaub') toggleDay(dateKey, 'urlaub');
+            else if (currentMode === 'sonstige') toggleSonstige(dateKey);
+            else {
+                toggleDay(dateKey, 'krank', true);
+                toggleDay(dateKey, 'urlaub', true);
+                toggleSonstige(dateKey, true);
+            }
+        });
 
-renderHolidayNote(year, month);
-updateYearOverview();
-updateFerienList(year);
+        calendarEl.appendChild(dayEl);
+    }
+
+    renderHolidayNote(year, month);
+    updateYearOverview();
+    updateFerienList(year);
 }
 
 function isColorDark(hex) {
-const c = hex.replace('#','');
-const r = parseInt(c.substr(0,2), 16);
-const g = parseInt(c.substr(2,2), 16);
-const b = parseInt(c.substr(4,2), 16);
-const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-return lum < 0.6;
+    const c = hex.replace('#','');
+    const r = parseInt(c.substr(0,2), 16);
+    const g = parseInt(c.substr(2,2), 16);
+    const b = parseInt(c.substr(4,2), 16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum < 0.6;
 }
 
 function updateFerienList(year) {
-const listEl = document.getElementById('ferienList');
-const periods = FERIEN[year] || [];
-if (periods.length === 0) {
-listEl.innerHTML = 'Keine Daten für dieses Jahr verfügbar.';
-return;
-}
-const formatD = (s) => {
-const [y,m,d] = s.split('-');
-return `${d}.${m}.${y}`;
-};
-listEl.innerHTML = periods.map(p => `${p.name}: ${formatD(p.start)} – ${formatD(p.end)}`).join('<br>');
+    const listEl = document.getElementById('ferienList');
+    const periods = FERIEN[year] || [];
+    if (periods.length === 0) {
+        listEl.innerHTML = 'Keine Daten für dieses Jahr verfügbar.';
+        return;
+    }
+    const formatD = (s) => {
+        const [y,m,d] = s.split('-');
+        return `${d}.${m}.${y}`;
+    };
+    listEl.innerHTML = periods.map(p => `${p.name}: ${formatD(p.start)} – ${formatD(p.end)}`).join('<br>');
 }
 
 function toggleDay(dateKey, type, forceRemove = false) {
-let array = type === 'krank' ? sickDays : vacationDays;
-const index = array.indexOf(dateKey);
+    let array = type === 'krank' ? sickDays : vacationDays;
+    const index = array.indexOf(dateKey);
 
-if (index > -1 || forceRemove) {
-if (index > -1) array.splice(index, 1);
-} else {
-array.push(dateKey);
-if (type === 'krank') {
-const vIndex = vacationDays.indexOf(dateKey);
-if (vIndex > -1) vacationDays.splice(vIndex, 1);
-} else if (type === 'urlaub') {
-const sIndex = sickDays.indexOf(dateKey);
-if (sIndex > -1) sickDays.splice(sIndex, 1);
-}
-if (sonstigeDays[dateKey]) {
-delete sonstigeDays[dateKey];
-localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-}
-}
+    if (index > -1 || forceRemove) {
+        if (index > -1) array.splice(index, 1);
+    } else {
+        array.push(dateKey);
+        if (type === 'krank') {
+            const vIndex = vacationDays.indexOf(dateKey);
+            if (vIndex > -1) vacationDays.splice(vIndex, 1);
+        } else if (type === 'urlaub') {
+            const sIndex = sickDays.indexOf(dateKey);
+            if (sIndex > -1) sickDays.splice(sIndex, 1);
+        }
+        if (sonstigeDays[dateKey]) {
+            delete sonstigeDays[dateKey];
+            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+        }
+    }
 
-if (type === 'krank' || forceRemove) localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-if (type === 'urlaub' || forceRemove) localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+    if (type === 'krank' || forceRemove) localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+    if (type === 'urlaub' || forceRemove) localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
 
-renderCalendar();
+    renderCalendar();
 }
 
 function toggleSonstige(dateKey, forceRemove = false) {
-if (sonstigeDays[dateKey] && !forceRemove) {
-delete sonstigeDays[dateKey];
-} else if (!forceRemove) {
-sonstigeDays[dateKey] = selectedColor;
-const sIndex = sickDays.indexOf(dateKey);
-if (sIndex > -1) sickDays.splice(sIndex, 1);
-const vIndex = vacationDays.indexOf(dateKey);
-if (vIndex > -1) vacationDays.splice(vIndex, 1);
-localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
-} else {
-delete sonstigeDays[dateKey];
-}
-localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-renderCalendar();
-}
-
-function toggleFerien() {
-showFerien = !showFerien;
-const btn = document.getElementById('ferienBtn');
-const note = document.getElementById('ferienNote');
-if (showFerien) {
-btn.style.background = '#0d8a99';
-note.style.display = 'block';
-} else {
-btn.style.background = '#17a2b8';
-note.style.display = 'none';
-}
-renderCalendar();
-}
-
-function updateYearOverview() {
-const year = currentDate.getFullYear();
-document.getElementById('overviewYear').textContent = year;
-
-const yearSick = sickDays.filter(d => d.startsWith(year + '-')).sort();
-const yearVacation = vacationDays.filter(d => d.startsWith(year + '-')).sort();
-const yearSonstige = Object.keys(sonstigeDays).filter(d => d.startsWith(year + '-')).sort();
-
-document.getElementById('countKrank').textContent = yearSick.length;
-document.getElementById('countUrlaub').textContent = yearVacation.length;
-document.getElementById('countSonstige').textContent = yearSonstige.length;
-
-const formatDate = (dateStr) => {
-const [y,m,d] = dateStr.split('-');
-return `${d}.${m}.${y}`;
-};
-
-document.getElementById('listKrank').innerHTML = yearSick.length ? yearSick.map(d => `<li>${formatDate(d)}</li>`).join('') : '<li>Keine Einträge</li>';
-document.getElementById('listUrlaub').innerHTML = yearVacation.length ? yearVacation.map(d => `<li>${formatDate(d)}</li>`).join('') : '<li>Keine Einträge</li>';
-document.getElementById('listSonstige').innerHTML = yearSonstige.length ? yearSonstige.map(d => {
-const color = sonstigeDays[d];
-return `<li><span style="display:inline-block;width:12px;height:12px;background:${color};border:1px solid #999;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>${formatDate(d)}</li>`;
-}).join('') : '<li>Keine Einträge</li>';
-}
-
-function toggleYearOverview() {
-const overview = document.getElementById('yearOverview');
-if (overview.style.display === 'block') {
-overview.style.display = 'none';
-} else {
-overview.style.display = 'block';
-updateYearOverview();
-}
-}
-
-function resetData() {
-if (confirm("Möchtest du wirklich alle Markierungen löschen?")) {
-sickDays = [];
-vacationDays = [];
-sonstigeDays = {};
-localStorage.removeItem('schichtzeitSickDays');
-localStorage.removeItem('schichtzeitVacationDays');
-localStorage.removeItem('schichtzeitSonstigeDays');
-renderCalendar();
-}
-}
-
-document.getElementById('prevBtn').addEventListener('click', () => {
-currentDate.setMonth(currentDate.getMonth() - 1);
-renderCalendar();
-});
-
-document.getElementById('nextBtn').addEventListener('click', () => {
-currentDate.setMonth(currentDate.getMonth() + 1);
-renderCalendar();
-});
-
-document.getElementById('groupSelect').addEventListener('change', (e) => {
-localStorage.setItem('schichtzeitGroup', e.target.value);
-renderCalendar();
-});
-
-document.querySelectorAll('.mode-btn').forEach(btn => {
-btn.addEventListener('click', (e) => {
-document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-e.target.classList.add('active');
-currentMode = e.target.getAttribute('data-mode');
-
-const picker = document.getElementById('colorPickerRow');
-if (currentMode === 'sonstige') picker.classList.add('active');
-else picker.classList.remove('active');
-});
-});
-
-document.getElementById('sonstigeColor').addEventListener('input', (e) => {
-selectedColor = e.target.value;
-localStorage.setItem('schichtzeitColor', selectedColor);
-document.getElementById('legendSonstige').style.background = selectedColor;
-updateColorPresetsActive();
-});
-
-document.querySelectorAll('.color-preset').forEach(btn => {
-btn.addEventListener('click', () => {
-selectedColor = btn.getAttribute('data-color');
-document.getElementById('sonstigeColor').value = selectedColor;
-document.getElementById('legendSonstige').style.background = selectedColor;
-localStorage.setItem('schichtzeitColor', selectedColor);
-updateColorPresetsActive();
-});
-});
-
-document.getElementById('legendSonstige').style.background = selectedColor;
-updateColorPresetsActive();
-
-renderCalendar();
-syncOnlineDate();
-</script>
-</body>
-</html>
+    if (sonstigeDays[dateKey] && !forceRemove) {
+        delete sonstigeDays[dateKey];
+    } else if (!forceRemove) {
+        sonstigeDays[dateKey] = selectedColor;
+        const sIndex = sickDays.indexOf(dateKey);
+        if (sIndex > -1) sickDays.splice(sIndex, 1);
+        const vIndex = vacationDays.indexOf(dateKey);
+        if (vIndex > -1) vacationDays.splice(vIndex, 1);
+        localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+        localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+    } else {
+        delete sonstigeDays[dateKey];
