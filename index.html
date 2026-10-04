@@ -51,7 +51,7 @@ button:active{background:#0056b3}
 .day.sonstige{border:2px solid rgba(0,0,0,0.3);color:#fff;text-shadow:0 0 3px rgba(0,0,0,0.8)}
 .day.empty{background:transparent;border:none;cursor:default}
 .day.today{border:3px solid #000;box-shadow:0 0 6px rgba(0,0,0,0.4);font-weight:900}
-.day.today .date-num{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;font-weight:900;font-size:13px;color:#000}
+.day.today .date-num{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;font-weight:900}
 .day.feiertag{border:3px solid #CD7F32;animation:pulse-glow 3s infinite ease-in-out;z-index:2}
 @keyframes pulse-glow{0%{box-shadow:0 0 0 0 rgba(205,127,50,0.9);border-color:#CD7F32}50%{box-shadow:0 0 15px 8px rgba(205,127,50,0.8);border-color:#FFA500}100%{box-shadow:0 0 0 0 rgba(205,127,50,0.9);border-color:#CD7F32}}
 .day.ferien{border:2px dashed #17a2b8;z-index:1}
@@ -168,27 +168,37 @@ button:active{background:#0056b3}
 // ============================================================
 // ДАННЫЕ
 // ============================================================
-const BASE_DATE = new Date(2026, 9, 1);
 
-const CYCLE_35 = [
-'F','F','N','N','N','_','_','_',
-'S','S','S','_',
-'F','F','N','N','_','_','_',
-'S','S','S','_',
-'F','F','F','N','N',
-'_','_','_','_','_','_','_'
-];
+// Опорная дата: 19.10.2026 = индекс 0 в паттерне.
+// Храним в UTC, чтобы расчёт не зависел от часового пояса и DST.
+const BASE_DATE_UTC = Date.UTC(2026, 9, 19); // 19 октября 2026
 
-// Стартовые индексы для 1 октября 2026
-// 1я=F(0), 2я=S(8), 3я=S(9), 4я=N(3), 5я=F(1)
-const START_INDEX_BY_GROUP = {
-'1': 0,
-'2': 8,
-'3': 9,
-'4': 3,
-'5': 1
+// Пять независимых 35-дневных паттернов, считанных с печатного календаря.
+// '_' = Frei. Каждый паттерн начинается 19.10.2026.
+const PATTERNS = {
+  '1': ['F','F','N','N','_','_','_','S','S','S','_',
+        'F','F','F','N','N','_','_','N','N','N','_','_',
+        'F','F','N','N','N','_','_','_','S','S','S','_'],
+
+  '2': ['S','S','S','_','F','F','F','N','N','_','_','_','_','_','_','_',
+        'F','F','S','S','_','F','F','_','S','S','S','_',
+        'F','F','N','N','_','_','_'],
+
+  '3': ['N','N','_','_','_','_','_','_','_','F','F','N','N','N','_','_','_',
+        'S','_','_','_','S','S','N','N','_','_','_','S','S','S','_','F','F','F'],
+
+  '4': ['_','_','_','F','N','N','N','_','_','_','S','S','S','_',
+        'F','F','N','N','_','_','_','N','N','S','_','_','_','_',
+        'N','N','_','_','_','_','_'],
+
+  '5': ['_','_','F','S','S','S','_','F','F','N','N','_','_','_',
+        'S','S','S','_','F','F','F','_','_','_','_',
+        'F','F','F','_','_','F','F','N','N','N']
 };
 
+// ============================================================
+// СОСТОЯНИЕ
+// ============================================================
 let currentDate = new Date(2026, 9, 1);
 let currentMode = 'normal';
 let showFerien = false;
@@ -305,7 +315,7 @@ function getHolidaySet(year) {
 }
 
 // ============================================================
-// КАНИКУЛЫ
+// КАНИКУЛЫ (Bayern)
 // ============================================================
 const FERIEN = {
 2026: [
@@ -355,14 +365,15 @@ function formatDateKey(date) {
 }
 
 function getShift(date, group) {
-    const g = String(group);
-    const startIndex = START_INDEX_BY_GROUP[g];
-    if (startIndex === undefined) return '_';
-    const diffTime = date.getTime() - BASE_DATE.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    let index = (startIndex + diffDays) % CYCLE_35.length;
-    if (index < 0) index += CYCLE_35.length;
-    return CYCLE_35[index];
+    const pattern = PATTERNS[String(group)];
+    if (!pattern) return '_';
+
+    const dateUTC = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((dateUTC - BASE_DATE_UTC) / 86400000);
+
+    let index = diffDays % pattern.length;
+    if (index < 0) index += pattern.length;
+    return pattern[index];
 }
 
 // ============================================================
@@ -394,12 +405,9 @@ function updateColorPresetsActive() {
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    // Читаем группу НАПРЯМУЮ из селекта
     const group = document.getElementById('groupSelect').value;
     const holidays = getHolidaySet(year);
     const ferienSet = showFerien ? getFerienSet(year) : new Set();
-
-    console.log('renderCalendar вызван. Gruppe =', group, '| Monat =', monthNames[month], year);
 
     document.getElementById('monthDisplay').textContent = monthNames[month] + ' ' + year;
 
@@ -638,7 +646,6 @@ document.getElementById('nextBtn').addEventListener('click', () => {
 document.getElementById('groupSelect').addEventListener('change', (e) => {
     const newGroup = e.target.value;
     localStorage.setItem('schichtzeitGroup', newGroup);
-    console.log('Группа изменена на:', newGroup, '| 1 окт =', getShift(new Date(2026, 9, 1), newGroup));
     renderCalendar();
 });
 
@@ -675,9 +682,27 @@ document.getElementById('legendSonstige').style.background = selectedColor;
 updateColorPresetsActive();
 
 // ============================================================
+// САМОПРОВЕРКА (для разработки — можно удалить)
+// ============================================================
+// Проверка: 19.10.2026 у каждой группы должно быть
+// G1=F, G2=S, G3=N, G4=_, G5=_
+(function selfCheck() {
+    const refDate = new Date(2026, 9, 19);
+    const expected = {'1':'F','2':'S','3':'N','4':'_','5':'_'};
+    let ok = true;
+    for (const g in expected) {
+        const got = getShift(refDate, g);
+        if (got !== expected[g]) {
+            console.warn(`Selfcheck FAIL: Gruppe ${g} am 19.10.2026 → erwartet ${expected[g]}, bekommen ${got}`);
+            ok = false;
+        }
+    }
+    if (ok) console.log('✓ Selfcheck OK: 19.10.2026 stimmt für alle Gruppen');
+})();
+
+// ============================================================
 // СТАРТ
 // ============================================================
-console.log('START. Gruppe aus localStorage:', savedGroup);
 renderCalendar();
 syncOnlineDate();
 </script>
