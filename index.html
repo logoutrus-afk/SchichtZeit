@@ -505,7 +505,18 @@
             'F', 'F', 'F', 'N', 'N', 
             '_', '_', '_', '_', '_', '_', '_'
         ];
-        const START_INDEX = 8;
+
+        // ============================================================
+        // СТАРТОВЫЕ ИНДЕКСЫ ДЛЯ КАЖДОЙ ГРУППЫ (1 октября 2026)
+        // Рассчитаны по фото: 1-я=F, 2-я=S, 3-я=S, 4-я=N, 5-я=F
+        // ============================================================
+        const START_INDEX_BY_GROUP = {
+            '1': 0,   // F (Früh)
+            '2': 8,   // S (Spät)
+            '3': 9,   // S (Spät), со сдвигом на 1 день от группы 2
+            '4': 3,   // N (Nacht)
+            '5': 1    // F (Früh), со сдвигом на 1 день от группы 1
+        };
 
         let currentDate = new Date(2026, 9, 1);
         let currentMode = 'normal';
@@ -700,10 +711,14 @@
             return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
         }
 
+        // ============================================================
+        // ГЛАВНАЯ ФУНКЦИЯ СМЕН — С ИСПРАВЛЕННЫМ СДВИГОМ ПО ГРУППАМ
+        // ============================================================
         function getShift(date, group) {
+            const startIndex = START_INDEX_BY_GROUP[group] || 0;
             const diffTime = date.getTime() - BASE_DATE.getTime();
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            let index = (START_INDEX + diffDays) % CYCLE_35.length;
+            let index = (startIndex + diffDays) % CYCLE_35.length;
             if (index < 0) index += CYCLE_35.length;
             return CYCLE_35[index];
         }
@@ -734,294 +749,3 @@
                 } else {
                     btn.classList.remove('active');
                 }
-            });
-        }
-
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const group = document.getElementById('groupSelect').value;
-            const holidays = getHolidaySet(year);
-            const ferienSet = showFerien ? getFerienSet(year) : new Set();
-            
-            document.getElementById('monthDisplay').textContent = monthNames[month] + ' ' + year;
-
-            const firstDayOfMonth = new Date(year, month, 1);
-            const lastDayOfMonth = new Date(year, month + 1, 0);
-            
-            let startDay = firstDayOfMonth.getDay();
-            startDay = startDay === 0 ? 6 : startDay - 1;
-
-            const calendarEl = document.getElementById('calendar');
-            calendarEl.innerHTML = '';
-
-            dayNames.forEach(day => {
-                const headerEl = document.createElement('div');
-                headerEl.className = 'day-header';
-                headerEl.textContent = day;
-                calendarEl.appendChild(headerEl);
-            });
-
-            for (let i = 0; i < startDay; i++) {
-                const emptyEl = document.createElement('div');
-                emptyEl.className = 'day empty';
-                calendarEl.appendChild(emptyEl);
-            }
-
-            for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
-                const date = new Date(year, month, day);
-                const dateKey = formatDateKey(date);
-                const shift = getShift(date, group);
-                
-                const dayEl = document.createElement('div');
-                dayEl.className = `day ${shift}`;
-                
-                if (sickDays.includes(dateKey)) dayEl.classList.add('krank');
-                else if (vacationDays.includes(dateKey)) dayEl.classList.add('urlaub');
-
-                if (date.getTime() === actualToday.getTime()) dayEl.classList.add('today');
-                
-                if (holidays.has(dateKey)) {
-                    dayEl.classList.add('feiertag');
-                    dayEl.title = "Feiertag";
-                }
-
-                if (showFerien && ferienSet.has(dateKey)) {
-                    dayEl.classList.add('ferien');
-                    dayEl.title = "Ferien";
-                    const ferienMarker = document.createElement('span');
-                    ferienMarker.className = 'ferien-marker';
-                    ferienMarker.textContent = 'F';
-                    dayEl.appendChild(ferienMarker);
-                }
-
-                const dateNumEl = document.createElement('span');
-                dateNumEl.className = 'date-num';
-                dateNumEl.textContent = day;
-                
-                const shiftTextEl = document.createElement('span');
-                shiftTextEl.textContent = shift === '_' ? '' : shift;
-
-                dayEl.appendChild(dateNumEl);
-                dayEl.appendChild(shiftTextEl);
-
-                if (sonstigeDays[dateKey] && !sickDays.includes(dateKey) && !vacationDays.includes(dateKey)) {
-                    dayEl.classList.add('sonstige');
-                    dayEl.style.backgroundColor = sonstigeDays[dateKey];
-                    const isDark = isColorDark(sonstigeDays[dateKey]);
-                    dayEl.style.color = isDark ? '#fff' : '#000';
-                    const dateNumSpan = dayEl.querySelector('.date-num');
-                    if (dateNumSpan) dateNumSpan.style.color = dayEl.style.color;
-                    if (sonstigeDays[dateKey].toUpperCase() === '#FFFFFF') {
-                        dayEl.style.border = '2px solid #999';
-                    }
-                }
-                
-                dayEl.addEventListener('click', () => {
-                    if (currentMode === 'krank') toggleDay(dateKey, 'krank');
-                    else if (currentMode === 'urlaub') toggleDay(dateKey, 'urlaub');
-                    else if (currentMode === 'sonstige') toggleSonstige(dateKey);
-                    else {
-                        toggleDay(dateKey, 'krank', true);
-                        toggleDay(dateKey, 'urlaub', true);
-                        toggleSonstige(dateKey, true);
-                    }
-                });
-
-                calendarEl.appendChild(dayEl);
-            }
-
-            renderHolidayNote(year, month);
-            updateYearOverview();
-            updateFerienList(year);
-        }
-
-        function isColorDark(hex) {
-            const c = hex.replace('#','');
-            const r = parseInt(c.substr(0,2), 16);
-            const g = parseInt(c.substr(2,2), 16);
-            const b = parseInt(c.substr(4,2), 16);
-            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-            return lum < 0.6;
-        }
-
-        function updateFerienList(year) {
-            const listEl = document.getElementById('ferienList');
-            const periods = FERIEN[year] || [];
-            if (periods.length === 0) {
-                listEl.innerHTML = "Keine Daten für dieses Jahr verfügbar.";
-                return;
-            }
-            const formatD = (s) => {
-                const [y,m,d] = s.split('-');
-                return `${d}.${m}.${y}`;
-            };
-            listEl.innerHTML = periods.map(p => `${p.name}: ${formatD(p.start)} – ${formatD(p.end)}`).join('<br>');
-        }
-
-        function toggleDay(dateKey, type, forceRemove = false) {
-            let array = type === 'krank' ? sickDays : vacationDays;
-            const index = array.indexOf(dateKey);
-
-            if (index > -1 || forceRemove) {
-                if (index > -1) array.splice(index, 1);
-            } else {
-                array.push(dateKey);
-                if (type === 'krank') {
-                    const vIndex = vacationDays.indexOf(dateKey);
-                    if (vIndex > -1) vacationDays.splice(vIndex, 1);
-                } else if (type === 'urlaub') {
-                    const sIndex = sickDays.indexOf(dateKey);
-                    if (sIndex > -1) sickDays.splice(sIndex, 1);
-                }
-                if (sonstigeDays[dateKey]) {
-                    delete sonstigeDays[dateKey];
-                    localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-                }
-            }
-
-            if (type === 'krank' || forceRemove) localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-            if (type === 'urlaub' || forceRemove) localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
-            
-            renderCalendar();
-        }
-
-        function toggleSonstige(dateKey, forceRemove = false) {
-            if (sonstigeDays[dateKey] && !forceRemove) {
-                delete sonstigeDays[dateKey];
-            } else if (!forceRemove) {
-                sonstigeDays[dateKey] = selectedColor;
-                const sIndex = sickDays.indexOf(dateKey);
-                if (sIndex > -1) sickDays.splice(sIndex, 1);
-                const vIndex = vacationDays.indexOf(dateKey);
-                if (vIndex > -1) vacationDays.splice(vIndex, 1);
-                localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-                localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
-            } else {
-                delete sonstigeDays[dateKey];
-            }
-            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-            renderCalendar();
-        }
-
-        function toggleFerien() {
-            showFerien = !showFerien;
-            const btn = document.getElementById('ferienBtn');
-            const note = document.getElementById('ferienNote');
-            if (showFerien) {
-                btn.style.background = '#0d8a99';
-                note.style.display = 'block';
-            } else {
-                btn.style.background = '#17a2b8';
-                note.style.display = 'none';
-            }
-            renderCalendar();
-        }
-
-        function updateYearOverview() {
-            const year = currentDate.getFullYear();
-            document.getElementById('overviewYear').textContent = year;
-
-            const yearSick = sickDays.filter(d => d.startsWith(year + '-')).sort();
-            const yearVacation = vacationDays.filter(d => d.startsWith(year + '-')).sort();
-            const yearSonstige = Object.keys(sonstigeDays).filter(d => d.startsWith(year + '-')).sort();
-
-            document.getElementById('countKrank').textContent = yearSick.length;
-            document.getElementById('countUrlaub').textContent = yearVacation.length;
-            document.getElementById('countSonstige').textContent = yearSonstige.length;
-
-            const formatDate = (dateStr) => {
-                const [y, m, d] = dateStr.split('-');
-                return `${d}.${m}.${y}`;
-            };
-
-            const listKrank = document.getElementById('listKrank');
-            listKrank.innerHTML = yearSick.length ? yearSick.map(d => `<li>${formatDate(d)}</li>`).join('') : '<li>Keine Einträge</li>';
-
-            const listUrlaub = document.getElementById('listUrlaub');
-            listUrlaub.innerHTML = yearVacation.length ? yearVacation.map(d => `<li>${formatDate(d)}</li>`).join('') : '<li>Keine Einträge</li>';
-
-            const listSonstige = document.getElementById('listSonstige');
-            listSonstige.innerHTML = yearSonstige.length ? yearSonstige.map(d => {
-                const color = sonstigeDays[d];
-                return `<li><span style="display:inline-block;width:12px;height:12px;background:${color};border:1px solid #999;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>${formatDate(d)}</li>`;
-            }).join('') : '<li>Keine Einträge</li>';
-        }
-
-        function toggleYearOverview() {
-            const overview = document.getElementById('yearOverview');
-            if (overview.style.display === 'block') {
-                overview.style.display = 'none';
-            } else {
-                overview.style.display = 'block';
-                updateYearOverview();
-            }
-        }
-
-        function resetData() {
-            if (confirm("Möchtest du wirklich alle Markierungen löschen?")) {
-                sickDays = [];
-                vacationDays = [];
-                sonstigeDays = {};
-                localStorage.removeItem('schichtzeitSickDays');
-                localStorage.removeItem('schichtzeitVacationDays');
-                localStorage.removeItem('schichtzeitSonstigeDays');
-                renderCalendar();
-            }
-        }
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        document.getElementById('groupSelect').addEventListener('change', (e) => {
-            localStorage.setItem('schichtzeitGroup', e.target.value);
-            renderCalendar();
-        });
-
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentMode = e.target.getAttribute('data-mode');
-                
-                const picker = document.getElementById('colorPickerRow');
-                if (currentMode === 'sonstige') {
-                    picker.classList.add('active');
-                } else {
-                    picker.classList.remove('active');
-                }
-            });
-        });
-
-        document.getElementById('sonstigeColor').addEventListener('input', (e) => {
-            selectedColor = e.target.value;
-            localStorage.setItem('schichtzeitColor', selectedColor);
-            document.getElementById('legendSonstige').style.background = selectedColor;
-            updateColorPresetsActive();
-        });
-
-        document.querySelectorAll('.color-preset').forEach(btn => {
-            btn.addEventListener('click', () => {
-                selectedColor = btn.getAttribute('data-color');
-                document.getElementById('sonstigeColor').value = selectedColor;
-                document.getElementById('legendSonstige').style.background = selectedColor;
-                localStorage.setItem('schichtzeitColor', selectedColor);
-                updateColorPresetsActive();
-            });
-        });
-
-        document.getElementById('legendSonstige').style.background = selectedColor;
-        updateColorPresetsActive();
-
-        renderCalendar();
-        syncOnlineDate();
-    </script>
-</body>
-</html>
