@@ -72,6 +72,34 @@ button:active{background:#0056b3}
 .holiday-note .holiday-item.current{background:#FFE8C9;border:2px solid #CD7F32;color:#6b3a06;font-weight:bold;animation:note-pulse 3s infinite ease-in-out}
 @keyframes note-pulse{0%,100%{box-shadow:0 0 0 0 rgba(205,127,50,0.7)}50%{box-shadow:0 0 6px 2px rgba(205,127,50,0.3)}}
 .ferien-note{display:none;margin-top:10px;font-size:11px;color:#666;text-align:left;background:#e7f6f8;padding:8px;border-radius:6px;border-left:3px solid #17a2b8;line-height:1.6}
+.paypal-note {
+    margin-top: 25px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e6eeff 100%);
+    border-radius: 8px;
+    border: 1px solid #c3d4ff;
+    text-align: center;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.5;
+}
+.paypal-note p {
+    margin: 0 0 10px 0;
+}
+.paypal-btn {
+    display: inline-block;
+    background: #0070ba;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.paypal-btn:hover, .paypal-btn:active {
+    background: #005ea6;
+}
 </style>
 </head>
 <body>
@@ -160,6 +188,16 @@ button:active{background:#0056b3}
 <div class="overview-list"><strong>Sonstige Tage:</strong><ul id="listSonstige"></ul></div>
 <button class="close-btn" onclick="toggleYearOverview()">Schließen</button>
 </div>
+
+<!-- PayPal Spende -->
+<div class="paypal-note">
+    <p>💙 <strong>Gefällt dir Schichtzeit?</strong><br>
+    Du kannst mich mit einer kleinen Spende unterstützen:</p>
+    <a href="https://www.paypal.me/schichtzeit" target="_blank" rel="noopener" class="paypal-btn">
+        ☕ Mit PayPal unterstützen
+    </a>
+</div>
+
 </div>
 
 <script>
