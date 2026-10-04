@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Schichtzeit</title>
 
-    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +12,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0056b3">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230056b3'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ESZ%3C/text%3E%3C/svg%3E">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230056b3'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ESZ%3C/text%3E%3C/svg%3E">
 
     <style>
         body {
@@ -506,16 +504,13 @@
             '_', '_', '_', '_', '_', '_', '_'
         ];
 
-        // ============================================================
-        // СТАРТОВЫЕ ИНДЕКСЫ ДЛЯ КАЖДОЙ ГРУППЫ (1 октября 2026)
-        // Рассчитаны по фото: 1-я=F, 2-я=S, 3-я=S, 4-я=N, 5-я=F
-        // ============================================================
+        // Стартовые индексы для каждой группы (1 октября 2026)
         const START_INDEX_BY_GROUP = {
-            '1': 0,   // F (Früh)
-            '2': 8,   // S (Spät)
-            '3': 9,   // S (Spät), со сдвигом на 1 день от группы 2
-            '4': 3,   // N (Nacht)
-            '5': 1    // F (Früh), со сдвигом на 1 день от группы 1
+            '1': 0,
+            '2': 8,
+            '3': 9,
+            '4': 3,
+            '5': 1
         };
 
         let currentDate = new Date(2026, 9, 1);
@@ -684,6 +679,7 @@
                 { name: "Herbstferien", start: "2027-11-02", end: "2027-11-05" },
                 { name: "Weihnachtsferien", start: "2027-12-23", end: "2027-12-31" }
             ],
+            // 2028...
             2028: [
                 { name: "Winterferien", start: "2028-02-14", end: "2028-02-18" },
                 { name: "Osterferien", start: "2028-04-10", end: "2028-04-21" },
@@ -712,7 +708,8 @@
         }
 
         // ============================================================
-        // ГЛАВНАЯ ФУНКЦИЯ СМЕН — С ИСПРАВЛЕННЫМ СДВИГОМ ПО ГРУППАМ
+        // ГЛАВНАЯ ФУНКЦИЯ — ИСПРАВЛЕНО
+        // Каждая группа использует свой стартовый индекс
         // ============================================================
         function getShift(date, group) {
             const startIndex = START_INDEX_BY_GROUP[group] || 0;
@@ -726,7 +723,6 @@
         function renderHolidayNote(year, month) {
             const listEl = document.getElementById('holidayList');
             const allList = getHolidayList(year);
-            
             const currentList = allList.filter(h => h.date.getMonth() === month);
             
             if (currentList.length === 0) {
@@ -749,3 +745,35 @@
                 } else {
                     btn.classList.remove('active');
                 }
+            });
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const group = document.getElementById('groupSelect').value;
+            const holidays = getHolidaySet(year);
+            const ferienSet = showFerien ? getFerienSet(year) : new Set();
+            
+            document.getElementById('monthDisplay').textContent = monthNames[month] + ' ' + year;
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+            
+            let startDay = firstDayOfMonth.getDay();
+            startDay = startDay === 0 ? 6 : startDay - 1;
+
+            const calendarEl = document.getElementById('calendar');
+            calendarEl.innerHTML = '';
+
+            dayNames.forEach(day => {
+                const headerEl = document.createElement('div');
+                headerEl.className = 'day-header';
+                headerEl.textContent = day;
+                calendarEl.appendChild(headerEl);
+            });
+
+            for (let i = 0; i < startDay; i++) {
+                const emptyEl = document.createElement('div');
+                emptyEl.className = 'day empty';
+                calendar
