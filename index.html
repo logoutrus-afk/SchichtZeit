@@ -133,6 +133,9 @@ button:active{background:#0056b3}
 <button onclick="resetData()" style="background:#dc3545;">Alle Markierungen löschen</button>
 <button onclick="toggleYearOverview()" style="background:#28a745;">Jahresübersicht</button>
 <button onclick="toggleFerien()" id="ferienBtn" style="background:#17a2b8;">Ferien</button>
+<button onclick="createBackup()" style="background:#6f42c1;">💾 Backup</button>
+<button onclick="restoreBackup()" style="background:#fd7e14;">📂 Restore</button>
+<input type="file" id="restoreFileInput" accept=".json" style="display:none;">
 </div>
 
 <div class="holiday-note">
@@ -161,11 +164,11 @@ button:active{background:#0056b3}
 
 <script>
 // ============================================================
-// БАЗА: 1 ОКТЯБРЯ 2026
+// BASIS: 1. OKTOBER 2026
 // ============================================================
 const BASE_DATE = new Date(2026, 9, 1);
 
-// 35-ТАГЕ-ЦИКЛ. После 7 выходных (индексы 28-34) всё повторяется.
+// 35-Tage-Zyklus. Nach 7 Freitagen wiederholt sich alles.
 const CYCLE_35 = [
 'F','F','N','N','N','_','_','_',
 'S','S','S','_',
@@ -175,18 +178,13 @@ const CYCLE_35 = [
 '_','_','_','_','_','_','_'
 ];
 
-// Стартовые индексы для 1 октября 2026
-// 1: блок начинается 7 окт → 1 окт = индекс 29 = _
-// 2: блок начинается 4 ноя → 1 окт = индекс 1 = F
-// 3: блок начинается 28 окт → 1 окт = индекс 8 = S
-// 4: блок начинается 21 окт → 1 окт = индекс 15 = N
-// 5: блок начинается 14 окт → 1 окт = индекс 22 = _
+// Start-Indizes für 1. Oktober 2026
 const START_INDEX_BY_GROUP = {
-'1': 29,
-'2': 1,
-'3': 8,
-'4': 15,
-'5': 22
+'1': 29,   // Block startet 7. Okt
+'2': 1,    // Block startet 4. Nov
+'3': 8,    // Block startet 28. Okt
+'4': 15,   // Block startet 21. Okt
+'5': 22    // Block startet 14. Okt
 };
 
 let currentDate = new Date(2026, 9, 1);
@@ -208,7 +206,7 @@ const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","Augu
 const dayNames = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 
 // ============================================================
-// ОНЛАЙН-ВРЕМЯ
+// ONLINE-ZEIT
 // ============================================================
 function updateOnlineStatus(text, status) {
     const el = document.getElementById('onlineStatus');
@@ -244,7 +242,7 @@ async function syncOnlineDate() {
 setInterval(syncOnlineDate, 5 * 60 * 1000);
 
 // ============================================================
-// ПАСХА И ПРАЗДНИКИ
+// OSTERN & FEIERTAGE
 // ============================================================
 function calculateEaster(year) {
     const a = year % 19, b = Math.floor(year / 100), c = year % 100;
@@ -295,7 +293,7 @@ function getHolidaySet(year) {
 }
 
 // ============================================================
-// КАНИКУЛЫ
+// FERIEN
 // ============================================================
 const FERIEN = {
 2026: [
@@ -338,7 +336,7 @@ function getFerienSet(year) {
 }
 
 // ============================================================
-// СМЕНЫ — бесконечный 35-дневный цикл
+// SCHICHT-BERECHNUNG
 // ============================================================
 function formatDateKey(date) {
     return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
@@ -356,7 +354,7 @@ function getShift(date, group) {
 }
 
 // ============================================================
-// ОТРИСОВКА
+// RENDERING
 // ============================================================
 function renderHolidayNote(year, month) {
     const listEl = document.getElementById('holidayList');
@@ -596,6 +594,88 @@ function resetData() {
     }
 }
 
+// ============================================================
+// BACKUP / RESTORE
+// ============================================================
+function createBackup() {
+    const backup = {
+        version: 1,
+        date: new Date().toISOString(),
+        group: document.getElementById('groupSelect').value,
+        color: selectedColor,
+        sickDays: sickDays,
+        vacationDays: vacationDays,
+        sonstigeDays: sonstigeDays
+    };
+    const json = JSON.stringify(backup, null, 2);
+    const blob = new Blob([json], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const now = new Date();
+    const filename = 'Schichtzeit_Backup_' +
+        now.getFullYear() + '-' +
+        String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0') + '_' +
+        String(now.getHours()).padStart(2,'0') + '-' +
+        String(now.getMinutes()).padStart(2,'0') + '.json';
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function restoreBackup() {
+    const input = document.getElementById('restoreFileInput');
+    input.value = '';
+    input.click();
+}
+
+document.getElementById('restoreFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const data = JSON.parse(event.target.result);
+            if (!data.sickDays && !data.vacationDays && !data.sonstigeDays) {
+                alert('Ungültige Backup-Datei.');
+                return;
+            }
+            if (!confirm('Backup wiederherstellen? Die aktuellen Daten werden überschrieben.')) return;
+
+            sickDays = data.sickDays || [];
+            vacationDays = data.vacationDays || [];
+            sonstigeDays = data.sonstigeDays || {};
+            if (data.group) {
+                document.getElementById('groupSelect').value = data.group;
+                localStorage.setItem('schichtzeitGroup', data.group);
+            }
+            if (data.color) {
+                selectedColor = data.color;
+                document.getElementById('sonstigeColor').value = selectedColor;
+                document.getElementById('legendSonstige').style.background = selectedColor;
+                localStorage.setItem('schichtzeitColor', selectedColor);
+                updateColorPresetsActive();
+            }
+
+            localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+            localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+
+            renderCalendar();
+            alert('✅ Backup erfolgreich wiederhergestellt!');
+        } catch (err) {
+            alert('Fehler beim Lesen der Backup-Datei: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+});
+
+// ============================================================
+// СОБЫТИЯ
+// ============================================================
 document.getElementById('prevBtn').addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
