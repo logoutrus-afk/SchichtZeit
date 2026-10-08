@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Schichtzeit</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Schichtzeit">
+<meta name="theme-color" content="#0056b3">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230056b3'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ESZ%3C/text%3E%3C/svg%3E">
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f4f9;color:#333;text-align:center;padding:4px;padding-top:env(safe-area-inset-top,4px);padding-bottom:env(safe-area-inset-bottom,4px);margin:0;-webkit-tap-highlight-color:transparent;font-size:16px}
+.container{max-width:1000px;margin:0 auto;background:#fff;padding:10px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+h2{margin-top:0;color:#0056b3;font-size:26px;letter-spacing:.3px}
+.online-status{font-size:13px;padding:5px 12px;border-radius:14px;display:inline-block;margin-bottom:12px;font-weight:bold}
+.online-status.online{background:#d4edda;color:#155724}
+.online-status.offline{background:#f8d7da;color:#721c24}
+.online-status.loading{background:#fff3cd;color:#856404}
+.top-row{display:flex;justify-content:center;align-items:center;margin-bottom:12px;font-size:17px}
+.nav-row{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:nowrap}
+.nav-row button#prevBtn,.nav-row button#nextBtn{padding:2px 6px;font-size:11px;min-width:26px;height:26px;line-height:1;border-radius:6px;font-weight:bold}
+select,button{padding:11px 16px;font-size:16px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer;font-family:inherit}
+button{background:#007bff;color:#fff;border:none;font-weight:bold}
+button:active{background:#0056b3}
+.mode-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;background:#e9ecef;padding:7px;border-radius:10px}
+.mode-btn{background:#fff;color:#333;border:1px solid #ccc;font-size:14px;padding:8px 4px;font-weight:600;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mode-btn.active{background:#0056b3;color:#fff;border-color:#0056b3;font-weight:bold}
+.color-picker-row{display:none;justify-content:center;align-items:center;gap:12px;margin-bottom:18px;padding:10px;background:#f1f3f5;border-radius:10px;border:1px dashed #999;flex-wrap:wrap}
+.color-picker-row.active{display:flex}
+.color-picker-row label{font-size:15px;font-weight:bold}
+.color-picker-row input[type="color"]{width:48px;height:38px;border:2px solid #999;border-radius:8px;cursor:pointer;padding:0;background:#fff}
+.color-presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.color-preset{width:36px;height:36px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #999;cursor:pointer;padding:0;position:relative}
+.color-preset.active{box-shadow:0 0 0 3px #0056b3}
+.color-preset .preset-letter{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:bold;color:#000;pointer-events:none}
+.color-preset[data-color="#1E90FF"] .preset-letter,.color-preset[data-color="#FF4500"] .preset-letter{color:#fff}
+#monthDisplay{font-size:19px;font-weight:bold;min-width:160px;display:inline-block}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;touch-action:pan-y}
+.calendar.anim-left{animation:cal-slide-left .28s ease}
+.calendar.anim-right{animation:cal-slide-right .28s ease}
+@keyframes cal-slide-left{from{opacity:.35;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes cal-slide-right{from{opacity:.35;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+.day-header{font-weight:bold;font-size:15px;padding:8px 0;color:#555}
+.day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:clamp(14px,3.8vw,20px);font-weight:900;border:1px solid #eee;position:relative;cursor:pointer;transition:transform 0.1s;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+.day:active{transform:scale(0.95)}
+.day.F{background-color:#FFD700;color:#000}
+.day.S{background-color:#FF4500;color:#fff}
+.day.N{background-color:#1E90FF;color:#fff}
+.day._{background-color:#f9f9f9;color:#999}
+.day.krank{background-color:#DDA0DD!important;color:#000!important;border:2px solid #8A2BE2}
+.day.urlaub{background-color:#90EE90!important;color:#000!important;border:2px solid #228B22}
+.day.sonstige{border:2px solid rgba(0,0,0,0.3)}
+.day.sonstige[data-dark="1"]{color:#fff}
+.day.sonstige[data-dark="0"]{color:#000}
+.day.empty{background:transparent;border:none;cursor:default}
+.day.today{border:3px solid #000;box-shadow:0 0 8px rgba(0,0,0,0.5);font-weight:900}
+.day.today .date-num{text-decoration:underline;text-decoration-thickness:2.5px;text-underline-offset:2px;font-weight:900}
+.day.feiertag{border:3px solid #CD7F32;animation:pulse-glow 3s infinite ease-in-out;z-index:2}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(205,127,50,0.9);border-color:#CD7F32}50%{box-shadow:0 0 15px 8px rgba(205,127,50,0.8);border-color:#FFA500}}
+.day.ferien{border:2px dashed #17a2b8;z-index:1}
+.ferien-marker{position:absolute;bottom:3px;left:5px;font-size:clamp(10px,2.5vw,14px);color:#17a2b8;font-weight:bold;background:#fff;border-radius:3px;padding:0 4px;line-height:1.1}
+.day .date-num{font-size:clamp(12px,3.2vw,17px);position:absolute;top:5px;left:7px;color:#555;font-weight:bold;line-height:1}
+.day.sonstige .date-num{color:inherit;font-weight:bold}
+.sonstige-marker{position:absolute;top:3px;right:4px;font-size:clamp(16px,4.4vw,26px);line-height:1;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.6))}
+.sonstige-preview{position:absolute;bottom:4px;left:4px;right:4px;font-size:clamp(9px,2.4vw,13px);line-height:1.05;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;opacity:0.95;pointer-events:none;font-weight:bold}
+.legend{margin-top:18px;font-size:13px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-box{width:16px;height:16px;border-radius:4px;border:1px solid #ccc}
+.footer{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.overview-container{display:none;margin-top:22px;text-align:left;background:#f8f9fa;padding:16px;border-radius:10px;border:1px solid #dee2e6;font-size:15px;scroll-margin-top:20px}
+.overview-container h3{margin-top:0;color:#0056b3;border-bottom:1px solid #ccc;padding-bottom:6px;font-size:18px}
+.overview-stats{display:flex;justify-content:space-around;margin-bottom:16px;font-weight:bold;flex-wrap:wrap;gap:8px;font-size:15px}
+.overview-list{margin-bottom:12px}
+.overview-list strong{display:block;margin-bottom:6px;color:#333;font-size:15px}
+.overview-list ul{margin:0;padding-left:22px;font-size:14px;color:#555}
+.overview-list li{margin-bottom:4px}
+.close-btn{background:#6c757d;font-size:14px;padding:8px 14px;margin-top:10px}
+.holiday-note{margin-top:12px;font-size:13px;color:#666;text-align:left;background:#f8f9fa;padding:10px;border-radius:8px;border-left:4px solid #CD7F32;line-height:1.8}
+.holiday-note strong.title{color:#CD7F32;display:block;margin-bottom:6px;font-size:14px}
+.holiday-note .holiday-item{display:inline-block;padding:3px 8px;margin:3px 3px;border-radius:5px;background:#fff;border:1px solid #eee;font-size:13px}
+.holiday-note .holiday-item.current{background:#FFE8C9;border:2px solid #CD7F32;color:#6b3a06;font-weight:bold}
+.ferien-note{display:none;margin-top:12px;font-size:13px;color:#666;text-align:left;background:#e7f6f8;padding:10px;border-radius:8px;border-left:4px solid #17a2b8;line-height:1.7}
+.ferien-note strong{color:#17a2b8;font-size:14px}
+.reminders-box{display:none;margin-top:18px;text-align:left;background:#eef6ff;padding:12px 14px;border-radius:10px;border-left:5px solid #0056b3;font-size:14px}
+.reminders-box strong{display:block;color:#0056b3;font-size:15px;margin-bottom:8px}
+.reminders-box ul{margin:0;padding-left:0;list-style:none;font-size:14px;color:#333}
+.reminders-box li{padding:6px 0;border-bottom:1px solid #d6e7ff}
+.reminders-box li:last-child{border-bottom:none}
+.reminders-box .when{color:#666;font-size:13px}
+.paypal-note{margin-top:25px;padding:14px;background:linear-gradient(135deg,#f0f4ff 0%,#e6eeff 100%);border-radius:10px;border:1px solid #c3d4ff;text-align:center;font-size:14px;color:#333;line-height:1.6}
+.paypal-note p{margin:0 0 12px 0}
+.paypal-btn{display:inline-block;background:#0070ba;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:bold}
+.paypal-btn:hover,.paypal-btn:active{background:#005ea6}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px;overflow-y:auto}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:14px;padding:22px;max-width:460px;width:100%;text-align:left;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-height:95vh;overflow-y:auto;font-size:16px}
+.modal h3{margin:0 0 6px;color:#0056b3;font-size:20px}
+.modal .modal-date{font-size:14px;color:#777;margin-bottom:14px}
+.modal label{display:block;font-size:15px;font-weight:bold;margin-bottom:12px;color:#333}
+.modal input[type="text"],.modal input[type="time"]{width:100%;padding:12px 12px;font-size:17px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;margin-top:5px;font-family:inherit}
+.modal input[type="color"]{width:56px;height:40px;border:2px solid #999;border-radius:8px;cursor:pointer;padding:0;background:#fff;margin-top:5px;vertical-align:middle}
+.symbol-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:5px}
+.symbol-btn{font-size:22px;padding:8px 0;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;line-height:1;font-weight:normal;color:#333}
+.symbol-btn.active{background:#0056b3;border-color:#0056b3;box-shadow:0 0 0 2px rgba(0,86,179,0.35)}
+.symbol-btn:active{transform:scale(0.92)}
+.modal .checkbox-row{display:flex;align-items:flex-start;gap:10px;font-weight:normal;font-size:14.5px;color:#444;background:#f1f3f5;padding:12px 12px;border-radius:8px;line-height:1.45}
+.modal .checkbox-row input{margin-top:3px;transform:scale(1.3);flex-shrink:0}
+.modal-buttons{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.modal-buttons button{flex:1;min-width:90px;padding:13px 10px;font-size:16px}
+.notif-hint{font-size:13px;color:#856404;background:#fff3cd;padding:8px 10px;border-radius:6px;margin-top:10px;display:none}
+.notif-hint.active{display:block}
+.notif-banner{position:fixed;top:12px;left:50%;transform:translateX(-50%);max-width:520px;width:calc(100% - 24px);background:#0056b3;color:#fff;padding:16px 44px 16px 18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.45);z-index:9999;font-size:16px;line-height:1.45;text-align:left;animation:banner-in .3s ease}
+@keyframes banner-in{from{opacity:0;transform:translate(-50%,-25px)}to{opacity:1;transform:translate(-50%,0)}}
+.notif-banner strong{display:block;font-size:17px;margin-bottom:4px}
+.notif-banner-close{position:absolute;top:8px;right:10px;background:transparent;color:#fff;border:none;font-size:24px;line-height:1;padding:2px 10px;cursor:pointer;font-weight:bold;font-family:inherit}
+.notif-info{font-size:12px;color:#666;background:#f1f3f5;padding:8px 10px;border-radius:6px;margin-top:12px;line-height:1.5;text-align:left}
+.err-box{display:none;background:#f8d7da;color:#721c24;padding:10px 12px;border-radius:8px;border:1px solid #dc3545;margin-bottom:10px;font-size:13px;text-align:left;word-break:break-word;font-family:monospace}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Schichtzeit</h2>
+<div class="err-box" id="errBox"></div>
+<div id="onlineStatus" class="online-status loading">Datum wird geladen...</div>
+
+<div class="top-row">
+<label>Schicht: 
+<select id="groupSelect">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</label>
+</div>
+
+<div class="nav-row">
+<button id="prevBtn" title="Zur&uuml;ck">&larr;</button>
+<span id="monthDisplay"></span>
+<button id="nextBtn" title="Weiter">&rarr;</button>
+</div>
+
+<div class="mode-controls">
+<button class="mode-btn active" data-mode="normal">Normal</button>
+<button class="mode-btn" data-mode="krank">Krank</button>
+<button class="mode-btn" data-mode="urlaub">Urlaub</button>
+<button class="mode-btn" data-mode="sonstige">Sonstige</button>
+</div>
+
+<div class="color-picker-row" id="colorPickerRow">
+<label for="sonstigeColor">Farbe:</label>
+<input type="color" id="sonstigeColor" value="#FFD700">
+<div class="color-presets">
+<button class="color-preset" data-color="#FFD700" style="background:#FFD700;" title="Fr&uuml;h"><span class="preset-letter">F</span></button>
+<button class="color-preset" data-color="#FF4500" style="background:#FF4500;" title="Sp&auml;t"><span class="preset-letter">S</span></button>
+<button class="color-preset" data-color="#1E90FF" style="background:#1E90FF;" title="Nacht"><span class="preset-letter">N</span></button>
+<button class="color-preset" data-color="#FFFFFF" style="background:#FFFFFF;" title="Frei"><span class="preset-letter" style="color:#999;">&ndash;</span></button>
+</div>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+<div class="reminders-box" id="remindersBox">
+<strong>Kommende Erinnerungen</strong>
+<ul id="remindersList"></ul>
+</div>
+
+<div class="legend">
+<div class="legend-item"><div class="legend-box" style="background:#FFD700;"></div> F (Fr&uuml;h)</div>
+<div class="legend-item"><div class="legend-box" style="background:#FF4500;"></div> S (Sp&auml;t)</div>
+<div class="legend-item"><div class="legend-box" style="background:#1E90FF;"></div> N (Nacht)</div>
+<div class="legend-item"><div class="legend-box" style="background:#f9f9f9;"></div> Frei</div>
+<div class="legend-item"><div class="legend-box" style="background:#DDA0DD;"></div> Krank</div>
+<div class="legend-item"><div class="legend-box" style="background:#90EE90;"></div> Urlaub</div>
+<div class="legend-item"><div class="legend-box" id="legendSonstige" style="background:#FFD700;"></div> Sonstige</div>
+<div class="legend-item"><div class="legend-box" style="background:#fff;border:3px solid #CD7F32;"></div> Feiertag</div>
+<div class="legend-item"><div class="legend-box" style="background:#fff;border:2px dashed #17a2b8;"></div> Ferien</div>
+</div>
+
+<div class="footer">
+<button onclick="resetData()" style="background:#dc3545;">Alle Markierungen l&ouml;schen</button>
+<button onclick="toggleYearOverview()" style="background:#28a745;">Jahres&uuml;bersicht</button>
+<button onclick="toggleFerien()" id="ferienBtn" style="background:#17a2b8;">Ferien</button>
+<button onclick="createBackup()" style="background:#6f42c1;">Backup</button>
+<button onclick="restoreBackup()" style="background:#fd7e14;">Restore</button>
+<button id="notifBtn" style="background:#00796b;">Erinnerungen aktivieren</button>
+<input type="file" id="restoreFileInput" accept=".json" style="display:none;">
+</div>
+
+<div class="notif-info" id="notifInfo">
+    Erinnerungen werden als Banner oben und per Ton angezeigt &mdash; auch in Browsern ohne System-Benachrichtigungen. Die Seite muss daf&uuml;r ge&ouml;ffnet sein.
+</div>
+
+<div class="holiday-note">
+<strong class="title">Feiertage in diesem Monat:</strong>
+<div id="holidayList"></div>
+</div>
+
+<div class="ferien-note" id="ferienNote">
+<strong>Ferien in Bayern:</strong><br>
+<span id="ferienList"></span>
+</div>
+
+<div id="yearOverview" class="overview-container">
+<h3>Jahres&uuml;bersicht <span id="overviewYear"></span></h3>
+<div class="overview-stats">
+<span style="color:#8A2BE2;">Krank: <span id="countKrank">0</span> Tage</span>
+<span style="color:#228B22;">Urlaub: <span id="countUrlaub">0</span> Tage</span>
+<span style="color:#666;">Sonstige: <span id="countSonstige">0</span> Tage</span>
+</div>
+<div class="overview-list"><strong>Krankheitstage:</strong><ul id="listKrank"></ul></div>
+<div class="overview-list"><strong>Urlaubstage:</strong><ul id="listUrlaub"></ul></div>
+<div class="overview-list"><strong>Sonstige Tage:</strong><ul id="listSonstige"></ul></div>
+<button class="close-btn" onclick="toggleYearOverview()">Schlie&szlig;en</button>
+</div>
+
+<div class="paypal-note">
+    <p><strong>Gef&auml;llt dir Schichtzeit?</strong><br>
+    Du kannst mich mit einer kleinen Spende unterst&uuml;tzen:</p>
+    <a href="https://www.paypal.me/schichtzeit" target="_blank" rel="noopener" class="paypal-btn">
+        Mit PayPal unterst&uuml;tzen
+    </a>
+</div>
+
+</div>
+
+<div class="modal-overlay" id="entryModal">
+  <div class="modal">
+    <h3 id="modalTitle">Eintrag</h3>
+    <div class="modal-date" id="modalDate"></div>
+
+    <label>Beschreibung
+      <input type="text" id="entryText" maxlength="80" placeholder="z.B. Arzttermin, Elternabend..." autocomplete="off">
+    </label>
+
+    <label>Uhrzeit
+      <input type="time" id="entryTime">
+    </label>
+
+    <label>Symbol
+      <div class="symbol-grid" id="symbolGrid"></div>
+    </label>
+
+    <label>Farbe
+      <input type="color" id="entryColor" value="#FFD700">
+    </label>
+
+    <label class="checkbox-row">
+      <input type="checkbox" id="entryNotify">
+      <span>Erinnerung senden &mdash; <b>1 Tag</b>, <b>2 Stunden</b> und <b>30 Minuten</b> vorher</span>
+    </label>
+
+    <div class="notif-hint" id="notifHint">System-Benachrichtigungen werden von diesem Browser nicht unterst&uuml;tzt. Banner und Ton funktionieren trotzdem.</div>
+
+    <div class="modal-buttons">
+      <button id="modalDeleteBtn" style="background:#dc3545;">L&ouml;schen</button>
+      <button id="modalCancelBtn" style="background:#6c757d;">Schlie&szlig;en</button>
+      <button id="modalSaveBtn" style="background:#007bff;">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.addEventListener('error', function(e){
+    var box = document.getElementById('errBox');
+    if (box) {
+        box.style.display = 'block';
+        box.textContent = 'JS-Fehler: ' + (e.message || e.error || 'unbekannt') + ' @ Zeile ' + (e.lineno || '?');
+    }
+});
+window.addEventListener('unhandledrejection', function(e){
+    var box = document.getElementById('errBox');
+    if (box) {
+        box.style.display = 'block';
+        box.textContent = 'Promise-Fehler: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
+    }
+});
+
+var BASE_DATE_UTC = Date.UTC(2026, 9, 1);
+var CYCLE_35 = [
+'F','F','N','N','N','_','_','_',
+'S','S','S','_',
+'F','F','N','N','_','_','_',
+'S','S','S','_',
+'F','F','F','N','N',
+'_','_','_','_','_','_','_'
+];
+var START_INDEX_BY_GROUP = { '1': 29, '2': 1, '3': 8, '4': 15, '5': 22 };
+var monthNames = ["Januar","Februar","M\u00E4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+var dayNames = ["Mo","Di","Mi","Do","Fr","Sa","So"];
+var SYMBOLS = ['\uD83D\uDD14','\u23F0','\uD83D\uDCCC','\u2B50','\u2764\uFE0F','\u26A0\uFE0F','\uD83D\uDCDE','\uD83D\uDC8A','\uD83C\uDFE5','\uD83D\uDCC5','\u2708\uFE0F','\uD83C\uDF82','\uD83C\uDF89','\uD83D\uDE97','\uD83D\uDCBC','\uD83D\uDCDD'];
+
+var currentDate = new Date(2026, 9, 1);
+var currentMode = 'normal';
+var showFerien = false;
+var actualToday = new Date(); actualToday.setHours(0,0,0,0);
+var selectedColor = localStorage.getItem('schichtzeitColor') || '#FFD700';
+var selectedSymbol = localStorage.getItem('schichtzeitSymbol') || '\uD83D\uDD14';
+
+function safeParse(s, fallback) {
+    try { var v = JSON.parse(s); return (v === null || v === undefined) ? fallback : v; }
+    catch(e){ return fallback; }
+}
+function safeGetArray(key) {
+    var v = safeParse(localStorage.getItem(key), []);
+    return Array.isArray(v) ? v : [];
+}
+function safeGetObject(key) {
+    var v = safeParse(localStorage.getItem(key), {});
+    return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+}
+
+var sickDays = safeGetArray('schichtzeitSickDays');
+var vacationDays = safeGetArray('schichtzeitVacationDays');
+var sonstigeDays = safeGetObject('schichtzeitSonstigeDays');
+
+(function migrateSonstige(){
+    var changed = false;
+    Object.keys(sonstigeDays).forEach(function(k){
+        var v = sonstigeDays[k];
+        if (typeof v === 'string') {
+            sonstigeDays[k] = { color:v, text:'', time:'', notify:false, icon:'\uD83D\uDD14' };
+            changed = true;
+        } else if (v && typeof v === 'object' && !v.icon) {
+            v.icon = '\uD83D\uDD14'; changed = true;
+        }
+    });
+    if (changed) { try { localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays)); } catch(e){} }
+})();
+
+var notifiedFlags = safeGetObject('schichtzeitNotified');
+var savedGroup = localStorage.getItem('schichtzeitGroup') || '1';
+
+function updateOnlineStatus(text, status) {
+    var el = document.getElementById('onlineStatus');
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'online-status ' + status;
+}
+function updateClockStatus() {
+    var d = new Date();
+    actualToday = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    var hh = String(d.getHours()).padStart(2,'0');
+    var mm = String(d.getMinutes()).padStart(2,'0');
+    var wdIdx = actualToday.getDay() === 0 ? 6 : actualToday.getDay() - 1;
+    var wd = dayNames[wdIdx];
+    var dd = String(d.getDate()).padStart(2,'0');
+    var mo = String(d.getMonth()+1).padStart(2,'0');
+    updateOnlineStatus(hh + ':' + mm + ' Uhr \u00B7 ' + wd + ' ' + dd + '.' + mo + '.' + d.getFullYear(), 'online');
+}
+function syncClock() {
+    updateClockStatus();
+    try { renderCalendar(); } catch(e){ console.error(e); }
+}
+function scheduleMinuteTick() {
+    var now = new Date();
+    var ms = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    if (ms < 50) ms += 60000;
+    setTimeout(function(){ syncClock(); scheduleMinuteTick(); }, ms);
+}
+scheduleMinuteTick();
+document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) { syncClock(); checkReminders(); scheduleMinuteTick(); }
+});
+window.addEventListener('focus', function(){ syncClock(); checkReminders(); });
+
+function calculateEaster(year) {
+    var a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+    return new Date(year, month-1, day);
+}
+function getHolidayList(year) {
+    var list = [];
+    function add(m,d,name){ var dt=new Date(year,m-1,d); list.push({name:name,date:dt,key:year+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0')}); }
+    add(1,1,"Neujahr"); add(1,6,"Heilige Drei K\u00F6nige");
+    add(5,1,"Tag der Arbeit"); add(8,15,"Mari\u00E4 Himmelfahrt");
+    add(10,3,"Tag der Deutschen Einheit"); add(11,1,"Allerheiligen");
+    add(12,25,"1. Weihnachtstag"); add(12,26,"2. Weihnachtstag");
+    var easter = calculateEaster(year);
+    function addE(days,name){ var d=new Date(easter); d.setDate(d.getDate()+days); add(d.getMonth()+1,d.getDate(),name); }
+    addE(-2,"Karfreitag"); addE(1,"Ostermontag");
+    addE(39,"Christi Himmelfahrt"); addE(50,"Pfingstmontag"); addE(60,"Fronleichnam");
+    list.sort(function(a,b){return a.date-b.date;});
+    return list;
+}
+function getHolidaySet(year) {
+    var s = new Set();
+    getHolidayList(year).forEach(function(h){ s.add(h.key); });
+    return s;
+}
+
+var FERIEN = {
+2026:[
+{name:"Winterferien",start:"2026-02-16",end:"2026-02-20"},
+{name:"Osterferien",start:"2026-03-30",end:"2026-04-10"},
+{name:"Pfingstferien",start:"2026-05-26",end:"2026-06-05"},
+{name:"Sommerferien",start:"2026-08-01",end:"2026-09-14"},
+{name:"Herbstferien",start:"2026-11-02",end:"2026-11-06"},
+{name:"Weihnachtsferien",start:"2026-12-21",end:"2026-12-31"}
+],
+2027:[
+{name:"Winterferien",start:"2027-02-15",end:"2027-02-19"},
+{name:"Osterferien",start:"2027-03-22",end:"2027-04-02"},
+{name:"Pfingstferien",start:"2027-05-18",end:"2027-05-28"},
+{name:"Sommerferien",start:"2027-08-02",end:"2027-09-13"},
+{name:"Herbstferien",start:"2027-11-02",end:"2027-11-05"},
+{name:"Weihnachtsferien",start:"2027-12-23",end:"2027-12-31"}
+],
+2028:[
+{name:"Winterferien",start:"2028-02-14",end:"2028-02-18"},
+{name:"Osterferien",start:"2028-04-10",end:"2028-04-21"},
+{name:"Pfingstferien",start:"2028-06-06",end:"2028-06-16"},
+{name:"Sommerferien",start:"2028-07-31",end:"2028-09-11"},
+{name:"Herbstferien",start:"2028-10-30",end:"2028-11-03"},
+{name:"Weihnachtsferien",start:"2028-12-23",end:"2028-12-31"}
+]
+};
+function getFerienSet(year) {
+    var set = new Set();
+    (FERIEN[year]||[]).forEach(function(period){
+        var cur = new Date(period.start);
+        var end = new Date(period.end);
+        while (cur <= end) {
+            set.add(cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')+'-'+String(cur.getDate()).padStart(2,'0'));
+            cur.setDate(cur.getDate()+1);
+        }
+    });
+    return set;
+}
+
+function formatDateKey(date) {
+    return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+}
+function getShift(date, group) {
+    var g = String(group);
+    var startIndex = START_INDEX_BY_GROUP[g];
+    if (startIndex === undefined) return '_';
+    var dateUTC = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    var diffDays = Math.round((dateUTC - BASE_DATE_UTC) / 86400000);
+    var index = (startIndex + diffDays) % CYCLE_35.length;
+    if (index < 0) index += CYCLE_35.length;
+    return CYCLE_35[index];
+}
+
+function isColorDark(hex) {
+    var c = String(hex).replace('#','');
+    var r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+    return ((0.299*r + 0.587*g + 0.114*b) / 255) < 0.55;
+}
+function getEntry(dateKey) {
+    var e = sonstigeDays[dateKey];
+    if (!e) return null;
+    if (typeof e === 'string') return { color:e, text:'', time:'', notify:false, icon:'\uD83D\uDD14' };
+    if (!e.icon) e.icon = '\uD83D\uDD14';
+    return e;
+}
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+}
+
+var audioCtx = null;
+function ensureAudio() {
+    if (audioCtx) return audioCtx;
+    try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; audioCtx = new AC(); } catch(e){ audioCtx = null; }
+    return audioCtx;
+}
+function unlockAudio() {
+    var ctx = ensureAudio();
+    if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch(e){} }
+}
+document.addEventListener('touchstart', unlockAudio, {once:true, passive:true});
+document.addEventListener('click', unlockAudio, {once:true});
+function playNotifySound() {
+    var ctx = ensureAudio();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') { try { ctx.resume(); } catch(e){} }
+    var now = ctx.currentTime;
+    function tone(freq, start, dur, gainVal) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, now + start);
+        gain.gain.exponentialRampToValueAtTime(gainVal, now + start + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now + start); osc.stop(now + start + dur + 0.05);
+    }
+    tone(1318.5, 0.00, 0.55, 0.28);
+    tone(1046.5, 0.18, 0.75, 0.26);
+    tone(1568.0, 0.42, 0.45, 0.14);
+}
+
+var suppressClick = false;
+function changeMonth(delta) {
+    currentDate.setMonth(currentDate.getMonth() + delta);
+    renderCalendar();
+    animateCalendar(delta > 0 ? 'next' : 'prev');
+}
+function animateCalendar(direction) {
+    var cal = document.getElementById('calendar');
+    if (!cal) return;
+    cal.classList.remove('anim-left','anim-right');
+    void cal.offsetWidth;
+    cal.classList.add(direction === 'next' ? 'anim-left' : 'anim-right');
+    setTimeout(function(){ cal.classList.remove('anim-left','anim-right'); }, 320);
+}
+(function setupSwipe(){
+    var el = document.getElementById('calendar');
+    if (!el) return;
+    var startX = 0, startY = 0, startT = 0;
+    el.addEventListener('touchstart', function(e){
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY; startT = Date.now();
+    }, {passive:true});
+    el.addEventListener('touchend', function(e){
+        if (e.changedTouches.length !== 1) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        var dy = e.changedTouches[0].clientY - startY;
+        var dt = Date.now() - startT;
+        if (dt > 900) return;
+        if (Math.abs(dx) < 60) return;
+        if (Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        suppressClick = true;
+        setTimeout(function(){ suppressClick = false; }, 450);
+        if (dx < 0) changeMonth(1); else changeMonth(-1);
+    }, {passive:true});
+})();
+
+function renderHolidayNote(year, month) {
+    var listEl = document.getElementById('holidayList');
+    if (!listEl) return;
+    var currentList = getHolidayList(year).filter(function(h){ return h.date.getMonth() === month; });
+    if (currentList.length === 0) { listEl.innerHTML = '<span style="color:#999;font-style:italic;">Keine Feiertage in diesem Monat.</span>'; return; }
+    listEl.innerHTML = currentList.map(function(h){
+        var dd = String(h.date.getDate()).padStart(2,'0');
+        var mm = String(h.date.getMonth()+1).padStart(2,'0');
+        return '<span class="holiday-item current">' + h.name + ' (' + dd + '.' + mm + ')</span>';
+    }).join('');
+}
+function updateColorPresetsActive() {
+    var all = document.querySelectorAll('.color-preset');
+    for (var i = 0; i < all.length; i++) {
+        var c = all[i].getAttribute('data-color').toLowerCase();
+        if (c === selectedColor.toLowerCase()) all[i].classList.add('active');
+        else all[i].classList.remove('active');
+    }
+}
+function renderCalendar() {
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth();
+    var sel = document.getElementById('groupSelect');
+    if (!sel) return;
+    var group = sel.value;
+    var holidays = getHolidaySet(year);
+    var ferienSet = showFerien ? getFerienSet(year) : new Set();
+
+    var md = document.getElementById('monthDisplay');
+    if (md) md.textContent = monthNames[month] + ' ' + year;
+
+    var firstDayOfMonth = new Date(year, month, 1);
+    var lastDayOfMonth = new Date(year, month + 1, 0);
+    var startDay = firstDayOfMonth.getDay();
+    startDay = startDay === 0 ? 6 : startDay - 1;
+
+    var calendarEl = document.getElementById('calendar');
+    if (!calendarEl) return;
+    calendarEl.innerHTML = '';
+
+    dayNames.forEach(function(day){
+        var h = document.createElement('div');
+        h.className = 'day-header'; h.textContent = day;
+        calendarEl.appendChild(h);
+    });
+    for (var i = 0; i < startDay; i++) {
+        var e = document.createElement('div');
+        e.className = 'day empty';
+        calendarEl.appendChild(e);
+    }
+
+    var makeCell = function(day){
+        var date = new Date(year, month, day);
+        var dateKey = formatDateKey(date);
+        var shift = getShift(date, group);
+        var dayEl = document.createElement('div');
+        dayEl.className = 'day ' + shift;
+
+        if (sickDays.indexOf(dateKey) > -1) dayEl.classList.add('krank');
+        else if (vacationDays.indexOf(dateKey) > -1) dayEl.classList.add('urlaub');
+
+        if (date.getTime() === actualToday.getTime()) dayEl.classList.add('today');
+        if (holidays.has(dateKey)) dayEl.classList.add('feiertag');
+        if (showFerien && ferienSet.has(dateKey)) {
+            dayEl.classList.add('ferien');
+            var fm = document.createElement('span');
+            fm.className = 'ferien-marker'; fm.textContent = 'F';
+            dayEl.appendChild(fm);
+        }
+
+        var dn = document.createElement('span');
+        dn.className = 'date-num'; dn.textContent = day;
+        dayEl.appendChild(dn);
+
+        var st = document.createElement('span');
+        st.textContent = shift === '_' ? '' : shift;
+        dayEl.appendChild(st);
+
+        var entry = getEntry(dateKey);
+        if (entry && sickDays.indexOf(dateKey) < 0 && vacationDays.indexOf(dateKey) < 0) {
+            dayEl.classList.add('sonstige');
+            dayEl.style.backgroundColor = entry.color;
+            var isDark = isColorDark(entry.color);
+            if (isDark) {
+                dayEl.style.color = '#fff';
+                dayEl.setAttribute('data-dark','1');
+            } else {
+                dayEl.style.color = '#000';
+                dayEl.setAttribute('data-dark','0');
+            }
+            dn.style.color = dayEl.style.color;
+            if (String(entry.color).toUpperCase() === '#FFFFFF') dayEl.style.border = '2px solid #999';
+
+            var tipParts = [];
+            if (entry.text) tipParts.push(entry.text);
+            if (entry.time) tipParts.push('Uhrzeit: ' + entry.time);
+            if (entry.notify && entry.time) tipParts.push('Erinnerung aktiv');
+            if (tipParts.length) dayEl.title = tipParts.join(' | ');
+
+            if (entry.text || entry.time || entry.notify) {
+                var m = document.createElement('span');
+                m.className = 'sonstige-marker';
+                m.textContent = entry.icon || '\uD83D\uDD14';
+                dayEl.appendChild(m);
+            }
+            if (entry.text) {
+                var prev = document.createElement('span');
+                prev.className = 'sonstige-preview';
+                prev.textContent = entry.text.length > 12 ? entry.text.substr(0, 11) + '\u2026' : entry.text;
+                dayEl.appendChild(prev);
+            }
+        }
+
+        dayEl.addEventListener('click', function(){
+            if (suppressClick) return;
+            if (currentMode === 'krank') toggleDay(dateKey, 'krank');
+            else if (currentMode === 'urlaub') toggleDay(dateKey, 'urlaub');
+            else if (currentMode === 'sonstige') openEntryEditor(dateKey);
+            else { if (getEntry(dateKey)) openEntryEditor(dateKey); }
+        });
+
+        calendarEl.appendChild(dayEl);
+    };
+
+    for (var day = 1; day <= lastDayOfMonth.getDate(); day++) makeCell(day);
+
+    renderHolidayNote(year, month);
+    updateYearOverview();
+    updateFerienList(year);
+    updateRemindersList();
+}
+function updateFerienList(year) {
+    var listEl = document.getElementById('ferienList');
+    if (!listEl) return;
+    var periods = FERIEN[year] || [];
+    if (periods.length === 0) { listEl.innerHTML = 'Keine Daten f\u00FCr dieses Jahr verf\u00FCgbar.'; return; }
+    function f(s){ var p = s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+    listEl.innerHTML = periods.map(function(p){ return p.name + ': ' + f(p.start) + ' \u2013 ' + f(p.end); }).join('<br>');
+}
+function toggleDay(dateKey, type, forceRemove) {
+    if (forceRemove === undefined) forceRemove = false;
+    var array = type === 'krank' ? sickDays : vacationDays;
+    var index = array.indexOf(dateKey);
+    if (index > -1 || forceRemove) {
+        if (index > -1) array.splice(index, 1);
+    } else {
+        array.push(dateKey);
+        if (type === 'krank') {
+            var vi = vacationDays.indexOf(dateKey); if (vi > -1) vacationDays.splice(vi, 1);
+        } else if (type === 'urlaub') {
+            var si = sickDays.indexOf(dateKey); if (si > -1) sickDays.splice(si, 1);
+        }
+        if (sonstigeDays[dateKey]) {
+            delete sonstigeDays[dateKey];
+            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+        }
+    }
+    if (type === 'krank' || forceRemove) localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+    if (type === 'urlaub' || forceRemove) localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+    renderCalendar();
+}
+
+var editingDateKey = null;
+var editingSymbol = '\uD83D\uDD14';
+
+function renderSymbolGrid() {
+    var grid = document.getElementById('symbolGrid');
+    if (!grid) return;
+    grid.innerHTML = SYMBOLS.map(function(s){
+        return '<button type="button" class="symbol-btn' + (s===editingSymbol?' active':'') + '" data-symbol="' + s + '">' + s + '</button>';
+    }).join('');
+    var btns = grid.querySelectorAll('.symbol-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener('click', function(){
+            editingSymbol = this.getAttribute('data-symbol');
+            renderSymbolGrid();
+        });
+    }
+}
+function openEntryEditor(dateKey) {
+    editingDateKey = dateKey;
+    var parts = dateKey.split('-');
+    var entry = getEntry(dateKey);
+    document.getElementById('modalTitle').textContent = entry ? 'Eintrag ansehen / bearbeiten' : 'Neuer Eintrag';
+    document.getElementById('modalDate').textContent = parts[2] + '.' + parts[1] + '.' + parts[0];
+    document.getElementById('entryText').value = entry ? (entry.text || '') : '';
+    document.getElementById('entryTime').value = entry ? (entry.time || '') : '';
+    document.getElementById('entryColor').value = entry ? entry.color : selectedColor;
+    document.getElementById('entryNotify').checked = entry ? !!entry.notify : false;
+    editingSymbol = (entry && entry.icon) ? entry.icon : selectedSymbol;
+    renderSymbolGrid();
+    document.getElementById('modalDeleteBtn').style.display = entry ? 'block' : 'none';
+    var hint = document.getElementById('notifHint');
+    if (!('Notification' in window)) hint.classList.add('active'); else hint.classList.remove('active');
+    document.getElementById('entryModal').classList.add('active');
+}
+function closeEntryEditor() {
+    document.getElementById('entryModal').classList.remove('active');
+    editingDateKey = null;
+}
+function saveEntry() {
+    if (!editingDateKey) return;
+    var text = document.getElementById('entryText').value.trim();
+    var time = document.getElementById('entryTime').value;
+    var color = document.getElementById('entryColor').value;
+    var notify = document.getElementById('entryNotify').checked;
+
+    if (notify && time && 'Notification' in window && Notification.permission === 'default') {
+        try { Notification.requestPermission().then(function(){ updateNotifButton(); }); } catch(e){}
+    }
+    sonstigeDays[editingDateKey] = { color: color, text: text, time: time, notify: notify && !!time, icon: editingSymbol };
+    selectedSymbol = editingSymbol;
+    localStorage.setItem('schichtzeitSymbol', selectedSymbol);
+
+    var si = sickDays.indexOf(editingDateKey); if (si > -1) sickDays.splice(si, 1);
+    var vi = vacationDays.indexOf(editingDateKey); if (vi > -1) vacationDays.splice(vi, 1);
+    localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+    localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+
+    delete notifiedFlags[editingDateKey + '_1d'];
+    delete notifiedFlags[editingDateKey + '_2h'];
+    delete notifiedFlags[editingDateKey + '_30m'];
+
+    if (time && notify) {
+        var parts = editingDateKey.split('-').map(Number);
+        var tparts = time.split(':').map(Number);
+        var evMs = new Date(parts[0], parts[1]-1, parts[2], tparts[0], tparts[1], 0, 0).getTime();
+        var diffMin = (evMs - Date.now()) / 60000;
+        if (diffMin < 1320) notifiedFlags[editingDateKey + '_1d'] = true;
+        if (diffMin < 60)   notifiedFlags[editingDateKey + '_2h'] = true;
+        if (diffMin < 5)    notifiedFlags[editingDateKey + '_30m'] = true;
+    }
+    localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+    localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+
+    closeEntryEditor();
+    renderCalendar();
+}
+function deleteEntry() {
+    if (!editingDateKey) return;
+    if (!confirm('Diesen Eintrag wirklich l\u00F6schen?')) return;
+    delete sonstigeDays[editingDateKey];
+    delete notifiedFlags[editingDateKey + '_1d'];
+    delete notifiedFlags[editingDateKey + '_2h'];
+    delete notifiedFlags[editingDateKey + '_30m'];
+    localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+    localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+    closeEntryEditor();
+    renderCalendar();
+}
+document.getElementById('modalSaveBtn').addEventListener('click', saveEntry);
+document.getElementById('modalDeleteBtn').addEventListener('click', deleteEntry);
+document.getElementById('modalCancelBtn').addEventListener('click', closeEntryEditor);
+document.getElementById('entryModal').addEventListener('click', function(e){ if (e.target.id === 'entryModal') closeEntryEditor(); });
+
+function showBanner(title, body) {
+    var old = document.getElementById('notifBanner');
+    if (old) old.parentNode.removeChild(old);
+    var el = document.createElement('div');
+    el.id = 'notifBanner';
+    el.className = 'notif-banner';
+    el.innerHTML = '<button class="notif-banner-close" aria-label="Schliessen">\u00D7</button>' +
+                   '<strong>' + escapeHtml(title) + '</strong>' +
+                   escapeHtml(body);
+    el.querySelector('.notif-banner-close').addEventListener('click', function(){ el.parentNode.removeChild(el); });
+    document.body.appendChild(el);
+    setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 25000);
+}
+function fireNotification(title, body) {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+    try { new Notification(title, { body: body, tag: title + '|' + body, silent: true }); } catch(e){}
+}
+function notifyUser(title, body) {
+    playNotifySound();
+    showBanner(title, body);
+    fireNotification(title, body);
+}
+function updateNotifButton() {
+    var btn = document.getElementById('notifBtn');
+    if (!btn) return;
+    btn.disabled = false;
+    var hasSystem = ('Notification' in window);
+    if (hasSystem && Notification.permission === 'granted') {
+        btn.textContent = 'Erinnerungen aktiv'; btn.style.background = '#28a745';
+    } else if (hasSystem && Notification.permission === 'denied') {
+        btn.textContent = 'Erinnerungen aktiv (Banner)'; btn.style.background = '#00796b';
+    } else {
+        btn.textContent = 'Erinnerungen aktivieren'; btn.style.background = '#00796b';
+    }
+}
+document.getElementById('notifBtn').addEventListener('click', function(){
+    unlockAudio();
+    notifyUser('Test-Erinnerung', 'Banner und Ton funktionieren.');
+    if ('Notification' in window && Notification.permission === 'default') {
+        try { Notification.requestPermission().then(function(){ updateNotifButton(); checkReminders(); }); } catch(e){}
+    } else if ('Notification' in window && Notification.permission === 'granted') {
+        checkReminders();
+    }
+});
+function saveNotified() { localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags)); }
+
+function checkReminders() {
+    var nowMs = Date.now();
+    Object.keys(sonstigeDays).forEach(function(dateKey){
+        var entry = getEntry(dateKey);
+        if (!entry || !entry.notify || !entry.time) return;
+        var p = dateKey.split('-').map(Number);
+        var t = entry.time.split(':').map(Number);
+        if (isNaN(t[0]) || isNaN(t[1])) return;
+        var eventMs = new Date(p[0], p[1]-1, p[2], t[0], t[1], 0, 0).getTime();
+        var diffMin = (eventMs - nowMs) / 60000;
+        if (diffMin <= 0) return;
+
+        var label = entry.text ? entry.text : 'Sonstiger Termin';
+        var icon = entry.icon || '\uD83D\uDD14';
+
+        var triggers = [
+            { key:'_1d',  lo: 1320, hi: 1560, msg: icon + ' Morgen um ' + entry.time + ' Uhr' },
+            { key:'_2h',  lo: 60,   hi: 180,  msg: '\u23F0 In 2 Stunden: ' + entry.time + ' Uhr' },
+            { key:'_30m', lo: 5,    hi: 55,   msg: icon + ' In 30 Minuten: ' + entry.time + ' Uhr' }
+        ];
+
+        triggers.forEach(function(tr){
+            var fullKey = dateKey + tr.key;
+            if (notifiedFlags[fullKey]) return;
+            if (diffMin >= tr.lo && diffMin <= tr.hi) {
+                notifyUser(tr.msg, label);
+                notifiedFlags[fullKey] = true;
+                saveNotified();
+            } else if (diffMin < tr.lo) {
+                notifiedFlags[fullKey] = true;
+                saveNotified();
+            }
+        });
+    });
+
+    var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
+    var cutoffKey = formatDateKey(cutoff);
+    var cleaned = false;
+    Object.keys(notifiedFlags).forEach(function(k){
+        if (k.split('_')[0] < cutoffKey) { delete notifiedFlags[k]; cleaned = true; }
+    });
+    if (cleaned) saveNotified();
+}
+setInterval(checkReminders, 30 * 1000);
+
+function getUpcomingReminders(limit) {
+    var now = new Date();
+    var items = [];
+    Object.keys(sonstigeDays).forEach(function(k){
+        var e = getEntry(k);
+        if (!e || !e.notify || !e.time) return;
+        var p = k.split('-').map(Number);
+        var t = e.time.split(':').map(Number);
+        if (isNaN(t[0]) || isNaN(t[1])) return;
+        var dt = new Date(p[0], p[1]-1, p[2], t[0], t[1], 0, 0);
+        if (dt.getTime() >= now.getTime() - 30*60000) items.push({key:k, entry:e, dt:dt});
+    });
+    items.sort(function(a,b){ return a.dt - b.dt; });
+    return items.slice(0, limit || 10);
+}
+function updateRemindersList() {
+    var box = document.getElementById('remindersBox');
+    var list = document.getElementById('remindersList');
+    if (!box || !list) return;
+    var items = getUpcomingReminders(10);
+    if (items.length === 0) { box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    var now = new Date();
+    list.innerHTML = items.map(function(it){
+        var diffMin = Math.round((it.dt - now) / 60000);
+        var when;
+        if (diffMin < 0) when = 'jetzt';
+        else if (diffMin < 60) when = 'in ' + diffMin + ' Min';
+        else if (diffMin < 1440) when = 'in ' + Math.round(diffMin/60) + ' Std';
+        else when = 'in ' + Math.round(diffMin/1440) + ' Tagen';
+        var dt = it.dt;
+        var dd = String(dt.getDate()).padStart(2,'0'), mm = String(dt.getMonth()+1).padStart(2,'0'), yyyy = dt.getFullYear();
+        var hh = String(dt.getHours()).padStart(2,'0'), mn = String(dt.getMinutes()).padStart(2,'0');
+        var icon = it.entry.icon || '\uD83D\uDD14';
+        var text = it.entry.text || 'Termin';
+        return '<li>' + icon + ' <b>' + dd + '.' + mm + '.' + yyyy + '</b> \u00B7 ' + hh + ':' + mn + ' \u2013 ' + escapeHtml(text) + ' <span class="when">(' + when + ')</span></li>';
+    }).join('');
+}
+setInterval(updateRemindersList, 60 * 1000);
+
+function updateYearOverview() {
+    var year = currentDate.getFullYear();
+    document.getElementById('overviewYear').textContent = year;
+    var yearSick = sickDays.filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
+    var yearVacation = vacationDays.filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
+    var yearSonstige = Object.keys(sonstigeDays).filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
+    document.getElementById('countKrank').textContent = yearSick.length;
+    document.getElementById('countUrlaub').textContent = yearVacation.length;
+    document.getElementById('countSonstige').textContent = yearSonstige.length;
+    function f(s){ var p = s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+    document.getElementById('listKrank').innerHTML = yearSick.length ? yearSick.map(function(d){ return '<li>'+f(d)+'</li>'; }).join('') : '<li>Keine Eintr\u00E4ge</li>';
+    document.getElementById('listUrlaub').innerHTML = yearVacation.length ? yearVacation.map(function(d){ return '<li>'+f(d)+'</li>'; }).join('') : '<li>Keine Eintr\u00E4ge</li>';
+    document.getElementById('listSonstige').innerHTML = yearSonstige.length ? yearSonstige.map(function(d){
+        var e = getEntry(d);
+        var extra = [];
+        if (e.icon) extra.push(e.icon);
+        if (e.time) extra.push('Uhrzeit: ' + e.time);
+        if (e.text) extra.push(escapeHtml(e.text));
+        var extraStr = extra.length ? ' \u2013 ' + extra.join(' \u00B7 ') : '';
+        return '<li><span style="display:inline-block;width:14px;height:14px;background:'+e.color+';border:1px solid #999;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>'+f(d)+extraStr+'</li>';
+    }).join('') : '<li>Keine Eintr\u00E4ge</li>';
+}
+function toggleYearOverview() {
+    var o = document.getElementById('yearOverview');
+    if (o.style.display === 'block') { o.style.display = 'none'; }
+    else {
+        o.style.display = 'block';
+        updateYearOverview();
+        setTimeout(function(){
+            try { o.scrollIntoView({behavior:'smooth', block:'center'}); }
+            catch(e) {
+                var rect = o.getBoundingClientRect();
+                var targetY = window.pageYOffset + rect.top - (window.innerHeight - rect.height) / 2;
+                window.scrollTo(0, Math.max(0, targetY));
+            }
+        }, 30);
+    }
+}
+function resetData() {
+    if (confirm('M\u00F6chtest du wirklich alle Markierungen l\u00F6schen?')) {
+        sickDays = []; vacationDays = []; sonstigeDays = {}; notifiedFlags = {};
+        localStorage.removeItem('schichtzeitSickDays'); localStorage.removeItem('schichtzeitVacationDays');
+        localStorage.removeItem('schichtzeitSonstigeDays'); localStorage.removeItem('schichtzeitNotified');
+        renderCalendar();
+    }
+}
+
+function createBackup() {
+    var backup = { version: 1, date: new Date().toISOString(),
+        group: document.getElementById('groupSelect').value,
+        color: selectedColor, sickDays: sickDays, vacationDays: vacationDays,
+        sonstigeDays: sonstigeDays, notifiedFlags: notifiedFlags };
+    var json = JSON.stringify(backup, null, 2);
+    var blob = new Blob([json], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var now = new Date();
+    var filename = 'Schichtzeit_Backup_' +
+        now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0') + '_' +
+        String(now.getHours()).padStart(2,'0') + '-' + String(now.getMinutes()).padStart(2,'0') + '.json';
+    var link = document.createElement('a');
+    link.href = url; link.download = filename;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+function restoreBackup() {
+    var input = document.getElementById('restoreFileInput');
+    input.value = ''; input.click();
+}
+document.getElementById('restoreFileInput').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(event){
+        try {
+            var data = JSON.parse(event.target.result);
+            if (!data.sickDays && !data.vacationDays && !data.sonstigeDays) { alert('Ung\u00FCltige Backup-Datei.'); return; }
+            if (!confirm('Backup wiederherstellen? Die aktuellen Daten werden \u00FCberschrieben.')) return;
+            sickDays = data.sickDays || []; vacationDays = data.vacationDays || [];
+            sonstigeDays = data.sonstigeDays || {}; notifiedFlags = data.notifiedFlags || {};
+            if (data.group) { document.getElementById('groupSelect').value = data.group; localStorage.setItem('schichtzeitGroup', data.group); }
+            if (data.color) {
+                selectedColor = data.color;
+                document.getElementById('sonstigeColor').value = selectedColor;
+                document.getElementById('legendSonstige').style.background = selectedColor;
+                localStorage.setItem('schichtzeitColor', selectedColor);
+                updateColorPresetsActive();
+            }
+            localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+            localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+            localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+            renderCalendar();
+            alert('Backup erfolgreich wiederhergestellt.');
+        } catch (err) { alert('Fehler beim Lesen der Backup-Datei: ' + err.message); }
+    };
+    reader.readAsText(file);
+});
+
+document.getElementById('prevBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(-1); });
+document.getElementById('nextBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(1); });
+document.getElementById('groupSelect').addEventListener('change', function(e){ localStorage.setItem('schichtzeitGroup', e.target.value); renderCalendar(); });
+document.querySelectorAll('.mode-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+        document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
+        e.target.classList.add('active');
+        currentMode = e.target.getAttribute('data-mode');
+        var picker = document.getElementById('colorPickerRow');
+        picker.classList.toggle('active', currentMode === 'sonstige');
+    });
+});
+document.getElementById('sonstigeColor').addEventListener('input', function(e){
+    selectedColor = e.target.value;
+    localStorage.setItem('schichtzeitColor', selectedColor);
+    document.getElementById('legendSonstige').style.background = selectedColor;
+    updateColorPresetsActive();
+});
+document.querySelectorAll('.color-preset').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        selectedColor = btn.getAttribute('data-color');
+        document.getElementById('sonstigeColor').value = selectedColor;
+        document.getElementById('legendSonstige').style.background = selectedColor;
+        localStorage.setItem('schichtzeitColor', selectedColor);
+        updateColorPresetsActive();
+    });
+});
+document.getElementById('legendSonstige').style.background = selectedColor;
+
+function toggleFerien() {
+    showFerien = !showFerien;
+    var btn = document.getElementById('ferienBtn');
+    var note = document.getElementById('ferienNote');
+    if (showFerien) { btn.style.background = '#0d8a99'; note.style.display = 'block'; }
+    else { btn.style.background = '#17a2b8'; note.style.display = 'none'; }
+    renderCalendar();
+}
+
+document.getElementById('groupSelect').value = savedGroup;
+document.getElementById('sonstigeColor').value = selectedColor;
+updateColorPresetsActive();
+syncClock();
+updateNotifButton();
+setTimeout(checkReminders, 3000);
+</script>
+</body>
+</html>
