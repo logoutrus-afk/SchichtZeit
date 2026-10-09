@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>Schichtzeit</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,11 +12,14 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230056b3'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ESZ%3C/text%3E%3C/svg%3E">
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f4f9;color:#333;text-align:center;padding:6px;padding-top:env(safe-area-inset-top,6px);padding-bottom:env(safe-area-inset-bottom,6px);margin:0;-webkit-tap-highlight-color:transparent;font-size:16px}
-.container{max-width:1000px;margin:0 auto;background:#fff;padding:10px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-h2{margin-top:0;color:#0056b3;font-size:26px;letter-spacing:.3px}
+.container{position:relative;max-width:1000px;margin:0 auto;background:#fff;padding:10px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+h2{margin-top:0;color:#0056b3;font-size:26px;letter-spacing:.3px;padding:0 90px}
+.top-btn{position:absolute;top:10px;background:#f1f3f5;color:#333;border:1px solid #ccc;border-radius:8px;width:38px;height:38px;font-size:20px;font-weight:bold;cursor:pointer;line-height:1;padding:0;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.top-btn:active{background:#e2e6ea}
+.share-btn{left:10px}
+.settings-btn{right:10px}
 .online-status{font-size:13px;padding:5px 12px;border-radius:14px;display:inline-block;margin-bottom:12px;font-weight:bold}
 .online-status.online{background:#d4edda;color:#155724}
-.online-status.offline{background:#f8d7da;color:#721c24}
 .online-status.loading{background:#fff3cd;color:#856404}
 .top-row{display:flex;justify-content:center;align-items:center;margin-bottom:12px;font-size:17px}
 .nav-row{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:nowrap}
@@ -45,7 +46,7 @@ button:active{background:#0056b3}
 @keyframes cal-slide-left{from{opacity:.35;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
 @keyframes cal-slide-right{from{opacity:.35;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
 .day-header{font-weight:bold;font-size:15px;padding:8px 0;color:#555}
-.day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:clamp(14px,2.2vw,26px);font-weight:900;border:1px solid #eee;position:relative;cursor:pointer;transition:transform 0.1s;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+.day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:clamp(14px,2.2vw,26px);font-weight:900;border:1px solid #eee;position:relative;cursor:pointer;line-height:1;-webkit-font-smoothing:antialiased}
 @media (min-width:900px){ .day{aspect-ratio:auto;height:78px} }
 .day:active{transform:scale(0.95)}
 .day.F{background-color:#FFD700;color:#000}
@@ -72,9 +73,19 @@ button:active{background:#0056b3}
 .legend-item{display:flex;align-items:center;gap:5px}
 .legend-box{width:16px;height:16px;border-radius:4px;border:1px solid #ccc}
 .footer{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-.overview-container{display:none;margin-top:22px;text-align:left;background:#f8f9fa;padding:16px;border-radius:10px;border:1px solid #dee2e6;font-size:15px;scroll-margin-top:20px}
+.overview-container{display:none;margin-top:22px;text-align:left;background:#f8f9fa;padding:16px;border-radius:10px;border:1px solid #dee2e6;font-size:15px}
 .overview-container h3{margin-top:0;color:#0056b3;border-bottom:1px solid #ccc;padding-bottom:6px;font-size:18px}
 .overview-stats{display:flex;justify-content:space-around;margin-bottom:16px;font-weight:bold;flex-wrap:wrap;gap:8px;font-size:15px}
+.urlaub-stat{background:#e7f6e9;padding:10px 14px;border-radius:8px;border:1px solid #a8e0b0;display:flex;flex-direction:column;align-items:center;min-width:130px}
+.urlaub-stat .label{font-size:12px;color:#228B22;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.urlaub-stat .value{font-size:20px;color:#155724}
+.urlaub-stat .sub{font-size:12px;color:#666;margin-top:2px}
+.urlaub-stat.warn{background:#fff3cd;border-color:#ffc107}
+.urlaub-stat.warn .label{color:#856404}
+.urlaub-stat.warn .value{color:#856404}
+.urlaub-stat.danger{background:#f8d7da;border-color:#dc3545}
+.urlaub-stat.danger .label{color:#721c24}
+.urlaub-stat.danger .value{color:#721c24}
 .overview-list{margin-bottom:12px}
 .overview-list strong{display:block;margin-bottom:6px;color:#333;font-size:15px}
 .overview-list ul{margin:0;padding-left:22px;font-size:14px;color:#555}
@@ -92,70 +103,172 @@ button:active{background:#0056b3}
 .reminders-box li{padding:6px 0;border-bottom:1px solid #d6e7ff}
 .reminders-box li:last-child{border-bottom:none}
 .reminders-box .when{color:#666;font-size:13px}
-.paypal-note{margin-top:25px;padding:14px;background:linear-gradient(135deg,#f0f4ff 0%,#e6eeff 100%);border-radius:10px;border:1px solid #c3d4ff;text-align:center;font-size:14px;color:#333;line-height:1.6}
+.paypal-note{margin-top:25px;padding:14px;background:#f0f4ff;border-radius:10px;border:1px solid #c3d4ff;text-align:center;font-size:14px;color:#333;line-height:1.6}
 .paypal-note p{margin:0 0 12px 0}
 .paypal-btn{display:inline-block;background:#0070ba;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:bold}
-.paypal-btn:hover,.paypal-btn:active{background:#005ea6}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px;overflow-y:auto}
 .modal-overlay.active{display:flex}
-.modal{background:#fff;border-radius:14px;padding:22px;max-width:460px;width:100%;text-align:left;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-height:95vh;overflow-y:auto;-webkit-overflow-scrolling:touch;font-size:16px}
+.modal{background:#fff;border-radius:14px;padding:22px;max-width:460px;width:100%;text-align:left;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-height:95vh;overflow-y:auto;font-size:16px}
 .modal h3{margin:0 0 6px;color:#0056b3;font-size:20px}
 .modal .modal-date{font-size:14px;color:#777;margin-bottom:14px}
 .modal label{display:block;font-size:15px;font-weight:bold;margin-bottom:12px;color:#333}
 .field-label{display:block;font-size:15px;font-weight:bold;margin-bottom:8px;color:#333}
-.modal input[type="text"],.modal input[type="time"]{width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;margin-top:5px;font-family:inherit}
+.modal input[type="text"],.modal input[type="time"],.modal input[type="number"],.modal select{width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;margin-top:5px;font-family:inherit}
 .modal input[type="color"]{width:56px;height:40px;border:2px solid #999;border-radius:8px;cursor:pointer;padding:0;background:#fff;margin-top:5px;vertical-align:middle}
 .symbol-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:5px;margin-bottom:14px}
-.symbol-btn{
-    font-size:22px;
-    padding:6px 0;
-    min-height:44px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    background:#fff;
-    cursor:pointer;
-    line-height:1;
-    font-weight:normal;
-    color:#333;
-    -webkit-user-select:none;
-    user-select:none;
-    touch-action:manipulation;
-    -webkit-tap-highlight-color:rgba(0,86,179,0.2);
-}
+.symbol-btn{font-size:22px;padding:6px 0;min-height:44px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;line-height:1;font-weight:normal;color:#333;touch-action:manipulation}
 .symbol-btn.active{background:#0056b3;border-color:#0056b3;box-shadow:0 0 0 2px rgba(0,86,179,0.35)}
 .symbol-btn:active{transform:scale(0.92);background:#e9ecef}
-@media (max-width:420px){
-    .symbol-grid{grid-template-columns:repeat(6,1fr);gap:6px}
-    .symbol-btn{font-size:22px;min-height:46px}
-}
-.modal .checkbox-row{display:flex;align-items:flex-start;gap:10px;font-weight:normal;font-size:14.5px;color:#444;background:#f1f3f5;padding:12px;border-radius:8px;line-height:1.45}
-.modal .checkbox-row input{margin-top:3px;transform:scale(1.3);flex-shrink:0}
+@media (max-width:420px){ .symbol-grid{grid-template-columns:repeat(6,1fr);gap:6px} .symbol-btn{font-size:22px;min-height:46px} }
+.modal .checkbox-row{display:flex;align-items:flex-start;gap:10px;font-weight:normal;font-size:14.5px;color:#444;background:#f1f3f5;padding:12px;border-radius:8px;line-height:1.45;cursor:pointer}
+.modal .checkbox-row input{margin-top:3px;transform:scale(1.3);flex-shrink:0;cursor:pointer}
 .modal-buttons{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .modal-buttons button{flex:1;min-width:90px;padding:13px 10px;font-size:16px}
-.notif-hint{font-size:13px;color:#856404;background:#fff3cd;padding:8px 10px;border-radius:6px;margin-top:10px;display:none}
-.notif-hint.active{display:block}
-.notif-banner{position:fixed;top:12px;left:50%;transform:translateX(-50%);max-width:520px;width:calc(100% - 24px);background:#0056b3;color:#fff;padding:16px 44px 16px 18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.45);z-index:9999;font-size:16px;line-height:1.45;text-align:left;animation:banner-in .3s ease}
-@keyframes banner-in{from{opacity:0;transform:translate(-50%,-25px)}to{opacity:1;transform:translate(-50%,0)}}
+.modal-buttons a.donate-link{flex:1;min-width:90px;padding:13px 10px;font-size:16px;background:#0070ba;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:inherit}
+.notif-banner{position:fixed;top:12px;left:50%;transform:translateX(-50%);max-width:520px;width:calc(100% - 24px);background:#0056b3;color:#fff;padding:16px 44px 16px 18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.45);z-index:9999;font-size:16px;line-height:1.45;text-align:left}
 .notif-banner strong{display:block;font-size:17px;margin-bottom:4px}
 .notif-banner-close{position:absolute;top:8px;right:10px;background:transparent;color:#fff;border:none;font-size:24px;line-height:1;padding:2px 10px;cursor:pointer;font-weight:bold;font-family:inherit}
 .notif-info{font-size:12px;color:#666;background:#f1f3f5;padding:8px 10px;border-radius:6px;margin-top:12px;line-height:1.5;text-align:left}
-.err-box{display:none;background:#f8d7da;color:#721c24;padding:10px;border-radius:8px;border:1px solid #dc3545;margin-bottom:10px;font-size:13px;text-align:left;word-break:break-word;font-family:monospace}
+.err-box{display:none;background:#f8d7da;color:#721c24;padding:10px;border-radius:8px;border:1px solid #dc3545;margin-bottom:10px;font-size:13px;text-align:left;font-family:monospace;white-space:pre-wrap}
+.hint-row{font-size:12px;color:#666;margin-top:-8px;margin-bottom:12px;line-height:1.4}
+.donate-text{font-size:15px;line-height:1.55;color:#444;margin:10px 0 6px 0}
+.donate-text b{color:#0056b3}
+.donate-amounts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px 0;justify-content:center}
+.donate-amounts span{background:#f1f3f5;color:#333;border:1px solid #ccc;border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600}
+.share-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#333;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,0.35)}
+
+.help-btn{background:#17a2b8;display:block;width:100%;margin-top:8px;padding:14px;font-size:16px}
+.help-body{font-size:14.5px;line-height:1.65;color:#333}
+.help-body h4{margin:18px 0 6px 0;color:#0056b3;font-size:16px;border-bottom:1px solid #e5e9f0;padding-bottom:4px}
+.help-body h4:first-of-type{margin-top:6px}
+.help-body p{margin:6px 0}
+.help-body ul{margin:6px 0;padding-left:22px}
+.help-body li{margin-bottom:4px}
+.help-body .box{background:#f1f3f5;border-left:4px solid #0056b3;border-radius:6px;padding:10px 12px;margin:10px 0;font-size:14px}
+.help-body .box.warn{background:#fff3cd;border-left-color:#ffc107}
+.help-body .box.ok{background:#d4edda;border-left-color:#28a745}
+.help-body .tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:13px;font-weight:bold;margin-right:4px}
+.help-body .tag-F{background:#FFD700;color:#000}
+.help-body .tag-S{background:#FF4500;color:#fff}
+.help-body .tag-N{background:#1E90FF;color:#fff}
+.help-body .tag-_-{background:#f1f3f5;color:#666;border:1px solid #ccc}
+.help-body .emoji-list{font-size:20px;letter-spacing:3px;line-height:1.6}
+.help-body table{width:100%;border-collapse:collapse;margin:8px 0;font-size:14px}
+.help-body td{padding:5px 8px;border-bottom:1px solid #eee;vertical-align:top}
+.help-body td:first-child{font-weight:bold;white-space:nowrap;color:#0056b3;width:40%}
+.help-footer{margin-top:16px;padding-top:14px;border-top:1px solid #e5e9f0;font-size:13px;color:#777;text-align:center}
+
+.backup-option{display:flex;align-items:center;gap:14px;padding:16px;border:2px solid #e0e4e9;border-radius:10px;cursor:pointer;background:#fff;margin-bottom:10px;text-align:left;font-family:inherit;width:100%;font-size:15px;color:#333}
+.backup-option:hover,.backup-option:active{background:#f1f3f5;border-color:#0056b3}
+.backup-option .icon{font-size:28px;flex-shrink:0;width:36px;text-align:center}
+.backup-option .title{font-weight:bold;color:#0056b3;font-size:16px;display:block;margin-bottom:2px}
+.backup-option .desc{font-size:13px;color:#666;line-height:1.4}
+.section-title{font-size:14px;font-weight:bold;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px 0}
+.section-title:first-of-type{margin-top:0}
+
+/* Design-Auswahl in Einstellungen */
+.theme-row{display:flex;gap:8px;margin-bottom:14px}
+.theme-choice{flex:1;padding:14px 8px;font-size:15px;border-radius:8px;cursor:pointer;font-weight:bold;font-family:inherit;transition:box-shadow .15s}
+.theme-choice[data-theme="light"]{background:#ffffff;color:#333333;border:2px solid #cccccc}
+.theme-choice[data-theme="dark"]{background:#2a2e33;color:#e4e6ea;border:2px solid #555555}
+.theme-choice.active{border-color:#0056b3!important;box-shadow:0 0 0 3px rgba(0,86,179,0.35)}
+
+/* ============================================ */
+/* DUNKEL-MODUS                                 */
+/* ============================================ */
+body.dark{background:#14171a;color:#e4e6ea}
+body.dark .container{background:#1e2124;box-shadow:0 4px 15px rgba(0,0,0,0.5)}
+body.dark h2{color:#6ab0ff}
+body.dark .online-status.online{background:#1e4c2a;color:#8fdc9e}
+body.dark .online-status.loading{background:#4a3d10;color:#ffdb70}
+body.dark .top-btn{background:#2a2e33;color:#e4e6ea;border-color:#3a3f44}
+body.dark .top-btn:active{background:#3a3f44}
+body.dark select{background:#2a2e33;color:#e4e6ea;border-color:#3a3f44}
+body.dark button{background:#0056b3;color:#fff}
+body.dark button:active{background:#003d80}
+body.dark .mode-controls{background:#2a2e33}
+body.dark .mode-btn{background:#1e2124;color:#e4e6ea;border-color:#3a3f44}
+body.dark .mode-btn.active{background:#0056b3;color:#fff;border-color:#0056b3}
+body.dark .color-picker-row{background:#2a2e33;border-color:#555;color:#e4e6ea}
+body.dark .color-preset{border-color:#1e2124}
+body.dark .color-preset.active{box-shadow:0 0 0 3px #6ab0ff}
+body.dark #monthDisplay{color:#e4e6ea}
+body.dark .day-header{color:#a0a5ab}
+body.dark .day._{background:#232629;color:#5a5f66;border-color:#2f3338}
+body.dark .day.empty{background:transparent}
+body.dark .day .date-num{color:#c0c5cb}
+body.dark .legend{color:#c0c5cb}
+body.dark .legend-box{border-color:#3a3f44}
+body.dark .overview-container{background:#232629;border-color:#3a3f44;color:#c0c5cb}
+body.dark .overview-container h3{color:#6ab0ff;border-bottom-color:#3a3f44}
+body.dark .overview-list strong{color:#e4e6ea}
+body.dark .overview-list ul{color:#a0a5ab}
+body.dark .holiday-note{background:#232629;color:#a0a5ab;border-left-color:#CD7F32}
+body.dark .holiday-note .holiday-item{background:#2a2e33;border-color:#3a3f44}
+body.dark .holiday-note .holiday-item.current{background:#4a3510;color:#ffdb70;border-color:#CD7F32}
+body.dark .ferien-note{background:#1a3a40;color:#a0c8d0;border-left-color:#17a2b8}
+body.dark .reminders-box{background:#1a2634;border-left-color:#0056b3;color:#c0c5cb}
+body.dark .reminders-box strong{color:#6ab0ff}
+body.dark .reminders-box li{color:#e4e6ea;border-bottom-color:#2a3a4a}
+body.dark .reminders-box .when{color:#8a8f95}
+body.dark .paypal-note{background:#1a2330;border-color:#2a3a4a;color:#c0c5cb}
+body.dark .modal{background:#1e2124;color:#e4e6ea}
+body.dark .modal h3{color:#6ab0ff}
+body.dark .modal-date{color:#a0a5ab}
+body.dark .modal label{color:#e4e6ea}
+body.dark .field-label{color:#e4e6ea}
+body.dark .modal input[type="text"],body.dark .modal input[type="time"],body.dark .modal input[type="number"],body.dark .modal select{background:#2a2e33;color:#e4e6ea;border-color:#3a3f44}
+body.dark .symbol-btn{background:#2a2e33;color:#e4e6ea;border-color:#3a3f44}
+body.dark .symbol-btn:active{background:#3a3f44}
+body.dark .symbol-btn.active{background:#0056b3;border-color:#0056b3;color:#fff}
+body.dark .modal .checkbox-row{background:#2a2e33;color:#c0c5cb}
+body.dark .notif-info{background:#2a2e33;color:#a0a5ab}
+body.dark .hint-row{color:#a0a5ab}
+body.dark .donate-text{color:#c0c5cb}
+body.dark .donate-amounts span{background:#2a2e33;color:#e4e6ea;border-color:#3a3f44}
+body.dark .backup-option{background:#232629;border-color:#3a3f44;color:#e4e6ea}
+body.dark .backup-option:hover,body.dark .backup-option:active{background:#2a2e33;border-color:#0056b3}
+body.dark .backup-option .title{color:#6ab0ff}
+body.dark .backup-option .desc{color:#a0a5ab}
+body.dark .section-title{color:#a0a5ab}
+body.dark .help-body{color:#c0c5cb}
+body.dark .help-body h4{color:#6ab0ff;border-bottom-color:#3a3f44}
+body.dark .help-body .box{background:#2a2e33;color:#c0c5cb}
+body.dark .help-body .box.warn{background:#4a3d10;color:#ffdb70}
+body.dark .help-body .box.ok{background:#1e4c2a;color:#8fdc9e}
+body.dark .help-body td{border-bottom-color:#3a3f44}
+body.dark .help-body td:first-child{color:#6ab0ff}
+body.dark .help-body .tag-_-{background:#2a2e33;color:#a0a5ab;border-color:#3a3f44}
+body.dark .help-footer{color:#8a8f95;border-top-color:#3a3f44}
+body.dark .urlaub-stat{background:#1e3524;border-color:#3a5a44;color:#c0c5cb}
+body.dark .urlaub-stat .label{color:#6ecf8a}
+body.dark .urlaub-stat .value{color:#8fdc9e}
+body.dark .urlaub-stat .sub{color:#a0a5ab}
+body.dark .urlaub-stat.warn{background:#4a3d10;border-color:#ffc107}
+body.dark .urlaub-stat.warn .label,body.dark .urlaub-stat.warn .value{color:#ffdb70}
+body.dark .urlaub-stat.danger{background:#4a1a1f;border-color:#dc3545}
+body.dark .urlaub-stat.danger .label,body.dark .urlaub-stat.danger .value{color:#ff8a95}
+body.dark .close-btn{background:#3a3f44}
+body.dark .err-box{background:#4a1a1f;color:#ff8a95;border-color:#dc3545}
+body.dark .share-toast{background:#e4e6ea;color:#1e2124}
 </style>
 </head>
 <body>
 <div class="container">
 <h2>Schichtzeit</h2>
+<button class="top-btn share-btn" id="shareBtn" title="Teilen" aria-label="Teilen">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+<path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+</svg>
+</button>
+<button class="top-btn settings-btn" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen">&#8942;</button>
 <div class="err-box" id="errBox"></div>
 <div id="onlineStatus" class="online-status loading">Uhr wird geladen...</div>
 
 <div class="top-row">
-<label>Schicht: 
+<label>Schicht:
 <select id="groupSelect">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
+<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
 </select>
 </label>
 </div>
@@ -177,10 +290,10 @@ button:active{background:#0056b3}
 <label for="sonstigeColor">Farbe:</label>
 <input type="color" id="sonstigeColor" value="#FFD700">
 <div class="color-presets">
-<button class="color-preset" data-color="#FFD700" style="background:#FFD700;" title="Fr&uuml;h"><span class="preset-letter">F</span></button>
-<button class="color-preset" data-color="#FF4500" style="background:#FF4500;" title="Sp&auml;t"><span class="preset-letter">S</span></button>
-<button class="color-preset" data-color="#1E90FF" style="background:#1E90FF;" title="Nacht"><span class="preset-letter">N</span></button>
-<button class="color-preset" data-color="#FFFFFF" style="background:#FFFFFF;" title="Frei"><span class="preset-letter" style="color:#999;">&ndash;</span></button>
+<button class="color-preset" data-color="#FFD700" style="background:#FFD700;"><span class="preset-letter">F</span></button>
+<button class="color-preset" data-color="#FF4500" style="background:#FF4500;"><span class="preset-letter">S</span></button>
+<button class="color-preset" data-color="#1E90FF" style="background:#1E90FF;"><span class="preset-letter">N</span></button>
+<button class="color-preset" data-color="#FFFFFF" style="background:#FFFFFF;"><span class="preset-letter" style="color:#999;">-</span></button>
 </div>
 </div>
 
@@ -204,18 +317,15 @@ button:active{background:#0056b3}
 </div>
 
 <div class="footer">
-<button onclick="resetData()" style="background:#dc3545;">Alle Markierungen l&ouml;schen</button>
-<button onclick="toggleYearOverview()" style="background:#28a745;">Jahres&uuml;bersicht</button>
-<button onclick="toggleFerien()" id="ferienBtn" style="background:#17a2b8;">Ferien</button>
-<button onclick="createBackup()" style="background:#6f42c1;">Backup</button>
-<button onclick="restoreBackup()" style="background:#fd7e14;">Restore</button>
+<button id="resetBtn" style="background:#dc3545;">Alle Markierungen l&ouml;schen</button>
+<button id="yearOverviewBtn" style="background:#28a745;">Jahres&uuml;bersicht</button>
+<button id="ferienBtn" style="background:#17a2b8;">Ferien</button>
+<button id="backupBtn" style="background:#6f42c1;">Backup</button>
 <button id="notifBtn" style="background:#00796b;">Erinnerungen aktivieren</button>
 <input type="file" id="restoreFileInput" accept=".json" style="display:none;">
 </div>
 
-<div class="notif-info">
-    Erinnerungen werden als Banner oben und per Ton angezeigt &mdash; auch in Browsern ohne System-Benachrichtigungen. Die Seite muss daf&uuml;r ge&ouml;ffnet sein.
-</div>
+<div class="notif-info">Erinnerungen werden als Banner oben und per Ton angezeigt. Die Seite muss daf&uuml;r ge&ouml;ffnet sein.</div>
 
 <div class="holiday-note">
 <strong class="title">Feiertage in diesem Monat:</strong>
@@ -230,81 +340,247 @@ button:active{background:#0056b3}
 <div id="yearOverview" class="overview-container">
 <h3>Jahres&uuml;bersicht <span id="overviewYear"></span></h3>
 <div class="overview-stats">
-<span style="color:#8A2BE2;">Krank: <span id="countKrank">0</span> Tage</span>
-<span style="color:#228B22;">Urlaub: <span id="countUrlaub">0</span> Tage</span>
-<span style="color:#666;">Sonstige: <span id="countSonstige">0</span> Tage</span>
+<div class="urlaub-stat" id="urlaubStat">
+<span class="label">Urlaub</span>
+<span class="value"><span id="countUrlaub">0</span> / <span id="countUrlaubQuota">30</span></span>
+<span class="sub">&Uuml;brig: <span id="countUrlaubLeft">30</span> Tage</span>
 </div>
-<div class="overview-list"><strong>Krankheitstage:</strong><ul id="listKrank"></ul></div>
+<div class="urlaub-stat" style="background:#f3e9ff;border-color:#c9a8e6">
+<span class="label" style="color:#8A2BE2">Krank</span>
+<span class="value" style="color:#5a1a99"><span id="countKrank">0</span></span>
+<span class="sub">Tage</span>
+</div>
+<div class="urlaub-stat" style="background:#fff6e5;border-color:#ffc077">
+<span class="label" style="color:#b36200">Sonstige</span>
+<span class="value" style="color:#7a4300"><span id="countSonstige">0</span></span>
+<span class="sub">Tage</span>
+</div>
+</div>
 <div class="overview-list"><strong>Urlaubstage:</strong><ul id="listUrlaub"></ul></div>
+<div class="overview-list"><strong>Krankheitstage:</strong><ul id="listKrank"></ul></div>
 <div class="overview-list"><strong>Sonstige Tage:</strong><ul id="listSonstige"></ul></div>
-<button class="close-btn" onclick="toggleYearOverview()">Schlie&szlig;en</button>
+<button class="close-btn" id="yearOverviewCloseBtn">Schlie&szlig;en</button>
 </div>
 
 <div class="paypal-note">
-    <p><strong>Gef&auml;llt dir Schichtzeit?</strong><br>
-    Du kannst mich mit einer kleinen Spende unterst&uuml;tzen:</p>
-    <a href="https://www.paypal.com/biz/profile/schichtzeit" target="_blank" rel="noopener" class="paypal-btn">
-        Mit PayPal unterst&uuml;tzen
-    </a>
+<p><strong>Gef&auml;llt dir Schichtzeit?</strong><br>Du kannst mich mit einer kleinen Spende unterst&uuml;tzen:</p>
+<a href="https://www.paypal.com/biz/profile/schichtzeit" target="_blank" rel="noopener" class="paypal-btn">Mit PayPal unterst&uuml;tzen</a>
 </div>
 
 </div>
 
-<div class="modal-overlay" id="entryModal">
-  <div class="modal">
-    <h3 id="modalTitle">Eintrag</h3>
-    <div class="modal-date" id="modalDate"></div>
-
-    <label>Beschreibung
-      <input type="text" id="entryText" maxlength="80" placeholder="z.B. Arzttermin, Elternabend..." autocomplete="off">
-    </label>
-
-    <label>Uhrzeit
-      <input type="time" id="entryTime">
-    </label>
-
-    <div class="field-label">Symbol</div>
-    <div class="symbol-grid" id="symbolGrid"></div>
-
-    <label>Farbe
-      <input type="color" id="entryColor" value="#FFD700">
-    </label>
-
-    <label class="checkbox-row">
-      <input type="checkbox" id="entryNotify">
-      <span>Erinnerung senden &mdash; <b>1 Tag</b>, <b>2 Stunden</b> und <b>30 Minuten</b> vorher</span>
-    </label>
-
-    <div class="notif-hint" id="notifHint">System-Benachrichtigungen werden von diesem Browser nicht unterst&uuml;tzt. Banner und Ton funktionieren trotzdem.</div>
-
-    <div class="modal-buttons">
-      <button id="modalDeleteBtn" style="background:#dc3545;">L&ouml;schen</button>
-      <button id="modalCancelBtn" style="background:#6c757d;">Schlie&szlig;en</button>
-      <button id="modalSaveBtn" style="background:#007bff;">Speichern</button>
-    </div>
-  </div>
+<!-- ENTRY MODAL -->
+<div class="modal-overlay" id="entryModal"><div class="modal">
+<h3 id="modalTitle">Eintrag</h3>
+<div class="modal-date" id="modalDate"></div>
+<label>Beschreibung<input type="text" id="entryText" maxlength="80" placeholder="z.B. Arzttermin..." autocomplete="off"></label>
+<label>Uhrzeit<input type="time" id="entryTime"></label>
+<div class="field-label">Symbol</div>
+<div class="symbol-grid" id="symbolGrid"></div>
+<label>Farbe<input type="color" id="entryColor" value="#FFD700"></label>
+<label class="checkbox-row" for="entryNotify">
+<input type="checkbox" id="entryNotify">
+<span>Erinnerung senden &mdash; <b>1 Tag</b>, <b>2 Stunden</b> und <b>30 Minuten</b> vorher</span>
+</label>
+<div class="modal-buttons">
+<button id="modalDeleteBtn" style="background:#dc3545;">L&ouml;schen</button>
+<button id="modalCancelBtn" style="background:#6c757d;">Schlie&szlig;en</button>
+<button id="modalSaveBtn" style="background:#007bff;">Speichern</button>
 </div>
+</div></div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal"><div class="modal">
+<h3>Einstellungen</h3>
+<div class="modal-date" id="settingsYearDisplay"></div>
+<label>Urlaubstage pro Jahr<input type="number" id="vacQuotaInput" min="0" max="365" step="1" value="30"></label>
+<div class="hint-row">Dein Urlaubskontingent f&uuml;r <span id="settingsYearHint"></span>.</div>
+<div class="field-label">Schichtsystem</div>
+<select id="shiftSystemSelect">
+<option value="5">5-Schicht-System (aktuell)</option>
+<option value="4" disabled>4-Schicht-System (bald)</option>
+<option value="3" disabled>3-Schicht-System (bald)</option>
+<option value="6" disabled>6-Schicht-System (bald)</option>
+</select>
+<div class="field-label">Design / Modus</div>
+<div class="theme-row">
+<button type="button" class="theme-choice" data-theme="light">&#x2600;&#xFE0F; Hell</button>
+<button type="button" class="theme-choice" data-theme="dark">&#x1F319; Dunkel</button>
+</div>
+<div class="hint-row">Unabh&auml;ngig von der System-Einstellung.</div>
+<button class="help-btn" id="openHelpBtn">Anleitung / Hilfe &ouml;ffnen</button>
+<div class="modal-buttons">
+<button id="settingsCancelBtn" style="background:#6c757d;">Abbrechen</button>
+<button id="settingsSaveBtn" style="background:#007bff;">Speichern</button>
+</div>
+</div></div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal"><div class="modal">
+<h3>Anleitung</h3>
+<div class="modal-date">Bedienungsanleitung f&uuml;r SchichtZeit</div>
+
+<div class="help-body">
+
+<p>Willkommen bei <b>SchichtZeit</b>. Diese App zeigt euch den Schichtplan und hilft euch, Urlaub, Krankheit und eigene Termine einzutragen.</p>
+
+<h4>1. Die Schicht w&auml;hlen</h4>
+<p>Oben im Dropdown <b>Schicht</b> w&auml;hlt jeder seine Gruppe (1 bis 5). Danach zeigt der Kalender die passenden Buchstaben f&uuml;r eure Schicht:</p>
+<table>
+<tr><td><span class="tag tag-F">F</span></td><td>Fr&uuml;hschicht</td></tr>
+<tr><td><span class="tag tag-S">S</span></td><td>Sp&auml;tschicht</td></tr>
+<tr><td><span class="tag tag-N">N</span></td><td>Nachtschicht</td></tr>
+<tr><td><span class="tag tag-_-">&ndash;</span></td><td>Frei</td></tr>
+</table>
+
+<h4>2. Was macht die Modi-Leiste?</h4>
+<p>Unter dem Kalender stehen vier Modi zur Auswahl:</p>
+<ul>
+<li><b>Normal</b> &ndash; nur anschauen. Ein Klick auf einen Tag mit Eintrag &ouml;ffnet ihn.</li>
+<li><b>Krank</b> &ndash; Klick auf einen Tag markiert ihn als <b>Krank</b> (lila).</li>
+<li><b>Urlaub</b> &ndash; Klick auf einen Tag markiert ihn als <b>Urlaub</b> (gr&uuml;n). Wird aufs Urlaubskonto angerechnet.</li>
+<li><b>Sonstige</b> &ndash; Klick auf einen Tag &ouml;ffnet ein Fenster f&uuml;r eigene Termine (Arzt, Elternabend usw.).</li>
+</ul>
+<div class="box">Ein zweiter Klick auf einen markierten Tag entfernt die Markierung wieder.</div>
+
+<h4>3. Eigenen Termin eintragen</h4>
+<p>So geht's:</p>
+<ul>
+<li>Modus <b>Sonstige</b> w&auml;hlen.</li>
+<li>Auf den gew&uuml;nschten Tag tippen.</li>
+<li>Beschreibung eingeben (z.B. <i>Zahnarzt</i>).</li>
+<li>Uhrzeit w&auml;hlen (optional).</li>
+<li>Symbol aus den <b>16 Vorlagen</b> ausw&auml;hlen.</li>
+<li>Farbe festlegen.</li>
+<li>Wenn eine Erinnerung gew&uuml;nscht ist: <b>H&auml;kchen bei &bdquo;Erinnerung senden&ldquo;</b> setzen.</li>
+<li>Speichern.</li>
+</ul>
+<p>Der Termin erscheint als farbige Zelle mit Symbol. Bei aktivierter Erinnerung erhaltet ihr <b>1 Tag, 2 Stunden und 30 Minuten</b> vorher einen Hinweis (Banner + Ton).</p>
+<p>Verf&uuml;gbare Symbole:</p>
+<p class="emoji-list">&#x1F514; &#x23F0; &#x1F4CC; &#x2B50; &#x2764;&#xFE0F; &#x26A0;&#xFE0F; &#x1F4DE; &#x1F48A; &#x1F3E5; &#x1F4C5; &#x2708;&#xFE0F; &#x1F382; &#x1F389; &#x1F697; &#x1F4BC; &#x1F4DD;</p>
+
+<h4>4. Jahres&uuml;bersicht</h4>
+<p>Zeigt euch auf einen Blick:</p>
+<ul>
+<li><b>Urlaub</b> &ndash; wie viele Tage ihr verplant habt, wie viele euch insgesamt zustehen und wie viele noch &uuml;brig sind.</li>
+<li><b>Krank</b> &ndash; Summe aller Krankheitstage.</li>
+<li><b>Sonstige</b> &ndash; Summe aller sonstigen Eintr&auml;ge.</li>
+</ul>
+<p>Wenn euer Urlaub zur Neige geht, f&auml;rbt sich die Karte <b>gelb</b> (weniger als 5 Tage) oder <b>rot</b> (Kontingent &uuml;berschritten).</p>
+
+<h4>5. Ferien anzeigen</h4>
+<p>Der Knopf <b>Ferien</b> blendet die bayerischen Schulferien ein. Ferientage bekommen einen gestrichelten Rahmen.</p>
+
+<h4>6. Einstellungen &ouml;ffnen</h4>
+<p>&Uuml;ber das <b>Drei-Punkte-Men&uuml;</b> oben rechts:</p>
+<ul>
+<li><b>Urlaubstage pro Jahr</b> &ndash; tragt hier euer pers&ouml;nliches Urlaubskontingent ein (Standard: 30).</li>
+<li><b>Schichtsystem</b> &ndash; aktuell nur das <b>5-Schicht-System</b> verf&uuml;gbar.</li>
+<li><b>Design / Modus</b> &ndash; hier w&auml;hlt ihr zwischen <b>Hell</b> und <b>Dunkel</b>. Die Wahl ist unabh&auml;ngig von der System-Einstellung des Ger&auml;ts und bleibt gespeichert.</li>
+<li><b>Anleitung</b> &ndash; dieses Fenster hier.</li>
+</ul>
+
+<h4>7. Backup &ndash; Sichern und Wiederherstellen</h4>
+<p>Der Knopf <b>Backup</b> &ouml;ffnet ein Fenster mit zwei M&ouml;glichkeiten:</p>
+<ul>
+<li><b>Sichern</b> &ndash; eure Daten werden in einer Datei gespeichert. Danach k&ouml;nnt ihr w&auml;hlen:
+    <ul>
+    <li><b>Auf Ger&auml;t speichern</b> &ndash; Datei landet im Download-Ordner.</li>
+    <li><b>Teilen / E-Mail / Cloud</b> &ndash; das System-Teilen-Fenster &ouml;ffnet sich. Dort k&ouml;nnt ihr die Datei per E-Mail senden, in Google Drive / iCloud ablegen oder an WhatsApp / Telegram schicken.</li>
+    </ul>
+</li>
+<li><b>Wiederherstellen</b> &ndash; eine zuvor gespeicherte Datei ausw&auml;hlen. Alle Daten werden daraus zur&uuml;ckgespielt.</li>
+</ul>
+<div class="box warn">Beim Handywechsel <b>unbedingt vorher sichern</b>, sonst sind alle Eintr&auml;ge verloren.</div>
+
+<h4>8. Erinnerungen aktivieren</h4>
+<p>Beim ersten Besuch unten auf <b>&bdquo;Erinnerungen aktivieren&ldquo;</b> tippen. Der Browser fragt dann nach Erlaubnis.</p>
+<div class="box">Erinnerungen kommen nur, solange die App im Browser ge&ouml;ffnet ist. Wenn der Browser komplett geschlossen wird, kommen keine Hinweise mehr.</div>
+
+<h4>9. Teilen (Knopf oben links)</h4>
+<p>&Ouml;ffnet das Teilen-Men&uuml; des Handys. So k&ouml;nnt ihr den Link an Kollegen weitergeben &ndash; z.B. per WhatsApp, E-Mail oder Messenger.</p>
+
+<h4>10. Feiertage und Ferien (Bayern)</h4>
+<p>Alle bayerischen Feiertage sind fest hinterlegt: Neujahr, Heilige Drei K&ouml;nige, Karfreitag, Ostermontag, Tag der Arbeit, Christi Himmelfahrt, Pfingstmontag, Fronleichnam, Mari&auml; Himmelfahrt, Tag der Deutschen Einheit, Allerheiligen, 1. &amp; 2. Weihnachtstag.</p>
+<p>Feiertage bekommen einen <b>goldenen Rahmen</b>, Ferientage einen <b>gestrichelten blauen Rahmen</b>.</p>
+
+<h4>11. Hinweis zu Google Kalender</h4>
+<div class="box warn">Wenn ihr Erinnerungen auch dann erhalten wollt, wenn die App <b>geschlossen</b> ist &ndash; tragt wichtige Termine zus&auml;tzlich in euren <b>Google Kalender</b> ein. Dort funktionieren die Push-Benachrichtigungen zuverl&auml;ssig auf dem ganzen Handy.</div>
+
+<h4>12. Bei Problemen</h4>
+<p>Wenn etwas nicht funktioniert oder ihr Fragen habt &ndash; meldet euch beim Schichtleiter oder bei der Person, die die App eingerichtet hat.</p>
+
+<div class="help-footer">
+SchichtZeit &ndash; der digitale Schichtplan f&uuml;r unsere Schicht.
+</div>
+
+</div>
+
+<div class="modal-buttons">
+<button id="helpCloseBtn" style="background:#007bff;">Alles klar</button>
+</div>
+</div></div>
+
+<!-- BACKUP MENU MODAL -->
+<div class="modal-overlay" id="backupMenuModal"><div class="modal">
+<h3>Backup</h3>
+<div class="modal-date">Daten sichern oder wiederherstellen</div>
+
+<div class="section-title">Sichern</div>
+
+<button class="backup-option" id="backupSaveDeviceBtn">
+<span class="icon">&#x1F4BE;</span>
+<span>
+<span class="title">Auf Ger&auml;t speichern</span>
+<span class="desc">Datei wird in den Download-Ordner gespeichert. Funktioniert auf Windows, iOS und Android.</span>
+</span>
+</button>
+
+<button class="backup-option" id="backupShareBtn">
+<span class="icon">&#x1F4E4;</span>
+<span>
+<span class="title">Teilen / E-Mail / Cloud</span>
+<span class="desc">System-Fenster &ouml;ffnet sich: per E-Mail senden, in Cloud ablegen oder an Messenger schicken.</span>
+</span>
+</button>
+
+<div class="section-title">Wiederherstellen</div>
+
+<button class="backup-option" id="backupRestoreBtn">
+<span class="icon">&#x1F4C2;</span>
+<span>
+<span class="title">Aus Datei wiederherstellen</span>
+<span class="desc">Eine zuvor gesicherte Backup-Datei ausw&auml;hlen. Aktuelle Daten werden &uuml;berschrieben.</span>
+</span>
+</button>
+
+<div class="modal-buttons">
+<button id="backupCancelBtn" style="background:#6c757d;">Schlie&szlig;en</button>
+</div>
+</div></div>
+
+<!-- DONATE MODAL -->
+<div class="modal-overlay" id="donateModal"><div class="modal">
+<h3>Funktion noch nicht finanziert</h3>
+<p class="donate-text">F&uuml;r die Entwicklung dieser <b>Erinnerungsfunktion</b> wurden leider noch nicht gen&uuml;gend Mittel gesammelt. Deine Unterst&uuml;tzung hilft, dieses Feature fertigzustellen.</p>
+<p class="donate-text" style="text-align:center;margin-top:14px;"><b>Jede kleine Spende z&auml;hlt.</b> Danke!</p>
+<div class="donate-amounts"><span>1 &euro;</span><span>3 &euro;</span><span>5 &euro;</span><span>10 &euro;</span></div>
+<div class="modal-buttons">
+<button id="donateCancelBtn" style="background:#6c757d;">Sp&auml;ter</button>
+<a href="https://www.paypal.com/biz/profile/schichtzeit" target="_blank" rel="noopener" class="donate-link" id="donateConfirmLink">Jetzt unterst&uuml;tzen</a>
+</div>
+</div></div>
 
 <script>
-window.addEventListener('error', function(e){
-    var box = document.getElementById('errBox');
-    if (box) { box.style.display = 'block'; box.textContent = 'Fehler: ' + (e.message || e.error || '?') + ' @ ' + (e.lineno || '?'); }
-});
+(function(){
+try {
 
-// ============================================================
-// GOOGLE KALENDER SYNC – HIER DEINE WEB-APP-URL EINTRAGEN
-// ============================================================
-var GOOGLE_SYNC_URL = "DEINE_WEB_APP_URL_HIER_EINFUEGEN";
+var SHARE_URL = "https://logoutrus-afk.github.io/SchichtZeit-Experimental-/";
+var SHARE_TITLE = "Schichtzeit";
+var SHARE_TEXT = "Schichtplan f\u00FCr unsere Schicht - Schichtzeit";
 
 var BASE_DATE_UTC = Date.UTC(2026, 9, 1);
-var CYCLE_35 = [
-'F','F','N','N','N','_','_','_',
-'S','S','S','_',
-'F','F','N','N','_','_','_',
-'S','S','S','_',
-'F','F','F','N','N',
-'_','_','_','_','_','_','_'
-];
+var CYCLE_35 = ['F','F','N','N','N','_','_','_','S','S','S','_','F','F','N','N','_','_','_','S','S','S','_','F','F','F','N','N','_','_','_','_','_','_','_'];
 var START_INDEX_BY_GROUP = { '1': 29, '2': 1, '3': 8, '4': 15, '5': 22 };
 var monthNames = ["Januar","Februar","M\u00E4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 var dayNames = ["Mo","Di","Mi","Do","Fr","Sa","So"];
@@ -314,16 +590,31 @@ var currentDate = new Date(2026, 9, 1);
 var currentMode = 'normal';
 var showFerien = false;
 var actualToday = new Date(); actualToday.setHours(0,0,0,0);
-var selectedColor = localStorage.getItem('schichtzeitColor') || '#FFD700';
-var selectedSymbol = localStorage.getItem('schichtzeitSymbol') || '\uD83D\uDD14';
+var selectedColor = '#FFD700';
+var selectedSymbol = '\uD83D\uDD14';
+var shiftSystem = '5';
+var currentTheme = 'light';
 
 function safeParse(s, fallback) { try { var v = JSON.parse(s); return (v == null) ? fallback : v; } catch(e){ return fallback; } }
 function safeGetArray(k) { var v = safeParse(localStorage.getItem(k), []); return Array.isArray(v) ? v : []; }
 function safeGetObject(k) { var v = safeParse(localStorage.getItem(k), {}); return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {}; }
 
+try { selectedColor = localStorage.getItem('schichtzeitColor') || '#FFD700'; } catch(e){}
+try { selectedSymbol = localStorage.getItem('schichtzeitSymbol') || '\uD83D\uDD14'; } catch(e){}
+try { shiftSystem = localStorage.getItem('schichtzeitShiftSystem') || '5'; } catch(e){}
+try { currentTheme = localStorage.getItem('schichtzeitTheme') || 'light'; } catch(e){}
+
 var sickDays = safeGetArray('schichtzeitSickDays');
 var vacationDays = safeGetArray('schichtzeitVacationDays');
 var sonstigeDays = safeGetObject('schichtzeitSonstigeDays');
+
+var vacationQuota = safeGetObject('schichtzeitVacationQuota');
+if (Object.keys(vacationQuota).length === 0) {
+    vacationQuota['2026'] = 30;
+    try { localStorage.setItem('schichtzeitVacationQuota', JSON.stringify(vacationQuota)); } catch(e){}
+}
+function getVacationQuota(year) { return vacationQuota[String(year)] != null ? vacationQuota[String(year)] : 30; }
+function setVacationQuota(year, value) { vacationQuota[String(year)] = value; try { localStorage.setItem('schichtzeitVacationQuota', JSON.stringify(vacationQuota)); } catch(e){} }
 
 (function migrateSonstige(){
     var changed = false;
@@ -336,26 +627,162 @@ var sonstigeDays = safeGetObject('schichtzeitSonstigeDays');
 })();
 
 var notifiedFlags = safeGetObject('schichtzeitNotified');
-var savedGroup = localStorage.getItem('schichtzeitGroup') || '1';
+var savedGroup = '1';
+try { savedGroup = localStorage.getItem('schichtzeitGroup') || '1'; } catch(e){}
 
-function syncToGoogleCalendar(dateKey, entry) {
-    if (!GOOGLE_SYNC_URL || GOOGLE_SYNC_URL.indexOf('DEINE_WEB_APP_URL') === 0) return;
-    var payload = {
-        title: entry.text || 'Schichtzeit-Termin',
-        date: dateKey,
-        time: entry.time || '09:00',
-        description: entry.text || '',
-        icon: entry.icon || '',
-        durationMin: 60
-    };
+function applyTheme(theme) {
+    currentTheme = theme;
+    try { localStorage.setItem('schichtzeitTheme', theme); } catch(e){}
+    if (theme === 'dark') document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+    var choices = document.querySelectorAll('.theme-choice');
+    for (var i = 0; i < choices.length; i++) {
+        if (choices[i].getAttribute('data-theme') === theme) choices[i].classList.add('active');
+        else choices[i].classList.remove('active');
+    }
+}
+
+function showToast(text) {
+    var old = document.getElementById('shareToast');
+    if (old) old.parentNode.removeChild(old);
+    var el = document.createElement('div');
+    el.id = 'shareToast';
+    el.className = 'share-toast';
+    el.textContent = text;
+    document.body.appendChild(el);
+    setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 2500);
+}
+function shareSchichtzeit() {
+    var url = SHARE_URL;
+    var data = { title: SHARE_TITLE, text: SHARE_TEXT, url: url };
+    if (navigator.share) {
+        try {
+            navigator.share(data).then(function(){}).catch(function(err){
+                if (err && err.name === 'AbortError') return;
+                copyShareLink(url);
+            });
+            return;
+        } catch(e) {}
+    }
+    copyShareLink(url);
+}
+function copyShareLink(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function(){ showToast('Link kopiert'); }).catch(function(){ legacyCopy(url); });
+        return;
+    }
+    legacyCopy(url);
+}
+function legacyCopy(url) {
     try {
-        fetch(GOOGLE_SYNC_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        }).catch(function(err){ console.warn('Google-Sync fehlgeschlagen:', err); });
-    } catch(e) { console.warn('Google-Sync Exception:', e); }
+        var input = document.createElement('input');
+        input.type = 'text'; input.value = url;
+        input.style.position = 'fixed'; input.style.left = '-9999px';
+        document.body.appendChild(input); input.focus(); input.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(input);
+        if (ok) showToast('Link kopiert'); else showToast(url);
+    } catch(e) { showToast(url); }
+}
+
+function openSettings() {
+    var year = currentDate.getFullYear();
+    document.getElementById('settingsYearDisplay').textContent = 'Jahr ' + year;
+    document.getElementById('settingsYearHint').textContent = year;
+    document.getElementById('vacQuotaInput').value = getVacationQuota(year);
+    document.getElementById('shiftSystemSelect').value = shiftSystem;
+    applyTheme(currentTheme);
+    document.getElementById('settingsModal').classList.add('active');
+}
+function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
+function saveSettings() {
+    var year = currentDate.getFullYear();
+    var q = parseInt(document.getElementById('vacQuotaInput').value, 10);
+    if (isNaN(q) || q < 0) q = 0;
+    if (q > 365) q = 365;
+    setVacationQuota(year, q);
+    shiftSystem = document.getElementById('shiftSystemSelect').value;
+    try { localStorage.setItem('schichtzeitShiftSystem', shiftSystem); } catch(e){}
+    closeSettings();
+    updateYearOverview();
+}
+function openHelp() { closeSettings(); document.getElementById('helpModal').classList.add('active'); }
+function closeHelp() { document.getElementById('helpModal').classList.remove('active'); }
+function openDonateModal() { document.getElementById('donateModal').classList.add('active'); }
+function closeDonateModal() { document.getElementById('donateModal').classList.remove('active'); }
+
+function openBackupMenu() { document.getElementById('backupMenuModal').classList.add('active'); }
+function closeBackupMenu() { document.getElementById('backupMenuModal').classList.remove('active'); }
+
+function getBackupJSON() {
+    var backup = {
+        version: 3,
+        date: new Date().toISOString(),
+        group: document.getElementById('groupSelect').value,
+        color: selectedColor,
+        sickDays: sickDays,
+        vacationDays: vacationDays,
+        sonstigeDays: sonstigeDays,
+        notifiedFlags: notifiedFlags,
+        vacationQuota: vacationQuota,
+        shiftSystem: shiftSystem,
+        theme: currentTheme
+    };
+    return JSON.stringify(backup, null, 2);
+}
+function getBackupFilename() {
+    var now = new Date();
+    return 'Schichtzeit_Backup_' +
+        now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0') + '_' +
+        String(now.getHours()).padStart(2,'0') + '-' +
+        String(now.getMinutes()).padStart(2,'0') + '.json';
+}
+function backupToDevice() {
+    try {
+        var json = getBackupJSON();
+        var blob = new Blob([json], {type: 'application/json'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = getBackupFilename();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+        showToast('Datei gespeichert');
+    } catch(e) {
+        showToast('Fehler: ' + e.message);
+    }
+}
+function backupShare() {
+    try {
+        var json = getBackupJSON();
+        var filename = getBackupFilename();
+        var blob = new Blob([json], {type: 'application/json'});
+        var file = new File([blob], filename, {type: 'application/json'});
+        if (navigator.canShare && navigator.canShare({files: [file]}) && navigator.share) {
+            navigator.share({
+                files: [file],
+                title: 'Schichtzeit Backup',
+                text: 'Backup meiner Schichtzeit-Daten'
+            }).then(function(){}).catch(function(err){
+                if (err && err.name === 'AbortError') return;
+                backupToDevice();
+            });
+        } else {
+            showToast('Direktes Teilen nicht verf\u00FCgbar - Datei wird gespeichert');
+            setTimeout(backupToDevice, 800);
+        }
+    } catch(e) {
+        showToast('Fehler: ' + e.message);
+    }
+}
+function restoreFromFile() {
+    closeBackupMenu();
+    var input = document.getElementById('restoreFileInput');
+    input.value = '';
+    input.click();
 }
 
 function updateOnlineStatus(text, status) {
@@ -373,23 +800,15 @@ function updateClockStatus() {
     var wd = dayNames[wdIdx];
     var dd = String(d.getDate()).padStart(2,'0');
     var mo = String(d.getMonth()+1).padStart(2,'0');
-    updateOnlineStatus(hh + ':' + mm + ' Uhr \u00B7 ' + wd + ' ' + dd + '.' + mo + '.' + d.getFullYear(), 'online');
+    updateOnlineStatus(hh + ':' + mm + ' Uhr - ' + wd + ' ' + dd + '.' + mo + '.' + d.getFullYear(), 'online');
 }
-function syncClock() {
-    updateClockStatus();
-    try { renderCalendar(); } catch(e){ console.error(e); }
-}
+function syncClock() { updateClockStatus(); try { renderCalendar(); } catch(e){ console.error(e); } }
 function scheduleMinuteTick() {
     var now = new Date();
     var ms = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
     if (ms < 50) ms += 60000;
     setTimeout(function(){ syncClock(); scheduleMinuteTick(); }, ms);
 }
-scheduleMinuteTick();
-document.addEventListener('visibilitychange', function(){
-    if (!document.hidden) { syncClock(); checkReminders(); scheduleMinuteTick(); }
-});
-window.addEventListener('focus', function(){ syncClock(); checkReminders(); });
 
 function calculateEaster(year) {
     var a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
@@ -412,36 +831,14 @@ function getHolidayList(year) {
 function getHolidaySet(year) { var s = new Set(); getHolidayList(year).forEach(function(h){ s.add(h.key); }); return s; }
 
 var FERIEN = {
-2026:[
-{name:"Winterferien",start:"2026-02-16",end:"2026-02-20"},
-{name:"Osterferien",start:"2026-03-30",end:"2026-04-10"},
-{name:"Pfingstferien",start:"2026-05-26",end:"2026-06-05"},
-{name:"Sommerferien",start:"2026-08-01",end:"2026-09-14"},
-{name:"Herbstferien",start:"2026-11-02",end:"2026-11-06"},
-{name:"Weihnachtsferien",start:"2026-12-21",end:"2026-12-31"}
-],
-2027:[
-{name:"Winterferien",start:"2027-02-15",end:"2027-02-19"},
-{name:"Osterferien",start:"2027-03-22",end:"2027-04-02"},
-{name:"Pfingstferien",start:"2027-05-18",end:"2027-05-28"},
-{name:"Sommerferien",start:"2027-08-02",end:"2027-09-13"},
-{name:"Herbstferien",start:"2027-11-02",end:"2027-11-05"},
-{name:"Weihnachtsferien",start:"2027-12-23",end:"2027-12-31"}
-],
-2028:[
-{name:"Winterferien",start:"2028-02-14",end:"2028-02-18"},
-{name:"Osterferien",start:"2028-04-10",end:"2028-04-21"},
-{name:"Pfingstferien",start:"2028-06-06",end:"2028-06-16"},
-{name:"Sommerferien",start:"2028-07-31",end:"2028-09-11"},
-{name:"Herbstferien",start:"2028-10-30",end:"2028-11-03"},
-{name:"Weihnachtsferien",start:"2028-12-23",end:"2028-12-31"}
-]
+2026:[{name:"Winterferien",start:"2026-02-16",end:"2026-02-20"},{name:"Osterferien",start:"2026-03-30",end:"2026-04-10"},{name:"Pfingstferien",start:"2026-05-26",end:"2026-06-05"},{name:"Sommerferien",start:"2026-08-01",end:"2026-09-14"},{name:"Herbstferien",start:"2026-11-02",end:"2026-11-06"},{name:"Weihnachtsferien",start:"2026-12-21",end:"2026-12-31"}],
+2027:[{name:"Winterferien",start:"2027-02-15",end:"2027-02-19"},{name:"Osterferien",start:"2027-03-22",end:"2027-04-02"},{name:"Pfingstferien",start:"2027-05-18",end:"2027-05-28"},{name:"Sommerferien",start:"2027-08-02",end:"2027-09-13"},{name:"Herbstferien",start:"2027-11-02",end:"2027-11-05"},{name:"Weihnachtsferien",start:"2027-12-23",end:"2027-12-31"}],
+2028:[{name:"Winterferien",start:"2028-02-14",end:"2028-02-18"},{name:"Osterferien",start:"2028-04-10",end:"2028-04-21"},{name:"Pfingstferien",start:"2028-06-06",end:"2028-06-16"},{name:"Sommerferien",start:"2028-07-31",end:"2028-09-11"},{name:"Herbstferien",start:"2028-10-30",end:"2028-11-03"},{name:"Weihnachtsferien",start:"2028-12-23",end:"2028-12-31"}]
 };
 function getFerienSet(year) {
     var set = new Set();
     (FERIEN[year]||[]).forEach(function(period){
-        var cur = new Date(period.start);
-        var end = new Date(period.end);
+        var cur = new Date(period.start); var end = new Date(period.end);
         while (cur <= end) {
             set.add(cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')+'-'+String(cur.getDate()).padStart(2,'0'));
             cur.setDate(cur.getDate()+1);
@@ -450,10 +847,9 @@ function getFerienSet(year) {
     return set;
 }
 
-function formatDateKey(date) {
-    return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
-}
+function formatDateKey(date) { return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0'); }
 function getShift(date, group) {
+    if (shiftSystem !== '5') return '_';
     var g = String(group);
     var startIndex = START_INDEX_BY_GROUP[g];
     if (startIndex === undefined) return '_';
@@ -463,7 +859,6 @@ function getShift(date, group) {
     if (index < 0) index += CYCLE_35.length;
     return CYCLE_35[index];
 }
-
 function isColorDark(hex) {
     var c = String(hex).replace('#','');
     var r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
@@ -481,17 +876,8 @@ function escapeHtml(s) {
 }
 
 var audioCtx = null;
-function ensureAudio() {
-    if (audioCtx) return audioCtx;
-    try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; audioCtx = new AC(); } catch(e){ audioCtx = null; }
-    return audioCtx;
-}
-function unlockAudio() {
-    var ctx = ensureAudio();
-    if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch(e){} }
-}
-document.addEventListener('touchstart', unlockAudio, {once:true, passive:true});
-document.addEventListener('click', unlockAudio, {once:true});
+function ensureAudio() { if (audioCtx) return audioCtx; try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; audioCtx = new AC(); } catch(e){ audioCtx = null; } return audioCtx; }
+function unlockAudio() { var ctx = ensureAudio(); if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch(e){} } }
 function playNotifySound() {
     var ctx = ensureAudio();
     if (!ctx) return;
@@ -500,8 +886,7 @@ function playNotifySound() {
     function tone(freq, start, dur, gainVal) {
         var osc = ctx.createOscillator();
         var gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
+        osc.type = 'sine'; osc.frequency.value = freq;
         gain.gain.setValueAtTime(0.0001, now + start);
         gain.gain.exponentialRampToValueAtTime(gainVal, now + start + 0.04);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
@@ -514,11 +899,7 @@ function playNotifySound() {
 }
 
 var suppressClick = false;
-function changeMonth(delta) {
-    currentDate.setMonth(currentDate.getMonth() + delta);
-    renderCalendar();
-    animateCalendar(delta > 0 ? 'next' : 'prev');
-}
+function changeMonth(delta) { currentDate.setMonth(currentDate.getMonth() + delta); renderCalendar(); animateCalendar(delta > 0 ? 'next' : 'prev'); }
 function animateCalendar(direction) {
     var cal = document.getElementById('calendar');
     if (!cal) return;
@@ -527,7 +908,7 @@ function animateCalendar(direction) {
     cal.classList.add(direction === 'next' ? 'anim-left' : 'anim-right');
     setTimeout(function(){ cal.classList.remove('anim-left','anim-right'); }, 320);
 }
-(function setupSwipe(){
+function setupSwipe(){
     var el = document.getElementById('calendar');
     if (!el) return;
     var startX = 0, startY = 0, startT = 0;
@@ -547,13 +928,16 @@ function animateCalendar(direction) {
         setTimeout(function(){ suppressClick = false; }, 450);
         if (dx < 0) changeMonth(1); else changeMonth(-1);
     }, {passive:true});
-})();
+}
 
 function renderHolidayNote(year, month) {
     var listEl = document.getElementById('holidayList');
     if (!listEl) return;
     var currentList = getHolidayList(year).filter(function(h){ return h.date.getMonth() === month; });
-    if (currentList.length === 0) { listEl.innerHTML = '<span style="color:#999;font-style:italic;">Keine Feiertage in diesem Monat.</span>'; return; }
+    if (currentList.length === 0) {
+        listEl.innerHTML = '<span style="color:#999;font-style:italic;">Keine Feiertage in diesem Monat.</span>';
+        return;
+    }
     listEl.innerHTML = currentList.map(function(h){
         var dd = String(h.date.getDate()).padStart(2,'0');
         var mm = String(h.date.getMonth()+1).padStart(2,'0');
@@ -564,8 +948,7 @@ function updateColorPresetsActive() {
     var all = document.querySelectorAll('.color-preset');
     for (var i = 0; i < all.length; i++) {
         var c = all[i].getAttribute('data-color').toLowerCase();
-        if (c === selectedColor.toLowerCase()) all[i].classList.add('active');
-        else all[i].classList.remove('active');
+        if (c === selectedColor.toLowerCase()) all[i].classList.add('active'); else all[i].classList.remove('active');
     }
 }
 function renderCalendar() {
@@ -576,19 +959,15 @@ function renderCalendar() {
     var group = sel.value;
     var holidays = getHolidaySet(year);
     var ferienSet = showFerien ? getFerienSet(year) : new Set();
-
     var md = document.getElementById('monthDisplay');
     if (md) md.textContent = monthNames[month] + ' ' + year;
-
     var firstDayOfMonth = new Date(year, month, 1);
     var lastDayOfMonth = new Date(year, month + 1, 0);
     var startDay = firstDayOfMonth.getDay();
     startDay = startDay === 0 ? 6 : startDay - 1;
-
     var calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
     calendarEl.innerHTML = '';
-
     dayNames.forEach(function(day){
         var h = document.createElement('div');
         h.className = 'day-header'; h.textContent = day;
@@ -599,17 +978,14 @@ function renderCalendar() {
         e.className = 'day empty';
         calendarEl.appendChild(e);
     }
-
     var makeCell = function(day){
         var date = new Date(year, month, day);
         var dateKey = formatDateKey(date);
         var shift = getShift(date, group);
         var dayEl = document.createElement('div');
         dayEl.className = 'day ' + shift;
-
         if (sickDays.indexOf(dateKey) > -1) dayEl.classList.add('krank');
         else if (vacationDays.indexOf(dateKey) > -1) dayEl.classList.add('urlaub');
-
         if (date.getTime() === actualToday.getTime()) dayEl.classList.add('today');
         if (holidays.has(dateKey)) dayEl.classList.add('feiertag');
         if (showFerien && ferienSet.has(dateKey)) {
@@ -618,15 +994,12 @@ function renderCalendar() {
             fm.className = 'ferien-marker'; fm.textContent = 'F';
             dayEl.appendChild(fm);
         }
-
         var dn = document.createElement('span');
         dn.className = 'date-num'; dn.textContent = day;
         dayEl.appendChild(dn);
-
         var st = document.createElement('span');
         st.textContent = shift === '_' ? '' : shift;
         dayEl.appendChild(st);
-
         var entry = getEntry(dateKey);
         if (entry && sickDays.indexOf(dateKey) < 0 && vacationDays.indexOf(dateKey) < 0) {
             dayEl.classList.add('sonstige');
@@ -636,13 +1009,11 @@ function renderCalendar() {
             else { dayEl.style.color = '#000'; dayEl.setAttribute('data-dark','0'); }
             dn.style.color = dayEl.style.color;
             if (String(entry.color).toUpperCase() === '#FFFFFF') dayEl.style.border = '2px solid #999';
-
             var tipParts = [];
             if (entry.text) tipParts.push(entry.text);
             if (entry.time) tipParts.push('Uhrzeit: ' + entry.time);
             if (entry.notify && entry.time) tipParts.push('Erinnerung aktiv');
             if (tipParts.length) dayEl.title = tipParts.join(' | ');
-
             if (entry.text || entry.time || entry.notify) {
                 var m = document.createElement('span');
                 m.className = 'sonstige-marker';
@@ -656,7 +1027,6 @@ function renderCalendar() {
                 dayEl.appendChild(prev);
             }
         }
-
         dayEl.addEventListener('click', function(){
             if (suppressClick) return;
             if (currentMode === 'krank') toggleDay(dateKey, 'krank');
@@ -664,12 +1034,9 @@ function renderCalendar() {
             else if (currentMode === 'sonstige') openEntryEditor(dateKey);
             else { if (getEntry(dateKey)) openEntryEditor(dateKey); }
         });
-
         calendarEl.appendChild(dayEl);
     };
-
     for (var day = 1; day <= lastDayOfMonth.getDate(); day++) makeCell(day);
-
     renderHolidayNote(year, month);
     updateYearOverview();
     updateFerienList(year);
@@ -681,28 +1048,26 @@ function updateFerienList(year) {
     var periods = FERIEN[year] || [];
     if (periods.length === 0) { listEl.innerHTML = 'Keine Daten f\u00FCr dieses Jahr verf\u00FCgbar.'; return; }
     function f(s){ var p = s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
-    listEl.innerHTML = periods.map(function(p){ return p.name + ': ' + f(p.start) + ' \u2013 ' + f(p.end); }).join('<br>');
+    listEl.innerHTML = periods.map(function(p){ return p.name + ': ' + f(p.start) + ' - ' + f(p.end); }).join('<br>');
 }
 function toggleDay(dateKey, type, forceRemove) {
     if (forceRemove === undefined) forceRemove = false;
     var array = type === 'krank' ? sickDays : vacationDays;
     var index = array.indexOf(dateKey);
-    if (index > -1 || forceRemove) {
-        if (index > -1) array.splice(index, 1);
-    } else {
+    if (index > -1 || forceRemove) { if (index > -1) array.splice(index, 1); }
+    else {
         array.push(dateKey);
         if (type === 'krank') { var vi = vacationDays.indexOf(dateKey); if (vi > -1) vacationDays.splice(vi, 1); }
         else if (type === 'urlaub') { var si = sickDays.indexOf(dateKey); if (si > -1) sickDays.splice(si, 1); }
-        if (sonstigeDays[dateKey]) { delete sonstigeDays[dateKey]; localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays)); }
+        if (sonstigeDays[dateKey]) { delete sonstigeDays[dateKey]; try { localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays)); } catch(e){} }
     }
-    if (type === 'krank' || forceRemove) localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-    if (type === 'urlaub' || forceRemove) localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+    if (type === 'krank' || forceRemove) try { localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays)); } catch(e){}
+    if (type === 'urlaub' || forceRemove) try { localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays)); } catch(e){}
     renderCalendar();
 }
 
 var editingDateKey = null;
 var editingSymbol = '\uD83D\uDD14';
-
 function renderSymbolGrid() {
     var grid = document.getElementById('symbolGrid');
     if (!grid) return;
@@ -712,19 +1077,13 @@ function renderSymbolGrid() {
     var btns = grid.querySelectorAll('.symbol-btn');
     for (var i = 0; i < btns.length; i++) {
         (function(btn){
-            // Klick UND Touch für maximale Kompatibilität
-            btn.addEventListener('click', function(ev){
-                ev.preventDefault();
-                ev.stopPropagation();
+            var handler = function(ev){
+                ev.preventDefault(); ev.stopPropagation();
                 editingSymbol = btn.getAttribute('data-symbol');
                 renderSymbolGrid();
-            });
-            btn.addEventListener('touchend', function(ev){
-                ev.preventDefault();
-                ev.stopPropagation();
-                editingSymbol = btn.getAttribute('data-symbol');
-                renderSymbolGrid();
-            });
+            };
+            btn.addEventListener('click', handler);
+            btn.addEventListener('touchend', handler);
         })(btns[i]);
     }
 }
@@ -741,41 +1100,30 @@ function openEntryEditor(dateKey) {
     editingSymbol = (entry && entry.icon) ? entry.icon : selectedSymbol;
     renderSymbolGrid();
     document.getElementById('modalDeleteBtn').style.display = entry ? 'block' : 'none';
-    var hint = document.getElementById('notifHint');
-    if (!('Notification' in window)) hint.classList.add('active'); else hint.classList.remove('active');
     document.getElementById('entryModal').classList.add('active');
 }
-function closeEntryEditor() {
-    document.getElementById('entryModal').classList.remove('active');
-    editingDateKey = null;
-}
+function closeEntryEditor() { document.getElementById('entryModal').classList.remove('active'); editingDateKey = null; }
 function saveEntry() {
     if (!editingDateKey) return;
     var text = document.getElementById('entryText').value.trim();
     var time = document.getElementById('entryTime').value;
     var color = document.getElementById('entryColor').value;
     var notify = document.getElementById('entryNotify').checked;
-
     if (notify && time && 'Notification' in window && Notification.permission === 'default') {
         try { Notification.requestPermission().then(function(){ updateNotifButton(); }); } catch(e){}
     }
     sonstigeDays[editingDateKey] = { color: color, text: text, time: time, notify: notify && !!time, icon: editingSymbol };
     selectedSymbol = editingSymbol;
-    localStorage.setItem('schichtzeitSymbol', selectedSymbol);
-
-    if (time) {
-        syncToGoogleCalendar(editingDateKey, sonstigeDays[editingDateKey]);
-    }
-
+    try { localStorage.setItem('schichtzeitSymbol', selectedSymbol); } catch(e){}
     var si = sickDays.indexOf(editingDateKey); if (si > -1) sickDays.splice(si, 1);
     var vi = vacationDays.indexOf(editingDateKey); if (vi > -1) vacationDays.splice(vi, 1);
-    localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-    localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
-
+    try {
+        localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+        localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+    } catch(e){}
     delete notifiedFlags[editingDateKey + '_1d'];
     delete notifiedFlags[editingDateKey + '_2h'];
     delete notifiedFlags[editingDateKey + '_30m'];
-
     if (time && notify) {
         var parts = editingDateKey.split('-').map(Number);
         var tparts = time.split(':').map(Number);
@@ -785,9 +1133,10 @@ function saveEntry() {
         if (diffMin < 60)   notifiedFlags[editingDateKey + '_2h'] = true;
         if (diffMin < 5)    notifiedFlags[editingDateKey + '_30m'] = true;
     }
-    localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
-    localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-
+    try {
+        localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+        localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+    } catch(e){}
     closeEntryEditor();
     renderCalendar();
 }
@@ -798,15 +1147,13 @@ function deleteEntry() {
     delete notifiedFlags[editingDateKey + '_1d'];
     delete notifiedFlags[editingDateKey + '_2h'];
     delete notifiedFlags[editingDateKey + '_30m'];
-    localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-    localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+    try {
+        localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+        localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+    } catch(e){}
     closeEntryEditor();
     renderCalendar();
 }
-document.getElementById('modalSaveBtn').addEventListener('click', saveEntry);
-document.getElementById('modalDeleteBtn').addEventListener('click', deleteEntry);
-document.getElementById('modalCancelBtn').addEventListener('click', closeEntryEditor);
-document.getElementById('entryModal').addEventListener('click', function(e){ if (e.target.id === 'entryModal') closeEntryEditor(); });
 
 function showBanner(title, body) {
     var old = document.getElementById('notifBanner');
@@ -814,9 +1161,7 @@ function showBanner(title, body) {
     var el = document.createElement('div');
     el.id = 'notifBanner';
     el.className = 'notif-banner';
-    el.innerHTML = '<button class="notif-banner-close" aria-label="Schliessen">\u00D7</button>' +
-                   '<strong>' + escapeHtml(title) + '</strong>' +
-                   escapeHtml(body);
+    el.innerHTML = '<button class="notif-banner-close" aria-label="Schliessen">\u00D7</button><strong>' + escapeHtml(title) + '</strong>' + escapeHtml(body);
     el.querySelector('.notif-banner-close').addEventListener('click', function(){ el.parentNode.removeChild(el); });
     document.body.appendChild(el);
     setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 25000);
@@ -826,11 +1171,7 @@ function fireNotification(title, body) {
     if (Notification.permission !== 'granted') return;
     try { new Notification(title, { body: body, tag: title + '|' + body, silent: true }); } catch(e){}
 }
-function notifyUser(title, body) {
-    playNotifySound();
-    showBanner(title, body);
-    fireNotification(title, body);
-}
+function notifyUser(title, body) { playNotifySound(); showBanner(title, body); fireNotification(title, body); }
 function updateNotifButton() {
     var btn = document.getElementById('notifBtn');
     if (!btn) return;
@@ -840,16 +1181,7 @@ function updateNotifButton() {
     else if (hasSystem && Notification.permission === 'denied') { btn.textContent = 'Erinnerungen aktiv (Banner)'; btn.style.background = '#00796b'; }
     else { btn.textContent = 'Erinnerungen aktivieren'; btn.style.background = '#00796b'; }
 }
-document.getElementById('notifBtn').addEventListener('click', function(){
-    unlockAudio();
-    notifyUser('Test-Erinnerung', 'Banner und Ton funktionieren.');
-    if ('Notification' in window && Notification.permission === 'default') {
-        try { Notification.requestPermission().then(function(){ updateNotifButton(); checkReminders(); }); } catch(e){}
-    } else if ('Notification' in window && Notification.permission === 'granted') {
-        checkReminders();
-    }
-});
-function saveNotified() { localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags)); }
+function saveNotified() { try { localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags)); } catch(e){} }
 
 function checkReminders() {
     var nowMs = Date.now();
@@ -862,16 +1194,13 @@ function checkReminders() {
         var eventMs = new Date(p[0], p[1]-1, p[2], t[0], t[1], 0, 0).getTime();
         var diffMin = (eventMs - nowMs) / 60000;
         if (diffMin <= 0) return;
-
         var label = entry.text ? entry.text : 'Sonstiger Termin';
         var icon = entry.icon || '\uD83D\uDD14';
-
         var triggers = [
-            { key:'_1d',  lo: 1320, hi: 1560, msg: icon + ' Morgen um ' + entry.time + ' Uhr' },
-            { key:'_2h',  lo: 60,   hi: 180,  msg: 'In 2 Stunden: ' + entry.time + ' Uhr' },
-            { key:'_30m', lo: 5,    hi: 55,   msg: icon + ' In 30 Minuten: ' + entry.time + ' Uhr' }
+            { key:'_1d', lo: 1320, hi: 1560, msg: icon + ' Morgen um ' + entry.time + ' Uhr' },
+            { key:'_2h', lo: 60, hi: 180, msg: 'In 2 Stunden: ' + entry.time + ' Uhr' },
+            { key:'_30m', lo: 5, hi: 55, msg: icon + ' In 30 Minuten: ' + entry.time + ' Uhr' }
         ];
-
         triggers.forEach(function(tr){
             var fullKey = dateKey + tr.key;
             if (notifiedFlags[fullKey]) return;
@@ -885,7 +1214,6 @@ function checkReminders() {
             }
         });
     });
-
     var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
     var cutoffKey = formatDateKey(cutoff);
     var cleaned = false;
@@ -894,7 +1222,6 @@ function checkReminders() {
     });
     if (cleaned) saveNotified();
 }
-setInterval(checkReminders, 30 * 1000);
 
 function getUpcomingReminders(limit) {
     var now = new Date();
@@ -927,24 +1254,36 @@ function updateRemindersList() {
         else if (diffMin < 1440) when = 'in ' + Math.round(diffMin/60) + ' Std';
         else when = 'in ' + Math.round(diffMin/1440) + ' Tagen';
         var dt = it.dt;
-        var dd = String(dt.getDate()).padStart(2,'0'), mm = String(dt.getMonth()+1).padStart(2,'0'), yyyy = dt.getFullYear();
-        var hh = String(dt.getHours()).padStart(2,'0'), mn = String(dt.getMinutes()).padStart(2,'0');
+        var dd = String(dt.getDate()).padStart(2,'0');
+        var mm = String(dt.getMonth()+1).padStart(2,'0');
+        var yyyy = dt.getFullYear();
+        var hh = String(dt.getHours()).padStart(2,'0');
+        var mn = String(dt.getMinutes()).padStart(2,'0');
         var icon = it.entry.icon || '\uD83D\uDD14';
         var text = it.entry.text || 'Termin';
-        return '<li>' + icon + ' <b>' + dd + '.' + mm + '.' + yyyy + '</b> \u00B7 ' + hh + ':' + mn + ' \u2013 ' + escapeHtml(text) + ' <span class="when">(' + when + ')</span></li>';
+        return '<li>' + icon + ' <b>' + dd + '.' + mm + '.' + yyyy + '</b> - ' + hh + ':' + mn + ' - ' + escapeHtml(text) + ' <span class="when">(' + when + ')</span></li>';
     }).join('');
 }
-setInterval(updateRemindersList, 60 * 1000);
 
 function updateYearOverview() {
     var year = currentDate.getFullYear();
-    document.getElementById('overviewYear').textContent = year;
+    var el = document.getElementById('overviewYear');
+    if (el) el.textContent = year;
     var yearSick = sickDays.filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
     var yearVacation = vacationDays.filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
     var yearSonstige = Object.keys(sonstigeDays).filter(function(d){ return d.indexOf(year+'-') === 0; }).sort();
+    var quota = getVacationQuota(year);
+    var used = yearVacation.length;
+    var left = quota - used;
+    document.getElementById('countUrlaub').textContent = used;
+    document.getElementById('countUrlaubQuota').textContent = quota;
+    document.getElementById('countUrlaubLeft').textContent = left;
     document.getElementById('countKrank').textContent = yearSick.length;
-    document.getElementById('countUrlaub').textContent = yearVacation.length;
     document.getElementById('countSonstige').textContent = yearSonstige.length;
+    var statEl = document.getElementById('urlaubStat');
+    statEl.classList.remove('warn','danger');
+    if (left < 0) statEl.classList.add('danger');
+    else if (left <= 5) statEl.classList.add('warn');
     function f(s){ var p = s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
     document.getElementById('listKrank').innerHTML = yearSick.length ? yearSick.map(function(d){ return '<li>'+f(d)+'</li>'; }).join('') : '<li>Keine Eintr\u00E4ge</li>';
     document.getElementById('listUrlaub').innerHTML = yearVacation.length ? yearVacation.map(function(d){ return '<li>'+f(d)+'</li>'; }).join('') : '<li>Keine Eintr\u00E4ge</li>';
@@ -954,116 +1293,15 @@ function updateYearOverview() {
         if (e.icon) extra.push(e.icon);
         if (e.time) extra.push('Uhrzeit: ' + e.time);
         if (e.text) extra.push(escapeHtml(e.text));
-        var extraStr = extra.length ? ' \u2013 ' + extra.join(' \u00B7 ') : '';
+        var extraStr = extra.length ? ' - ' + extra.join(' . ') : '';
         return '<li><span style="display:inline-block;width:14px;height:14px;background:'+e.color+';border:1px solid #999;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>'+f(d)+extraStr+'</li>';
     }).join('') : '<li>Keine Eintr\u00E4ge</li>';
 }
 function toggleYearOverview() {
     var o = document.getElementById('yearOverview');
     if (o.style.display === 'block') { o.style.display = 'none'; }
-    else {
-        o.style.display = 'block';
-        updateYearOverview();
-        setTimeout(function(){
-            try { o.scrollIntoView({behavior:'smooth', block:'center'}); }
-            catch(e) {
-                var rect = o.getBoundingClientRect();
-                var targetY = window.pageYOffset + rect.top - (window.innerHeight - rect.height) / 2;
-                window.scrollTo(0, Math.max(0, targetY));
-            }
-        }, 30);
-    }
+    else { o.style.display = 'block'; updateYearOverview(); }
 }
-function resetData() {
-    if (confirm('M\u00F6chtest du wirklich alle Markierungen l\u00F6schen?')) {
-        sickDays = []; vacationDays = []; sonstigeDays = {}; notifiedFlags = {};
-        localStorage.removeItem('schichtzeitSickDays'); localStorage.removeItem('schichtzeitVacationDays');
-        localStorage.removeItem('schichtzeitSonstigeDays'); localStorage.removeItem('schichtzeitNotified');
-        renderCalendar();
-    }
-}
-
-function createBackup() {
-    var backup = { version: 1, date: new Date().toISOString(),
-        group: document.getElementById('groupSelect').value,
-        color: selectedColor, sickDays: sickDays, vacationDays: vacationDays,
-        sonstigeDays: sonstigeDays, notifiedFlags: notifiedFlags };
-    var json = JSON.stringify(backup, null, 2);
-    var blob = new Blob([json], {type: 'application/json'});
-    var url = URL.createObjectURL(blob);
-    var now = new Date();
-    var filename = 'Schichtzeit_Backup_' +
-        now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' +
-        String(now.getDate()).padStart(2,'0') + '_' +
-        String(now.getHours()).padStart(2,'0') + '-' + String(now.getMinutes()).padStart(2,'0') + '.json';
-    var link = document.createElement('a');
-    link.href = url; link.download = filename;
-    document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
-function restoreBackup() {
-    var input = document.getElementById('restoreFileInput');
-    input.value = ''; input.click();
-}
-document.getElementById('restoreFileInput').addEventListener('change', function(e){
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(event){
-        try {
-            var data = JSON.parse(event.target.result);
-            if (!data.sickDays && !data.vacationDays && !data.sonstigeDays) { alert('Ung\u00FCltige Backup-Datei.'); return; }
-            if (!confirm('Backup wiederherstellen? Die aktuellen Daten werden \u00FCberschrieben.')) return;
-            sickDays = data.sickDays || []; vacationDays = data.vacationDays || [];
-            sonstigeDays = data.sonstigeDays || {}; notifiedFlags = data.notifiedFlags || {};
-            if (data.group) { document.getElementById('groupSelect').value = data.group; localStorage.setItem('schichtzeitGroup', data.group); }
-            if (data.color) {
-                selectedColor = data.color;
-                document.getElementById('sonstigeColor').value = selectedColor;
-                document.getElementById('legendSonstige').style.background = selectedColor;
-                localStorage.setItem('schichtzeitColor', selectedColor);
-                updateColorPresetsActive();
-            }
-            localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
-            localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
-            localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
-            localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
-            renderCalendar();
-            alert('Backup erfolgreich wiederhergestellt.');
-        } catch (err) { alert('Fehler beim Lesen der Backup-Datei: ' + err.message); }
-    };
-    reader.readAsText(file);
-});
-
-document.getElementById('prevBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(-1); });
-document.getElementById('nextBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(1); });
-document.getElementById('groupSelect').addEventListener('change', function(e){ localStorage.setItem('schichtzeitGroup', e.target.value); renderCalendar(); });
-document.querySelectorAll('.mode-btn').forEach(function(btn){
-    btn.addEventListener('click', function(e){
-        document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
-        e.target.classList.add('active');
-        currentMode = e.target.getAttribute('data-mode');
-        var picker = document.getElementById('colorPickerRow');
-        picker.classList.toggle('active', currentMode === 'sonstige');
-    });
-});
-document.getElementById('sonstigeColor').addEventListener('input', function(e){
-    selectedColor = e.target.value;
-    localStorage.setItem('schichtzeitColor', selectedColor);
-    document.getElementById('legendSonstige').style.background = selectedColor;
-    updateColorPresetsActive();
-});
-document.querySelectorAll('.color-preset').forEach(function(btn){
-    btn.addEventListener('click', function(){
-        selectedColor = btn.getAttribute('data-color');
-        document.getElementById('sonstigeColor').value = selectedColor;
-        document.getElementById('legendSonstige').style.background = selectedColor;
-        localStorage.setItem('schichtzeitColor', selectedColor);
-        updateColorPresetsActive();
-    });
-});
-document.getElementById('legendSonstige').style.background = selectedColor;
-
 function toggleFerien() {
     showFerien = !showFerien;
     var btn = document.getElementById('ferienBtn');
@@ -1072,13 +1310,189 @@ function toggleFerien() {
     else { btn.style.background = '#17a2b8'; note.style.display = 'none'; }
     renderCalendar();
 }
+function resetData() {
+    if (confirm('M\u00F6chtest du wirklich alle Markierungen l\u00F6schen?')) {
+        sickDays = []; vacationDays = []; sonstigeDays = {}; notifiedFlags = {};
+        try {
+            localStorage.removeItem('schichtzeitSickDays');
+            localStorage.removeItem('schichtzeitVacationDays');
+            localStorage.removeItem('schichtzeitSonstigeDays');
+            localStorage.removeItem('schichtzeitNotified');
+        } catch(e){}
+        renderCalendar();
+    }
+}
 
-document.getElementById('groupSelect').value = savedGroup;
-document.getElementById('sonstigeColor').value = selectedColor;
-updateColorPresetsActive();
-syncClock();
-updateNotifButton();
-setTimeout(checkReminders, 3000);
+function applyRestoredData(data) {
+    sickDays = data.sickDays || [];
+    vacationDays = data.vacationDays || [];
+    sonstigeDays = data.sonstigeDays || {};
+    notifiedFlags = data.notifiedFlags || {};
+    if (data.vacationQuota && typeof data.vacationQuota === 'object') {
+        vacationQuota = data.vacationQuota;
+        try { localStorage.setItem('schichtzeitVacationQuota', JSON.stringify(vacationQuota)); } catch(err){}
+    }
+    if (data.shiftSystem) {
+        shiftSystem = data.shiftSystem;
+        try { localStorage.setItem('schichtzeitShiftSystem', shiftSystem); } catch(err){}
+    }
+    if (data.theme) {
+        applyTheme(data.theme);
+    }
+    if (data.group) {
+        document.getElementById('groupSelect').value = data.group;
+        try { localStorage.setItem('schichtzeitGroup', data.group); } catch(err){}
+    }
+    if (data.color) {
+        selectedColor = data.color;
+        document.getElementById('sonstigeColor').value = selectedColor;
+        document.getElementById('legendSonstige').style.background = selectedColor;
+        try { localStorage.setItem('schichtzeitColor', selectedColor); } catch(err){}
+        updateColorPresetsActive();
+    }
+    try {
+        localStorage.setItem('schichtzeitSickDays', JSON.stringify(sickDays));
+        localStorage.setItem('schichtzeitVacationDays', JSON.stringify(vacationDays));
+        localStorage.setItem('schichtzeitSonstigeDays', JSON.stringify(sonstigeDays));
+        localStorage.setItem('schichtzeitNotified', JSON.stringify(notifiedFlags));
+    } catch(err){}
+    renderCalendar();
+}
+
+function init() {
+    applyTheme(currentTheme);
+
+    document.getElementById('shareBtn').addEventListener('click', shareSchichtzeit);
+    document.getElementById('settingsBtn').addEventListener('click', openSettings);
+    document.getElementById('settingsCancelBtn').addEventListener('click', closeSettings);
+    document.getElementById('settingsSaveBtn').addEventListener('click', saveSettings);
+    document.getElementById('settingsModal').addEventListener('click', function(e){ if (e.target.id === 'settingsModal') closeSettings(); });
+    document.getElementById('openHelpBtn').addEventListener('click', openHelp);
+    document.getElementById('helpCloseBtn').addEventListener('click', closeHelp);
+    document.getElementById('helpModal').addEventListener('click', function(e){ if (e.target.id === 'helpModal') closeHelp(); });
+
+    var themeBtns = document.querySelectorAll('.theme-choice');
+    for (var t = 0; t < themeBtns.length; t++) {
+        (function(btn){
+            btn.addEventListener('click', function(){
+                applyTheme(btn.getAttribute('data-theme'));
+            });
+        })(themeBtns[t]);
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', resetData);
+    document.getElementById('yearOverviewBtn').addEventListener('click', toggleYearOverview);
+    document.getElementById('yearOverviewCloseBtn').addEventListener('click', toggleYearOverview);
+    document.getElementById('ferienBtn').addEventListener('click', toggleFerien);
+    document.getElementById('backupBtn').addEventListener('click', openBackupMenu);
+
+    document.getElementById('backupSaveDeviceBtn').addEventListener('click', backupToDevice);
+    document.getElementById('backupShareBtn').addEventListener('click', backupShare);
+    document.getElementById('backupRestoreBtn').addEventListener('click', restoreFromFile);
+    document.getElementById('backupCancelBtn').addEventListener('click', closeBackupMenu);
+    document.getElementById('backupMenuModal').addEventListener('click', function(e){ if (e.target.id === 'backupMenuModal') closeBackupMenu(); });
+
+    document.getElementById('donateCancelBtn').addEventListener('click', closeDonateModal);
+    document.getElementById('donateModal').addEventListener('click', function(e){ if (e.target.id === 'donateModal') closeDonateModal(); });
+    document.getElementById('donateConfirmLink').addEventListener('click', function(){ setTimeout(closeDonateModal, 200); });
+    document.getElementById('entryNotify').addEventListener('change', function(){ setTimeout(openDonateModal, 60); });
+    document.getElementById('modalSaveBtn').addEventListener('click', saveEntry);
+    document.getElementById('modalDeleteBtn').addEventListener('click', deleteEntry);
+    document.getElementById('modalCancelBtn').addEventListener('click', closeEntryEditor);
+    document.getElementById('entryModal').addEventListener('click', function(e){ if (e.target.id === 'entryModal') closeEntryEditor(); });
+    document.getElementById('prevBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(-1); });
+    document.getElementById('nextBtn').addEventListener('click', function(){ unlockAudio(); changeMonth(1); });
+    document.getElementById('groupSelect').addEventListener('change', function(e){
+        try { localStorage.setItem('schichtzeitGroup', e.target.value); } catch(err){}
+        renderCalendar();
+    });
+    var modeBtns = document.querySelectorAll('.mode-btn');
+    for (var i = 0; i < modeBtns.length; i++) {
+        (function(btn){
+            btn.addEventListener('click', function(){
+                var all = document.querySelectorAll('.mode-btn');
+                for (var j = 0; j < all.length; j++) all[j].classList.remove('active');
+                btn.classList.add('active');
+                currentMode = btn.getAttribute('data-mode');
+                var picker = document.getElementById('colorPickerRow');
+                if (currentMode === 'sonstige') picker.classList.add('active');
+                else picker.classList.remove('active');
+            });
+        })(modeBtns[i]);
+    }
+    document.getElementById('sonstigeColor').addEventListener('input', function(e){
+        selectedColor = e.target.value;
+        try { localStorage.setItem('schichtzeitColor', selectedColor); } catch(err){}
+        document.getElementById('legendSonstige').style.background = selectedColor;
+        updateColorPresetsActive();
+    });
+    var presets = document.querySelectorAll('.color-preset');
+    for (var k = 0; k < presets.length; k++) {
+        (function(btn){
+            btn.addEventListener('click', function(){
+                selectedColor = btn.getAttribute('data-color');
+                document.getElementById('sonstigeColor').value = selectedColor;
+                document.getElementById('legendSonstige').style.background = selectedColor;
+                try { localStorage.setItem('schichtzeitColor', selectedColor); } catch(err){}
+                updateColorPresetsActive();
+            });
+        })(presets[k]);
+    }
+    document.getElementById('legendSonstige').style.background = selectedColor;
+    document.getElementById('notifBtn').addEventListener('click', function(){
+        unlockAudio();
+        notifyUser('Test-Erinnerung', 'Banner und Ton funktionieren.');
+        if ('Notification' in window && Notification.permission === 'default') {
+            try { Notification.requestPermission().then(function(){ updateNotifButton(); checkReminders(); }); } catch(e){}
+        } else if ('Notification' in window && Notification.permission === 'granted') { checkReminders(); }
+    });
+    document.getElementById('restoreFileInput').addEventListener('change', function(e){
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(event){
+            try {
+                var data = JSON.parse(event.target.result);
+                if (!data.sickDays && !data.vacationDays && !data.sonstigeDays) { alert('Ung\u00FCltige Backup-Datei.'); return; }
+                if (!confirm('Backup wiederherstellen? Aktuelle Daten werden \u00FCberschrieben.')) return;
+                applyRestoredData(data);
+                alert('Backup erfolgreich wiederhergestellt.');
+            } catch(err) { alert('Fehler beim Lesen der Backup-Datei: ' + err.message); }
+        };
+        reader.readAsText(file);
+    });
+    setupSwipe();
+    document.addEventListener('touchstart', unlockAudio, {once:true, passive:true});
+    document.addEventListener('click', unlockAudio, {once:true});
+    document.addEventListener('visibilitychange', function(){
+        if (!document.hidden) { syncClock(); checkReminders(); scheduleMinuteTick(); }
+    });
+    window.addEventListener('focus', function(){ syncClock(); checkReminders(); });
+    document.getElementById('groupSelect').value = savedGroup;
+    document.getElementById('sonstigeColor').value = selectedColor;
+    updateColorPresetsActive();
+    syncClock();
+    updateNotifButton();
+    scheduleMinuteTick();
+    setTimeout(checkReminders, 3000);
+    setInterval(checkReminders, 30 * 1000);
+    setInterval(updateRemindersList, 60 * 1000);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+} catch(err) {
+    var box = document.getElementById('errBox');
+    if (box) {
+        box.style.display = 'block';
+        box.textContent = 'FEHLER: ' + err.message;
+    }
+}
+})();
 </script>
 </body>
 </html>
