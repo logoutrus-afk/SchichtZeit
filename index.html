@@ -166,16 +166,12 @@ button:active{background:#0056b3}
 .section-title{font-size:14px;font-weight:bold;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px 0}
 .section-title:first-of-type{margin-top:0}
 
-/* Design-Auswahl in Einstellungen */
 .theme-row{display:flex;gap:8px;margin-bottom:14px}
 .theme-choice{flex:1;padding:14px 8px;font-size:15px;border-radius:8px;cursor:pointer;font-weight:bold;font-family:inherit;transition:box-shadow .15s}
 .theme-choice[data-theme="light"]{background:#ffffff;color:#333333;border:2px solid #cccccc}
 .theme-choice[data-theme="dark"]{background:#2a2e33;color:#e4e6ea;border:2px solid #555555}
 .theme-choice.active{border-color:#0056b3!important;box-shadow:0 0 0 3px rgba(0,86,179,0.35)}
 
-/* ============================================ */
-/* DUNKEL-MODUS                                 */
-/* ============================================ */
 body.dark{background:#14171a;color:#e4e6ea}
 body.dark .container{background:#1e2124;box-shadow:0 4px 15px rgba(0,0,0,0.5)}
 body.dark h2{color:#6ab0ff}
@@ -369,7 +365,6 @@ body.dark .share-toast{background:#e4e6ea;color:#1e2124}
 
 </div>
 
-<!-- ENTRY MODAL -->
 <div class="modal-overlay" id="entryModal"><div class="modal">
 <h3 id="modalTitle">Eintrag</h3>
 <div class="modal-date" id="modalDate"></div>
@@ -389,7 +384,6 @@ body.dark .share-toast{background:#e4e6ea;color:#1e2124}
 </div>
 </div></div>
 
-<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsModal"><div class="modal">
 <h3>Einstellungen</h3>
 <div class="modal-date" id="settingsYearDisplay"></div>
@@ -415,13 +409,10 @@ body.dark .share-toast{background:#e4e6ea;color:#1e2124}
 </div>
 </div></div>
 
-<!-- HELP MODAL -->
 <div class="modal-overlay" id="helpModal"><div class="modal">
 <h3>Anleitung</h3>
 <div class="modal-date">Bedienungsanleitung f&uuml;r SchichtZeit</div>
-
 <div class="help-body">
-
 <p>Willkommen bei <b>SchichtZeit</b>. Diese App zeigt euch den Schichtplan und hilft euch, Urlaub, Krankheit und eigene Termine einzutragen.</p>
 
 <h4>1. Die Schicht w&auml;hlen</h4>
@@ -434,100 +425,72 @@ body.dark .share-toast{background:#e4e6ea;color:#1e2124}
 </table>
 
 <h4>2. Was macht die Modi-Leiste?</h4>
-<p>Unter dem Kalender stehen vier Modi zur Auswahl:</p>
 <ul>
 <li><b>Normal</b> &ndash; nur anschauen. Ein Klick auf einen Tag mit Eintrag &ouml;ffnet ihn.</li>
 <li><b>Krank</b> &ndash; Klick auf einen Tag markiert ihn als <b>Krank</b> (lila).</li>
 <li><b>Urlaub</b> &ndash; Klick auf einen Tag markiert ihn als <b>Urlaub</b> (gr&uuml;n). Wird aufs Urlaubskonto angerechnet.</li>
-<li><b>Sonstige</b> &ndash; Klick auf einen Tag &ouml;ffnet ein Fenster f&uuml;r eigene Termine (Arzt, Elternabend usw.).</li>
+<li><b>Sonstige</b> &ndash; Klick auf einen Tag &ouml;ffnet ein Fenster f&uuml;r eigene Termine.</li>
 </ul>
 <div class="box">Ein zweiter Klick auf einen markierten Tag entfernt die Markierung wieder.</div>
 
 <h4>3. Eigenen Termin eintragen</h4>
-<p>So geht's:</p>
 <ul>
 <li>Modus <b>Sonstige</b> w&auml;hlen.</li>
-<li>Auf den gew&uuml;nschten Tag tippen.</li>
-<li>Beschreibung eingeben (z.B. <i>Zahnarzt</i>).</li>
-<li>Uhrzeit w&auml;hlen (optional).</li>
-<li>Symbol aus den <b>16 Vorlagen</b> ausw&auml;hlen.</li>
-<li>Farbe festlegen.</li>
-<li>Wenn eine Erinnerung gew&uuml;nscht ist: <b>H&auml;kchen bei &bdquo;Erinnerung senden&ldquo;</b> setzen.</li>
+<li>Auf den Tag tippen.</li>
+<li>Beschreibung, Uhrzeit, Symbol und Farbe w&auml;hlen.</li>
+<li>F&uuml;r eine Erinnerung H&auml;kchen bei <b>&bdquo;Erinnerung senden&ldquo;</b> setzen.</li>
 <li>Speichern.</li>
 </ul>
-<p>Der Termin erscheint als farbige Zelle mit Symbol. Bei aktivierter Erinnerung erhaltet ihr <b>1 Tag, 2 Stunden und 30 Minuten</b> vorher einen Hinweis (Banner + Ton).</p>
+<p>Der Termin erscheint als farbige Zelle mit Symbol. Erinnerungen kommen <b>1 Tag, 2 Stunden und 30 Minuten</b> vorher (Banner + Ton).</p>
 <p>Verf&uuml;gbare Symbole:</p>
 <p class="emoji-list">&#x1F514; &#x23F0; &#x1F4CC; &#x2B50; &#x2764;&#xFE0F; &#x26A0;&#xFE0F; &#x1F4DE; &#x1F48A; &#x1F3E5; &#x1F4C5; &#x2708;&#xFE0F; &#x1F382; &#x1F389; &#x1F697; &#x1F4BC; &#x1F4DD;</p>
 
 <h4>4. Jahres&uuml;bersicht</h4>
-<p>Zeigt euch auf einen Blick:</p>
-<ul>
-<li><b>Urlaub</b> &ndash; wie viele Tage ihr verplant habt, wie viele euch insgesamt zustehen und wie viele noch &uuml;brig sind.</li>
-<li><b>Krank</b> &ndash; Summe aller Krankheitstage.</li>
-<li><b>Sonstige</b> &ndash; Summe aller sonstigen Eintr&auml;ge.</li>
-</ul>
-<p>Wenn euer Urlaub zur Neige geht, f&auml;rbt sich die Karte <b>gelb</b> (weniger als 5 Tage) oder <b>rot</b> (Kontingent &uuml;berschritten).</p>
+<p>Zeigt Urlaub (verplant/gesamt/&uuml;brig), Krank und Sonstige. Bei weniger als 5 Resttagen wird die Urlaubskarte <b>gelb</b>, bei &Uuml;berschreitung <b>rot</b>.</p>
 
 <h4>5. Ferien anzeigen</h4>
-<p>Der Knopf <b>Ferien</b> blendet die bayerischen Schulferien ein. Ferientage bekommen einen gestrichelten Rahmen.</p>
+<p>Der Knopf <b>Ferien</b> blendet die bayerischen Schulferien ein.</p>
 
 <h4>6. Einstellungen &ouml;ffnen</h4>
-<p>&Uuml;ber das <b>Drei-Punkte-Men&uuml;</b> oben rechts:</p>
-<ul>
-<li><b>Urlaubstage pro Jahr</b> &ndash; tragt hier euer pers&ouml;nliches Urlaubskontingent ein (Standard: 30).</li>
-<li><b>Schichtsystem</b> &ndash; aktuell nur das <b>5-Schicht-System</b> verf&uuml;gbar.</li>
-<li><b>Design / Modus</b> &ndash; hier w&auml;hlt ihr zwischen <b>Hell</b> und <b>Dunkel</b>. Die Wahl ist unabh&auml;ngig von der System-Einstellung des Ger&auml;ts und bleibt gespeichert.</li>
-<li><b>Anleitung</b> &ndash; dieses Fenster hier.</li>
-</ul>
+<p>&Uuml;ber das <b>Drei-Punkte-Men&uuml;</b> oben rechts: Urlaubstage pro Jahr, Schichtsystem, <b>Design / Modus</b> (Hell / Dunkel &ndash; unabh&auml;ngig von der System-Einstellung) und diese Anleitung.</p>
 
 <h4>7. Backup &ndash; Sichern und Wiederherstellen</h4>
-<p>Der Knopf <b>Backup</b> &ouml;ffnet ein Fenster mit zwei M&ouml;glichkeiten:</p>
 <ul>
-<li><b>Sichern</b> &ndash; eure Daten werden in einer Datei gespeichert. Danach k&ouml;nnt ihr w&auml;hlen:
-    <ul>
-    <li><b>Auf Ger&auml;t speichern</b> &ndash; Datei landet im Download-Ordner.</li>
-    <li><b>Teilen / E-Mail / Cloud</b> &ndash; das System-Teilen-Fenster &ouml;ffnet sich. Dort k&ouml;nnt ihr die Datei per E-Mail senden, in Google Drive / iCloud ablegen oder an WhatsApp / Telegram schicken.</li>
-    </ul>
-</li>
-<li><b>Wiederherstellen</b> &ndash; eine zuvor gespeicherte Datei ausw&auml;hlen. Alle Daten werden daraus zur&uuml;ckgespielt.</li>
+<li><b>Sichern &rarr; Auf Ger&auml;t speichern</b> &ndash; Datei landet im Download-Ordner.</li>
+<li><b>Sichern &rarr; Teilen / E-Mail / Cloud</b> &ndash; System-Teilen-Fenster &ouml;ffnet sich. Dort kann man die Datei per E-Mail, Cloud (Drive/iCloud) oder Messenger verschicken.</li>
+<li><b>Wiederherstellen</b> &ndash; eine zuvor gesicherte Datei ausw&auml;hlen.</li>
 </ul>
 <div class="box warn">Beim Handywechsel <b>unbedingt vorher sichern</b>, sonst sind alle Eintr&auml;ge verloren.</div>
 
 <h4>8. Erinnerungen aktivieren</h4>
-<p>Beim ersten Besuch unten auf <b>&bdquo;Erinnerungen aktivieren&ldquo;</b> tippen. Der Browser fragt dann nach Erlaubnis.</p>
-<div class="box">Erinnerungen kommen nur, solange die App im Browser ge&ouml;ffnet ist. Wenn der Browser komplett geschlossen wird, kommen keine Hinweise mehr.</div>
+<p>Einmal unten auf <b>&bdquo;Erinnerungen aktivieren&ldquo;</b> tippen. Der Browser fragt nach Erlaubnis.</p>
+<div class="box">Erinnerungen kommen nur, solange die App im Browser ge&ouml;ffnet ist. Bei geschlossenem Browser kommen keine Hinweise mehr.</div>
 
 <h4>9. Teilen (Knopf oben links)</h4>
-<p>&Ouml;ffnet das Teilen-Men&uuml; des Handys. So k&ouml;nnt ihr den Link an Kollegen weitergeben &ndash; z.B. per WhatsApp, E-Mail oder Messenger.</p>
+<p>&Ouml;ffnet das Teilen-Men&uuml; des Handys.</p>
 
 <h4>10. Feiertage und Ferien (Bayern)</h4>
-<p>Alle bayerischen Feiertage sind fest hinterlegt: Neujahr, Heilige Drei K&ouml;nige, Karfreitag, Ostermontag, Tag der Arbeit, Christi Himmelfahrt, Pfingstmontag, Fronleichnam, Mari&auml; Himmelfahrt, Tag der Deutschen Einheit, Allerheiligen, 1. &amp; 2. Weihnachtstag.</p>
-<p>Feiertage bekommen einen <b>goldenen Rahmen</b>, Ferientage einen <b>gestrichelten blauen Rahmen</b>.</p>
+<p>Alle bayerischen Feiertage sind hinterlegt. Feiertage bekommen einen <b>goldenen Rahmen</b>, Ferientage einen <b>gestrichelten blauen Rahmen</b>.</p>
 
 <h4>11. Hinweis zu Google Kalender</h4>
-<div class="box warn">Wenn ihr Erinnerungen auch dann erhalten wollt, wenn die App <b>geschlossen</b> ist &ndash; tragt wichtige Termine zus&auml;tzlich in euren <b>Google Kalender</b> ein. Dort funktionieren die Push-Benachrichtigungen zuverl&auml;ssig auf dem ganzen Handy.</div>
+<div class="box warn">Wenn ihr Erinnerungen auch bei <b>geschlossener App</b> erhalten wollt &ndash; tragt wichtige Termine zus&auml;tzlich in euren <b>Google Kalender</b> ein.</div>
 
 <h4>12. Bei Problemen</h4>
-<p>Wenn etwas nicht funktioniert oder ihr Fragen habt &ndash; meldet euch beim Schichtleiter oder bei der Person, die die App eingerichtet hat.</p>
+<p>Meldet euch beim Schichtleiter oder bei der Person, die die App eingerichtet hat.</p>
 
 <div class="help-footer">
 SchichtZeit &ndash; der digitale Schichtplan f&uuml;r unsere Schicht.
 </div>
-
 </div>
-
 <div class="modal-buttons">
 <button id="helpCloseBtn" style="background:#007bff;">Alles klar</button>
 </div>
 </div></div>
 
-<!-- BACKUP MENU MODAL -->
 <div class="modal-overlay" id="backupMenuModal"><div class="modal">
 <h3>Backup</h3>
 <div class="modal-date">Daten sichern oder wiederherstellen</div>
-
 <div class="section-title">Sichern</div>
-
 <button class="backup-option" id="backupSaveDeviceBtn">
 <span class="icon">&#x1F4BE;</span>
 <span>
@@ -535,7 +498,6 @@ SchichtZeit &ndash; der digitale Schichtplan f&uuml;r unsere Schicht.
 <span class="desc">Datei wird in den Download-Ordner gespeichert. Funktioniert auf Windows, iOS und Android.</span>
 </span>
 </button>
-
 <button class="backup-option" id="backupShareBtn">
 <span class="icon">&#x1F4E4;</span>
 <span>
@@ -543,9 +505,7 @@ SchichtZeit &ndash; der digitale Schichtplan f&uuml;r unsere Schicht.
 <span class="desc">System-Fenster &ouml;ffnet sich: per E-Mail senden, in Cloud ablegen oder an Messenger schicken.</span>
 </span>
 </button>
-
 <div class="section-title">Wiederherstellen</div>
-
 <button class="backup-option" id="backupRestoreBtn">
 <span class="icon">&#x1F4C2;</span>
 <span>
@@ -553,13 +513,11 @@ SchichtZeit &ndash; der digitale Schichtplan f&uuml;r unsere Schicht.
 <span class="desc">Eine zuvor gesicherte Backup-Datei ausw&auml;hlen. Aktuelle Daten werden &uuml;berschrieben.</span>
 </span>
 </button>
-
 <div class="modal-buttons">
 <button id="backupCancelBtn" style="background:#6c757d;">Schlie&szlig;en</button>
 </div>
 </div></div>
 
-<!-- DONATE MODAL -->
 <div class="modal-overlay" id="donateModal"><div class="modal">
 <h3>Funktion noch nicht finanziert</h3>
 <p class="donate-text">F&uuml;r die Entwicklung dieser <b>Erinnerungsfunktion</b> wurden leider noch nicht gen&uuml;gend Mittel gesammelt. Deine Unterst&uuml;tzung hilft, dieses Feature fertigzustellen.</p>
@@ -1492,6 +1450,60 @@ if (document.readyState === 'loading') {
         box.textContent = 'FEHLER: ' + err.message;
     }
 }
+})();
+</script>
+
+<!-- ============================================================
+     AUTO-UPDATE-CHECK
+     Prueft alle 5 Min, ob auf dem Server eine neuere Version
+     liegt, und zeigt dann unten ein gruenes Baendchen.
+     ============================================================ -->
+<script>
+(function(){
+  var KEY = 'szServerVersion';
+
+  function showBanner(serverTime) {
+    if (document.getElementById('szUpdateBanner')) return;
+    var el = document.createElement('div');
+    el.id = 'szUpdateBanner';
+    el.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);' +
+      'background:#28a745;color:#fff;padding:14px 24px;border-radius:12px;font-size:15px;' +
+      'font-weight:bold;z-index:99998;box-shadow:0 6px 24px rgba(0,0,0,0.5);cursor:pointer;' +
+      'font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:calc(100% - 32px);' +
+      'text-align:center;user-select:none';
+    el.textContent = '\uD83D\uDD04 Neue Version verf\u00FCgbar \u2014 tippen zum Aktualisieren';
+    el.addEventListener('click', function(){
+      try { localStorage.setItem(KEY, String(serverTime)); } catch(e){}
+      location.replace(location.pathname + '?v=' + Date.now());
+    });
+    document.body.appendChild(el);
+  }
+
+  function check() {
+    try {
+      fetch(location.pathname + '?check=' + Date.now(), { method: 'HEAD', cache: 'no-store' })
+        .then(function(r){
+          var lm = r.headers.get('Last-Modified');
+          if (!lm) return;
+          var serverTime = new Date(lm).getTime();
+          var myVersion = parseInt(localStorage.getItem(KEY) || '0', 10);
+          if (myVersion === 0) {
+            try { localStorage.setItem(KEY, String(serverTime)); } catch(e){}
+            return;
+          }
+          if (serverTime > myVersion + 60000) {
+            showBanner(serverTime);
+          }
+        })
+        .catch(function(){});
+    } catch(e){}
+  }
+
+  setTimeout(check, 3000);
+  setInterval(check, 5 * 60 * 1000);
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) check();
+  });
 })();
 </script>
 </body>
