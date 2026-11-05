@@ -15,20 +15,25 @@
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f4f9;color:#333;text-align:center;padding:8px;padding-top:env(safe-area-inset-top,8px);padding-bottom:env(safe-area-inset-bottom,8px);margin:0;-webkit-tap-highlight-color:transparent;font-size:17px}
 .container{position:relative;max-width:1400px;margin:0 auto;background:#fff;padding:14px;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,0.1)}
-h2{margin:0 0 8px 0;color:#0056b3;font-size:32px;letter-spacing:.3px;padding:0 110px;position:relative;z-index:20}
-.top-btn{position:absolute;top:14px;background:#f1f3f5;color:#333;border:1px solid #ccc;border-radius:10px;width:46px;height:46px;font-size:24px;font-weight:bold;cursor:pointer;line-height:1;padding:0;font-family:inherit;display:flex;align-items:center;justify-content:center;z-index:20}
+h2{margin:0 0 8px 0;color:#0056b3;font-size:32px;letter-spacing:.3px;position:relative;z-index:20}
+
+/* === Кнопки share/settings — теперь в одном ряду с числом (nav-row) === */
+.top-btn{background:#f1f3f5;color:#333;border:1px solid #ccc;border-radius:10px;width:40px;height:40px;font-size:20px;font-weight:bold;cursor:pointer;line-height:1;padding:0;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;box-sizing:border-box;z-index:20;vertical-align:middle}
 .top-btn:active{background:#e2e6ea}
-.share-btn{left:14px}
-.settings-btn{right:14px}
-.share-btn svg,.settings-btn svg{width:26px;height:26px}
+.top-btn svg{width:22px;height:22px;display:block}
+
 .online-status{font-size:14px;padding:5px 11px;border-radius:16px;display:inline-block;margin-bottom:0;font-weight:bold;white-space:nowrap;position:relative;z-index:20}
 .online-status.online{background:#d4edda;color:#155724}
 .online-status.loading{background:#fff3cd;color:#856404}
 .top-row{display:flex;justify-content:center;align-items:center;margin-bottom:10px;font-size:16px;gap:10px;flex-wrap:wrap;position:relative;z-index:20}
 .top-row label{display:inline-flex;align-items:center;gap:5px;font-size:16px;font-weight:normal}
 .top-row select{padding:7px 12px;font-size:15px}
-.nav-row{display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:nowrap;position:relative;z-index:20}
-.nav-row button#prevBtn,.nav-row button#nextBtn{padding:4px 14px;font-size:18px;min-width:44px;height:40px;line-height:1;border-radius:8px;font-weight:bold}
+
+/* Nav-row: все элементы (share, стрелки, месяц, настройки) в ОДНОЙ линии одинаковой высоты */
+.nav-row{display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:nowrap;position:relative;z-index:20}
+.nav-row button#prevBtn,.nav-row button#nextBtn{min-width:40px;height:40px;padding:0;font-size:20px;line-height:1;border-radius:10px;font-weight:bold;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+#monthDisplay{font-size:24px;font-weight:bold;min-width:220px;height:40px;line-height:40px;display:inline-flex;align-items:center;justify-content:center;text-align:center;box-sizing:border-box;padding:0 8px}
+
 select,button{padding:13px 20px;font-size:17px;border-radius:9px;border:1px solid #ccc;background:#fff;cursor:pointer;font-family:inherit}
 button{background:#007bff;color:#fff;border:none;font-weight:bold}
 button:active{background:#0056b3}
@@ -51,7 +56,6 @@ button:active,.top-btn:active,.symbol-btn:active{transform:scale(0.94);filter:br
 .color-preset.active{box-shadow:0 0 0 3px #0056b3}
 .color-preset .preset-letter{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:17px;font-weight:bold;color:#000;pointer-events:none}
 .color-preset[data-color="#1E90FF"] .preset-letter,.color-preset[data-color="#FF4500"] .preset-letter{color:#fff}
-#monthDisplay{font-size:26px;font-weight:bold;min-width:240px;display:inline-block}
 
 .calendar-wrap{position:relative;z-index:1}
 .effects-layer{position:absolute;inset:0;pointer-events:none;z-index:12;overflow:hidden;border-radius:12px}
@@ -282,7 +286,6 @@ body.dark .help-body .box.warn{background:#4a3d10;color:#ffdb70}
 body.dark .help-body .box.ok{background:#1e4c2a;color:#8fdc9e}
 body.dark .help-body td{border-bottom-color:#3a3f44}
 body.dark .help-body td:first-child{color:#6ab0ff}
-body.dark .help-body .tag-_-{background:#2a2e33;color:#a0a5ab;border-color:#3a3f44}
 body.dark .help-footer{color:#8a8f95;border-top-color:#3a3f44}
 body.dark .urlaub-stat{background:#1e3524;border-color:#3a5a44;color:#c0c5cb}
 body.dark .urlaub-stat .label{color:#6ecf8a}
@@ -308,17 +311,16 @@ body.dark .lp-empty{color:#a0a5ab}
 @media (max-width:600px){
   body{padding:3px;font-size:15px}
   .container{padding:6px;border-radius:10px}
-  h2{font-size:22px;padding:0 66px;margin-bottom:4px;letter-spacing:0}
-  .top-btn{width:34px;height:34px;font-size:17px;top:8px;border-radius:8px}
-  .share-btn{left:8px}.settings-btn{right:8px}
-  .share-btn svg,.settings-btn svg{width:18px;height:18px}
+  h2{font-size:22px;margin-bottom:4px;letter-spacing:0}
+  .top-btn{width:32px;height:32px;font-size:16px;border-radius:8px}
+  .top-btn svg{width:16px;height:16px}
   .online-status{font-size:11px;padding:3px 9px;margin-bottom:0}
   .top-row{margin-bottom:5px;font-size:14px;gap:6px}
   .top-row label{font-size:14px;gap:4px}
   .top-row select{padding:6px 10px;font-size:13px}
-  .nav-row{gap:6px;margin-bottom:5px}
-  #monthDisplay{font-size:17px;min-width:130px}
-  .nav-row button#prevBtn,.nav-row button#nextBtn{font-size:15px;min-width:34px;height:30px;padding:2px 8px}
+  .nav-row{gap:4px;margin-bottom:6px}
+  #monthDisplay{font-size:16px;min-width:110px;height:32px;line-height:32px;padding:0 4px}
+  .nav-row button#prevBtn,.nav-row button#nextBtn{font-size:15px;min-width:32px;height:32px;padding:0;border-radius:8px}
   select,button{padding:8px 10px;font-size:14px}
   .mode-controls{gap:3px;padding:4px;margin-bottom:6px;border-radius:8px}
   .mode-btn{font-size:12px;padding:8px 2px;border-radius:6px}
@@ -375,6 +377,13 @@ body.dark .lp-empty{color:#a0a5ab}
   .daytype-label{font-size:7px;padding:1px 0;letter-spacing:0;line-height:1}
   .daytype-btn{font-size:11px;padding:8px 2px}
   .privacy-footer-link{font-size:12px;padding:8px 12px;margin:14px auto 4px}
+}
+@media (max-width:380px){
+  .nav-row{gap:2px}
+  .top-btn{width:28px;height:28px}
+  .top-btn svg{width:14px;height:14px}
+  #monthDisplay{font-size:14px;min-width:90px;height:28px;line-height:28px}
+  .nav-row button#prevBtn,.nav-row button#nextBtn{font-size:13px;min-width:28px;height:28px}
 }
 .egg-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;opacity:0;transition:opacity .35s ease;padding:24px;text-align:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .egg-overlay.show{opacity:1}
@@ -465,14 +474,18 @@ body.dark .plan-share-box textarea{background:#2a2e33;color:#e4e6ea;border-color
 <body>
 <div class="container" id="mainContainer">
 <h2>Schichtzeit</h2>
-<button class="top-btn share-btn" id="shareBtn" title="Teilen" aria-label="Teilen"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></button>
-<button class="top-btn settings-btn" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
 <div class="err-box" id="errBox"></div>
 <div class="top-row">
   <span id="onlineStatus" class="online-status loading">Uhr wird geladen...</span>
   <label>Schicht:<select id="groupSelect"></select></label>
 </div>
-<div class="nav-row"><button id="prevBtn" title="Zur&uuml;ck">&larr;</button><span id="monthDisplay"></span><button id="nextBtn" title="Weiter">&rarr;</button></div>
+<div class="nav-row">
+  <button class="top-btn share-btn" id="shareBtn" title="Teilen" aria-label="Teilen"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></button>
+  <button id="prevBtn" title="Zur&uuml;ck">&larr;</button>
+  <span id="monthDisplay"></span>
+  <button id="nextBtn" title="Weiter">&rarr;</button>
+  <button class="top-btn settings-btn" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+</div>
 <div class="mode-controls">
 <button class="mode-btn active" data-mode="normal">Normal</button>
 <button class="mode-btn" data-mode="krank">Krank</button>
@@ -773,7 +786,8 @@ var SHIFT_COLORS={'F':'#FFD700','T':'#FFD700','S':'#FF4500','N':'#1E90FF','_':'#
 var monthNames=["Januar","Februar","M\u00E4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 var dayNames=["Mo","Di","Mi","Do","Fr","Sa","So"];
 var SYMBOLS=['\uD83D\uDD14','\u23F0','\uD83D\uDCCC','\u2B50','\u2764\uFE0F','\u26A0\uFE0F','\uD83D\uDCDE','\uD83D\uDC8A','\uD83C\uDFE5','\uD83D\uDCC5','\u2708\uFE0F','\uD83C\uDF82','\uD83C\uDF89','\uD83D\uDE97','\uD83D\uDCBC','\uD83D\uDCDD'];
-var currentDate=new Date(2026,9,1);
+var _now=new Date();
+var currentDate=new Date(_now.getFullYear(),_now.getMonth(),1);
 var currentMode='normal';
 var showFerien=false;
 var actualToday=new Date();actualToday.setHours(0,0,0,0);
@@ -1247,7 +1261,6 @@ function handlePlanImport(){
     showToast('Plan "'+data.n+'" importiert');
 }
 
-/* === Effects Engine (überarbeitet) === */
 function applyEffects(){
     var layer=document.getElementById('effectsLayer');
     if(!layer)return;
