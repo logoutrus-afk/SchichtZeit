@@ -522,16 +522,110 @@ body.dark #viewRow .mode-btn.active{background:#0056b3;color:#fff;border-color:#
 .calendar.v-d1 .day .term-text{font-size:clamp(11px,3cqw,15px)}
 .day .term-text.t-top{top:3px;bottom:auto}
 .day .term-text.t-bottom{bottom:3px;top:auto}
-#dayZoom{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:14px;box-sizing:border-box;touch-action:none;animation:dzFade .25s ease}
+#dayZoom{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);padding:14px;box-sizing:border-box;touch-action:none;animation:dzFade .25s ease}
 #dayZoom.active{display:flex}
-@keyframes dzFade{from{opacity:0}to{opacity:1}}
+@keyframes dzFade{from{background-color:rgba(0,0,0,0)}to{background-color:rgba(0,0,0,.6)}}
+@keyframes dzInfo{from{opacity:0}to{opacity:1}}
 #dzHost{display:flex;flex-direction:column;align-items:center;gap:12px;max-height:100%}
 body.dark .dz-info{background:#1e2124;color:#e4e6ea}
 .dz-info b{display:block;font-size:17px;margin-bottom:4px}
 .dz-close{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:12px;width:42px;height:42px;padding:0;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;font-size:20px;z-index:2}
-.dz-wrap{max-width:100%;container-type:inline-size}
+.dz-wrap{max-width:100%;container-type:inline-size;position:relative}
 .dz-info{background:#fff;color:#333;border-radius:14px;padding:12px 16px;max-width:340px;margin:12px auto 0;box-sizing:border-box;text-align:left;font-size:15px;line-height:1.5}
 #dzHost .calendar{animation:none}
+.dz-info{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:min(100%,520px);margin:12px 0 0;animation:dzInfo .3s .2s both}
+/* 1-Tag-Ansicht = vergroesserte Monats-Zelle (alles proportional zur Zellbreite) */
+.calendar.v-d1{container-type:inline-size;max-width:min(100%,520px);gap:0}
+.calendar.v-d1 .day{aspect-ratio:1/1.15;min-height:0;border-radius:clamp(14px,9cqw,30px)}
+.calendar.v-d1 .day .date-num{font-size:clamp(12px,17cqw,72px);top:7cqw;left:8cqw}
+.calendar.v-d1 .day.today{border-width:clamp(3px,1.4cqw,7px)}
+.calendar.v-d1 .day.today .date-num{padding:.8cqw 3.5cqw;border-radius:3.5cqw;top:3.5cqw;left:3.5cqw}
+.calendar.v-d1 .day .shift-txt{font-size:clamp(24px,38cqw,170px)}
+.calendar.v-d1 .day .holiday-icon{font-size:clamp(16px,20cqw,84px);top:4cqw;right:6cqw}
+.calendar.v-d1 .day .daytype-label{font-size:clamp(10px,10cqw,40px);padding:2cqw 1cqw;bottom:5cqw;left:5cqw;right:5cqw}
+.calendar.v-d1 .day .term-icon{font-size:clamp(28px,34cqw,150px)}
+.calendar.v-d1 .day .term-text{font-size:clamp(12px,13cqw,56px)}
+.calendar.v-d1 .day .term-text.t-top{top:3cqw}
+.calendar.v-d1 .day .term-text.t-bottom{bottom:3cqw}
+.calendar.v-d1 .day .term-text.t-right{right:3cqw}
+.calendar.v-d1 .day .term-text.t-left{left:3cqw}
+.calendar.v-d1 .hol-name{display:none}
+.calendar .dz-info{position:static;transform:none;width:100%;max-width:none;margin:12px 0 0;animation:none}
+#lpOverlay .lp-title,#lpOverlay .lp-date{display:none}
+#lpOverlay .lp-modal{padding-top:18px}
+#settingsModal .modal{display:flex;flex-direction:column;padding:0;overflow:hidden;max-height:92vh;max-height:92dvh}
+.set-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 12px;border-bottom:1px solid #e5e9f0}
+.set-head h3{margin:0;font-size:22px}
+.set-year{background:#e7f1ff;color:#0056b3;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:bold;white-space:nowrap}
+.set-body{overflow-y:auto;padding:12px 14px 4px;flex:1;-webkit-overflow-scrolling:touch}
+.set-sec{margin-bottom:12px}
+.set-sec-title{font-size:12.5px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;color:#6b7480;margin:4px 4px 8px}
+.set-card{background:#f6f8fb;border:1px solid #e3e8ef;border-radius:14px;overflow:hidden}
+.set-row{padding:12px 14px;border-bottom:1px solid #e3e8ef}
+.set-row:last-child{border-bottom:none}
+.set-line{display:flex;align-items:center;gap:12px}
+.set-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:#e7f1ff;line-height:1}
+.set-txt{flex:1;min-width:0}
+.set-name{font-weight:bold;font-size:15.5px;color:#222;line-height:1.2}
+.set-sub{font-size:12.5px;color:#6b7480;line-height:1.4;margin-top:2px;text-align:left}
+.set-ctl{margin-top:10px}
+#settingsModal .set-ctl select{display:block;width:100%;margin:0;padding:11px 12px;font-size:16px;border-radius:10px}
+.seg{display:inline-flex;background:#e3e8ef;border-radius:10px;padding:3px;gap:2px;flex-shrink:0}
+.seg button{background:transparent;color:#4a525c;border:none;border-radius:8px;padding:8px 14px;font-size:15px;font-weight:bold}
+.seg button.active{background:#0056b3;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.stepper{display:inline-flex;align-items:center;gap:6px;flex-shrink:0}
+.stepper button{width:36px;height:36px;padding:0;border-radius:10px;font-size:22px;line-height:1;background:#0056b3}
+#settingsModal .stepper input{width:58px;margin:0;padding:8px 2px;text-align:center;font-size:18px;font-weight:bold}
+.set-link{display:flex;align-items:center;gap:12px;width:100%;background:transparent;color:#222;text-align:left;border:none;border-bottom:1px solid #e3e8ef;border-radius:0;padding:11px 14px;font-weight:bold;font-size:15.5px}
+.set-link:last-child{border-bottom:none}
+.set-link:active{background:#e3e8ef;filter:none;transform:none}
+.set-link .chev{margin-left:auto;color:#9aa3ad;font-size:24px;line-height:1}
+.set-plans{margin-top:10px;width:100%;padding:12px}
+.set-foot{display:flex;gap:10px;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid #e5e9f0}
+.set-foot button{flex:1;padding:14px 10px}
+body.dark .set-head,body.dark .set-foot{border-color:#3a3f44}
+body.dark .set-year{background:#1b3a63;color:#8fc2ff}
+body.dark .set-card{background:#25292d;border-color:#3a3f44}
+body.dark .set-row,body.dark .set-link{border-color:#3a3f44}
+body.dark .set-name,body.dark .set-link{color:#e4e6ea}
+body.dark .set-sub,body.dark .set-sec-title{color:#9aa3ad}
+body.dark .set-ic{background:#1b3a63!important}
+body.dark .seg{background:#1e2124}
+body.dark .seg button{color:#c0c5cb;background:transparent}
+body.dark .seg button.active{background:#0056b3;color:#fff}
+body.dark .set-link{background:transparent}
+body.dark .set-link:active{background:#2f3439}
+#monthDisplay{cursor:pointer;user-select:none;-webkit-user-select:none}
+#monthDisplay::after{content:"\25BE";font-size:.65em;margin-left:6px;opacity:.6}
+.calendar.v-year{grid-template-columns:repeat(3,1fr);gap:clamp(6px,2cqw,14px)}
+@media (min-width:760px){.calendar.v-year{grid-template-columns:repeat(4,1fr)}}
+.ym{container-type:inline-size;background:#f6f8fb;border:1px solid #e3e8ef;border-radius:12px;padding:6px 6px 8px;cursor:pointer;text-align:center;transition:transform .1s ease}
+.ym:active{transform:scale(.97)}
+.ym.cur{border-color:#0d47a1;box-shadow:0 0 0 2px rgba(13,71,161,.35)}
+.ym-t{font-weight:bold;color:#0056b3;font-size:clamp(11px,11cqw,17px);margin-bottom:4px}
+.ym.cur .ym-t{color:#0d47a1;text-decoration:underline}
+.ym-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.ym-w{font-size:clamp(6px,7cqw,10px);color:#8a8f95;font-weight:bold}
+.ym-d{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:3px;font-weight:bold;color:#555;line-height:1;font-size:clamp(7px,8.5cqw,13px)}
+.ym-d.td{outline:2px solid #0d47a1;outline-offset:-1px;z-index:1}
+.ym-d.ho{box-shadow:inset 0 0 0 1.5px #CD7F32}
+.ym-d.en::after{content:"";position:absolute;right:1px;bottom:1px;width:28%;height:28%;border-radius:50%;background:#e83e8c}
+body.dark .ym{background:#25292d;border-color:#3a3f44}
+body.dark .ym-t{color:#6ab0ff}
+body.dark .ym.cur .ym-t{color:#8fc2ff}
+body.dark .ym-d{color:#c0c5cb}
+body.dark .ym-d.td{outline-color:#5c9dff}
+.mp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mp-head span{font-size:24px;font-weight:bold;color:#0056b3}
+.mp-head button{width:46px;height:46px;padding:0;font-size:28px;line-height:1;border-radius:12px}
+.mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mp-grid button{background:#f1f3f5;color:#333;border:2px solid transparent;padding:14px 2px;font-size:15px;border-radius:11px}
+.mp-grid button.now{border-color:#0d47a1}
+.mp-grid button.sel{background:#0056b3;color:#fff}
+body.dark .mp-head span{color:#6ab0ff}
+body.dark .mp-grid button{background:#2a2e33;color:#e4e6ea}
+body.dark .mp-grid button.sel{background:#0056b3;color:#fff}
+body.dark .mp-grid button.now{border-color:#5c9dff}
 </style>
 </head>
 <body>
@@ -549,7 +643,7 @@ body.dark .dz-info{background:#1e2124;color:#e4e6ea}
   <button id="nextBtn" title="Weiter">&rarr;</button>
   <button class="top-btn settings-btn" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
 </div>
-<div class="view-switch" id="viewRow" role="group" aria-label="Ansicht w&auml;hlen"><button class="mode-btn" data-view="month" title="Monat" aria-label="Monat"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 9.8h17" stroke="currentColor" stroke-width="2"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button class="mode-btn" data-view="week" title="Woche" aria-label="Woche"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.6 4.5v15M8.1 4.5v15M10.7 4.5v15M13.3 4.5v15M15.9 4.5v15M18.4 4.5v15" stroke="currentColor" stroke-width="1.6"/></svg></button><button class="mode-btn" data-view="d4" title="4 Tage" aria-label="4 Tage"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7.5 4.5v15M12 4.5v15M16.5 4.5v15" stroke="currentColor" stroke-width="2"/></svg></button><button class="mode-btn" data-view="d1" title="1 Tag" aria-label="1 Tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button></div>
+<div class="view-switch" id="viewRow" role="group" aria-label="Ansicht w&auml;hlen"><button class="mode-btn" data-view="year" title="Jahr" aria-label="Jahr"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3.5" width="18" height="17" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 3.5v17M15 3.5v17M3 9.2h18M3 14.8h18" stroke="currentColor" stroke-width="1.6"/></svg></button><button class="mode-btn" data-view="month" title="Monat" aria-label="Monat"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 9.8h17" stroke="currentColor" stroke-width="2"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button class="mode-btn" data-view="week" title="Woche" aria-label="Woche"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.6 4.5v15M8.1 4.5v15M10.7 4.5v15M13.3 4.5v15M15.9 4.5v15M18.4 4.5v15" stroke="currentColor" stroke-width="1.6"/></svg></button><button class="mode-btn" data-view="d4" title="4 Tage" aria-label="4 Tage"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7.5 4.5v15M12 4.5v15M16.5 4.5v15" stroke="currentColor" stroke-width="2"/></svg></button><button class="mode-btn" data-view="d1" title="1 Tag" aria-label="1 Tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button></div>
 <div class="mode-controls">
 <button class="mode-btn active" data-mode="normal">Normal</button>
 <button class="mode-btn" data-mode="krank">Krank</button>
@@ -640,26 +734,42 @@ body.dark .dz-info{background:#1e2124;color:#e4e6ea}
     </div>
 </div></div>
 <div class="modal-overlay" id="settingsModal"><div class="modal">
-<h3>Einstellungen</h3>
-<div class="modal-date" id="settingsYearDisplay"></div>
-<label>Urlaubstage pro Jahr<input type="number" id="vacQuotaInput" min="0" max="365" step="1" value="30"></label>
-<div class="hint-row">Dein Urlaubskontingent f&uuml;r <span id="settingsYearHint"></span>.</div>
-<div class="field-label">Schichtsystem</div>
-<select id="shiftSystemSelect">
+<div class="set-head"><h3>&#x2699;&#xFE0F; Einstellungen</h3><span class="set-year" id="settingsYearDisplay"></span></div>
+<div class="set-body">
+
+<div class="set-sec">
+<div class="set-sec-title">&#x1F4C5; Schicht &amp; Urlaub</div>
+<div class="set-card">
+<div class="set-row">
+<div class="set-line"><div class="set-ic">&#x1F504;</div><div class="set-txt"><div class="set-name">Schichtsystem</div><div class="set-sub">Wie dein Dienstplan aufgebaut ist</div></div></div>
+<div class="set-ctl"><select id="shiftSystemSelect">
 <option value="5">5-Schicht (F/S/N)</option>
 <option value="4vk">4-Schicht Vollkonti (F/S/N, 8h, IGBCE)</option>
 <option value="4x12">4×12-Schicht (T/N, A/B/C/D)</option>
 <option value="3x12">3×12-Schicht (T/N, I/II/III)</option>
 <option value="custom">Eigene Schicht (eigener Plan)</option>
 <option value="blank">Leer (ohne Schicht)</option>
-</select>
-<div class="hint-row">4-Schicht Vollkonti: 2F&nbsp;&rarr;&nbsp;2S&nbsp;&rarr;&nbsp;2N&nbsp;&rarr;&nbsp;2 frei, 8-Tage-Zyklus. 12h-Systeme: T = Tag, N = Nacht. <b>Eigene Schicht</b>: Du definierst deinen eigenen Block (Start + Länge), der automatisch in alle folgenden Monate wiederholt wird.</div>
-<button class="help-btn" id="managePlansBtn" style="background:#ff9800;display:none;">Eigene Pl&auml;ne verwalten</button>
-<div class="field-label">Design / Modus</div>
-<div class="theme-row"><button type="button" class="theme-choice" data-theme="light">&#x2600;&#xFE0F; Hell</button><button type="button" class="theme-choice" data-theme="dark">&#x1F319; Dunkel</button></div>
-<div class="hint-row">Unabh&auml;ngig von der System-Einstellung.</div>
-<div class="field-label">Effekte im Kalender</div>
-<select id="effectSelect">
+</select></div>
+<div class="set-sub" style="margin-top:8px;">4-Schicht Vollkonti: 2F&nbsp;&rarr;&nbsp;2S&nbsp;&rarr;&nbsp;2N&nbsp;&rarr;&nbsp;2 frei, 8-Tage-Zyklus. 12h-Systeme: T = Tag, N = Nacht. <b>Eigene Schicht</b>: Du legst deinen eigenen Block (Start + L&auml;nge) fest, er wiederholt sich automatisch in jedem Monat.</div>
+<button class="help-btn set-plans" id="managePlansBtn" style="background:#ff9800;display:none;">&#x270F;&#xFE0F; Eigene Pl&auml;ne verwalten</button>
+</div>
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#e3f6e8;">&#x1F3D6;&#xFE0F;</div><div class="set-txt"><div class="set-name">Urlaubstage pro Jahr</div><div class="set-sub">Dein Kontingent f&uuml;r <span id="settingsYearHint"></span></div></div>
+<div class="stepper"><button type="button" id="vqMinus" aria-label="Weniger">&minus;</button><input type="number" id="vacQuotaInput" min="0" max="365" step="1" value="30"><button type="button" id="vqPlus" aria-label="Mehr">+</button></div></div>
+</div>
+</div>
+</div>
+
+<div class="set-sec">
+<div class="set-sec-title">&#x1F3A8; Darstellung</div>
+<div class="set-card">
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#efe6ff;">&#x1F313;</div><div class="set-txt"><div class="set-name">Design</div><div class="set-sub">Unabh&auml;ngig von der System-Einstellung</div></div></div>
+<div class="set-ctl"><div class="theme-row" style="margin:0;"><button type="button" class="theme-choice" data-theme="light">&#x2600;&#xFE0F; Hell</button><button type="button" class="theme-choice" data-theme="dark">&#x1F319; Dunkel</button></div></div>
+</div>
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#ffe9f3;">&#x2728;</div><div class="set-txt"><div class="set-name">Effekte im Kalender</div><div class="set-sub">Animation &uuml;ber dem Kalender</div></div></div>
+<div class="set-ctl"><select id="effectSelect">
 <option value="auto">Automatisch (GTA 6, sonst Jahreszeiten)</option>
 <option value="bats">&#x1F987; Flederm&auml;use (Halloween)</option>
 <option value="snowflakes">&#x2744;&#xFE0F; Schneeflocken (Winter)</option>
@@ -672,18 +782,42 @@ body.dark .dz-info{background:#1e2124;color:#e4e6ea}
 <option value="strangerthings">&#x26A1; Stranger Things</option>
 <option value="gta6">🌴 GTA 6 (Vice City)</option>
 <option value="none">Keine Effekte</option>
-</select>
-<div class="hint-row">W&auml;hle ein Effekt-Design oder schalte es komplett aus.</div>
-<div class="field-label">Zoom mit zwei Fingern</div>
-<select id="zoomSelect"><option value="on">Ein &ndash; Tag auseinanderziehen = hineinzoomen</option><option value="off">Aus</option></select>
-<div class="field-label">Ton bei Erinnerungen</div>
-<select id="soundSelect"><option value="on">Ein &ndash; &bdquo;Uh-oh&ldquo;-Ton</option><option value="off">Aus</option></select>
-<div class="field-label">Ferien (Bayern)</div>
-<select id="ferienSelect"><option value="on">Ein &ndash; im Kalender anzeigen</option><option value="off">Aus &ndash; ausblenden</option></select>
-<div class="hint-row">Markiert die Schulferien im Kalender. Der Knopf &bdquo;Ferien&ldquo; unten schaltet dasselbe um.</div>
-<button class="help-btn" id="openHelpBtn">Anleitung / Hilfe &ouml;ffnen</button>
-<button class="help-btn" id="settingsPrivacyBtn" style="background:#495057;">&#x1F512; Datenschutz / Privatsph&auml;re</button>
-<div class="modal-buttons"><button id="settingsCancelBtn" style="background:#6c757d;">Abbrechen</button><button id="settingsSaveBtn" style="background:#007bff;">Speichern</button></div>
+</select></div>
+</div>
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#e0f5f8;">&#x1F3EB;</div><div class="set-txt"><div class="set-name">Schulferien (Bayern)</div><div class="set-sub">Im Kalender markieren</div></div>
+<div class="seg" data-for="ferienSelect"><button type="button" data-v="on">Ein</button><button type="button" data-v="off">Aus</button></div></div>
+<select id="ferienSelect" style="display:none;"><option value="on">Ein</option><option value="off">Aus</option></select>
+</div>
+</div>
+</div>
+
+<div class="set-sec">
+<div class="set-sec-title">&#x1F514; Bedienung &amp; T&ouml;ne</div>
+<div class="set-card">
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#fff1db;">&#x1F50A;</div><div class="set-txt"><div class="set-name">Ton bei Erinnerungen</div><div class="set-sub">&bdquo;Uh-oh&ldquo;-Signal zum Banner</div></div>
+<div class="seg" data-for="soundSelect"><button type="button" data-v="on">Ein</button><button type="button" data-v="off">Aus</button></div></div>
+<select id="soundSelect" style="display:none;"><option value="on">Ein</option><option value="off">Aus</option></select>
+</div>
+<div class="set-row">
+<div class="set-line"><div class="set-ic" style="background:#e6f0ff;">&#x1F90F;</div><div class="set-txt"><div class="set-name">Zoom mit zwei Fingern</div><div class="set-sub">Tag auseinanderziehen = vergr&ouml;&szlig;ern</div></div>
+<div class="seg" data-for="zoomSelect"><button type="button" data-v="on">Ein</button><button type="button" data-v="off">Aus</button></div></div>
+<select id="zoomSelect" style="display:none;"><option value="on">Ein</option><option value="off">Aus</option></select>
+</div>
+</div>
+</div>
+
+<div class="set-sec">
+<div class="set-sec-title">&#x2139;&#xFE0F; Hilfe &amp; Info</div>
+<div class="set-card">
+<button type="button" class="set-link" id="openHelpBtn"><div class="set-ic" style="background:#e0f5f8;">&#x1F4D6;</div>Anleitung / Hilfe<span class="chev">&rsaquo;</span></button>
+<button type="button" class="set-link" id="settingsPrivacyBtn"><div class="set-ic" style="background:#e9ecef;">&#x1F512;</div>Datenschutz / Privatsph&auml;re<span class="chev">&rsaquo;</span></button>
+</div>
+</div>
+
+</div>
+<div class="set-foot"><button id="settingsCancelBtn" style="background:#6c757d;">Abbrechen</button><button id="settingsSaveBtn" style="background:#007bff;">&#x2714;&#xFE0F; Speichern</button></div>
 </div></div>
 <div class="modal-overlay" id="helpModal"><div class="modal">
 <h3>Anleitung</h3>
@@ -836,6 +970,11 @@ SchichtZeit speichert alle Daten ausschlie&szlig;lich <b>lokal auf deinem Ger&au
         <button class="help-btn" id="planShareBtn" style="background:#0070ba;display:none;">&#x1F517; Plan teilen</button>
         <div class="plan-share-box" id="planShareBox" style="display:none;"></div>
     </div>
+</div></div>
+<div class="modal-overlay" id="monthPicker"><div class="modal">
+<div class="mp-head"><button type="button" id="mpPrev" aria-label="Vorheriges Jahr">&lsaquo;</button><span id="mpYear"></span><button type="button" id="mpNext" aria-label="N&auml;chstes Jahr">&rsaquo;</button></div>
+<div class="mp-grid" id="mpGrid"></div>
+<div class="modal-buttons"><button type="button" id="mpToday" style="background:#17a2b8;">Heute</button><button type="button" id="mpYearView" style="background:#28a745;">Jahres&uuml;bersicht</button><button type="button" id="mpClose" style="background:#6c757d;">Schlie&szlig;en</button></div>
 </div></div>
 <div id="dayZoom"><button class="dz-close" aria-label="Schlie&szlig;en">&#x2715;</button><div id="dzHost"></div></div>
 <div class="lp-overlay" id="lpOverlay"><div class="lp-modal" id="lpModal">
@@ -1005,6 +1144,7 @@ function openSettings(){
     document.getElementById('zoomSelect').value=zoomOn?'on':'off';
     document.getElementById('managePlansBtn').style.display=(shiftSystem==='custom')?'block':'none';
     applyTheme(currentTheme);
+    syncSeg();
     document.getElementById('settingsModal').classList.add('active');
 }
 function closeSettings(){document.getElementById('settingsModal').classList.remove('active');}
@@ -1150,14 +1290,15 @@ var SN={F:'Fr\u00FCh',S:'Sp\u00E4t',N:'Nacht',T:'Tag','_':'Frei'};
 var TN={krank:'Krank',urlaub:'Urlaub',einbringer:'Einbringer'};
 var viewMode='month',cursor=new Date(actualToday.getTime()),editKey=null,editId=null,wired=false;
 try{viewMode=localStorage.getItem('schichtzeitView')||'month';}catch(e){}
-if(['month','week','d4','d1'].indexOf(viewMode)<0)viewMode='month';
+if(['year','month','week','d4','d1'].indexOf(viewMode)<0)viewMode='month';
 function saveArr(){try{localStorage.setItem('schichtzeitSickDays',JSON.stringify(sickDays));localStorage.setItem('schichtzeitVacationDays',JSON.stringify(vacationDays));localStorage.setItem('schichtzeitEinbringerDays',JSON.stringify(einbringerDays));}catch(e){}}
 function typeOf(k){return sickDays.indexOf(k)>=0?'krank':vacationDays.indexOf(k)>=0?'urlaub':einbringerDays.indexOf(k)>=0?'einbringer':'normal';}
 function setType(k,t){[sickDays,vacationDays,einbringerDays].forEach(function(a){var i=a.indexOf(k);if(i>=0)a.splice(i,1);});if(t==='krank')sickDays.push(k);else if(t==='urlaub')vacationDays.push(k);else if(t==='einbringer')einbringerDays.push(k);saveArr();}
 function inFerien(k){return Object.keys(FERIEN).some(function(y){return FERIEN[y].some(function(f){return k>=f.start&&k<=f.end;});});}
 function setCursor(d){cursor=new Date(d.getFullYear(),d.getMonth(),d.getDate());currentDate=new Date(cursor.getFullYear(),cursor.getMonth(),1);}
 function step(dir){
- if(viewMode==='month')setCursor(new Date(cursor.getFullYear(),cursor.getMonth()+dir,1));
+ if(viewMode==='year')setCursor(new Date(cursor.getFullYear()+dir,cursor.getMonth(),1));
+ else if(viewMode==='month')setCursor(new Date(cursor.getFullYear(),cursor.getMonth()+dir,1));
  else setCursor(new Date(cursor.getFullYear(),cursor.getMonth(),cursor.getDate()+dir*({week:7,d4:4,d1:1}[viewMode])));
  renderCalendar(dir>0?'anim-left':'anim-right');updateYearOverview();
 }
@@ -1180,7 +1321,7 @@ function splitHtml(es){
  return '<div class="split-layer">'+lay+'</div>'+ic+tx;
 }
 function cell(dt,group,forceBig){
- var k=formatDateKey(dt),y=dt.getFullYear(),big=forceBig||viewMode!=='month',txt=forceBig||viewMode!=='month',sh=getShift(dt,group),t=typeOf(k),es=getEntries(k);
+ var k=formatDateKey(dt),y=dt.getFullYear(),big=viewMode==='week'||viewMode==='d4',txt=viewMode==='week'||viewMode==='d4',sh=getShift(dt,group),t=typeOf(k),es=getEntries(k);
  var hl=getHolidayList(y).filter(function(h){return h.key===k;})[0];
  var el=document.createElement('div');
  el.className='day '+(shiftSystem==='custom'?'cust':sh)+(t!=='normal'?' '+t:'')+(hl?' feiertag':'')+(dt.getTime()===actualToday.getTime()?' today':'')+(showFerien&&inFerien(k)?' ferien':'');
@@ -1199,16 +1340,62 @@ function cell(dt,group,forceBig){
  el.addEventListener('contextmenu',function(ev){ev.preventDefault();});
  return el;
 }
-function clearDay(k){if(!confirm('Alle Markierungen am '+fmtDE(k)+' l\u00F6schen?'))return;setType(k,'normal');setEntries(k,[]);refresh();}
+var lpT=0;
+function closeLp(){$('lpOverlay').classList.remove('active');}
+function clearDay(k){
+ if(typeOf(k)==='normal'&&!getEntries(k).length)return;
+ var ov=$('lpOverlay');lpT=Date.now();
+ $('lpOptions').innerHTML='<button type="button" class="lp-option danger" id="lpDelBtn"><span class="lp-ic">\uD83D\uDDD1\uFE0F</span><span class="lp-label">Termine l\u00F6schen</span></button>';
+ $('lpDelBtn').onclick=function(){if(Date.now()-lpT<450)return;setType(k,'normal');setEntries(k,[]);closeLp();refresh();};
+ $('lpCancelBtn').onclick=closeLp;
+ ov.onclick=function(e){if(e.target===ov&&Date.now()-lpT>450)closeLp();};
+ ov.classList.add('active');
+}
 function dayClick(k){
  if(Date.now()-lastPinch<450)return;
  if(currentMode==='krank'||currentMode==='urlaub'){setType(k,typeOf(k)===currentMode?'normal':currentMode);refresh();}
  else openDay(k);
 }
+function dzInfoHtml(k,dt,g){
+ var sh=getShift(dt,g),hl=getHolidayList(dt.getFullYear()).filter(function(h){return h.key===k;})[0],es=getEntries(k),t2=typeOf(k),lab;
+ if(shiftSystem==='custom'){var b=planBlockAt(dt,g);lab=b?(b.code||'Frei'):'Frei';}else lab=SNL[sh]||sh;
+ var h='<b>'+DAYFULL[(dt.getDay()+6)%7]+', '+fmtDE(k)+'</b>Schicht: '+esc(lab);
+ if(hl)h+='<br>'+getHolidayIcon(hl.name)+' '+esc(hl.name);
+ if(t2!=='normal')h+='<br>Markiert: '+TN[t2];
+ h+=es.length?es.map(function(e){return '<br>'+e.icon+' '+(e.time?e.time+' ':'')+esc(e.text||'Termin');}).join(''):'<br><i>Keine Termine \u2013 auf den Tag tippen, um einen anzulegen.</i>';
+ return h;
+}
+var TYPE_COL={krank:'#DDA0DD',urlaub:'#90EE90',einbringer:'#FF69B4'};
+function yearHtml(y,group){
+ var hs=getHolidaySet(y),h='',wd=['M','D','M','D','F','S','S'];
+ for(var m=0;m<12;m++){
+  var lead=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate(),cur=(y===actualToday.getFullYear()&&m===actualToday.getMonth());
+  h+='<div class="ym'+(cur?' cur':'')+'" data-m="'+m+'"><div class="ym-t">'+monthNames[m]+'</div><div class="ym-g">';
+  wd.forEach(function(c){h+='<span class="ym-w">'+c+'</span>';});
+  for(var i=0;i<lead;i++)h+='<span></span>';
+  for(var d=1;d<=n;d++){
+   var dt=new Date(y,m,d),k=formatDateKey(dt),sh=getShift(dt,group),ty=typeOf(k),bg='';
+   if(ty!=='normal')bg=TYPE_COL[ty];
+   else if(shiftSystem==='custom'){var cb=planBlockAt(dt,group);bg=cb?cb.color:'';}
+   else if(sh!=='_')bg=SHIFT_COLORS[sh]||'';
+   var cl='ym-d'+(dt.getTime()===actualToday.getTime()?' td':'')+(hs.has(k)?' ho':'')+(getEntries(k).length?' en':'');
+   h+='<span class="'+cl+'"'+(bg?' style="background:'+bg+';color:'+contrast(bg)+'"':'')+'>'+d+'</span>';
+  }
+  h+='</div></div>';
+ }
+ return h;
+}
 function renderCalendar(anim){
  var cal=$('calendar');if(!cal)return;
  cal.className='calendar v-'+viewMode;cal.innerHTML='';
  var group=$('groupSelect')?$('groupSelect').value:'1',days=[];
+ if(viewMode==='year'){
+  var yy=currentDate.getFullYear();cal.innerHTML=yearHtml(yy,group);
+  [].forEach.call(cal.querySelectorAll('.ym'),function(el){el.addEventListener('click',function(){setCursor(new Date(yy,+el.getAttribute('data-m'),1));setView('month');});});
+  $('monthDisplay').textContent=String(yy);
+  if(anim)cal.classList.add(anim);
+  updateAux();return;
+ }
  if(viewMode==='month'){
   dayNames.forEach(function(d){var h=document.createElement('div');h.className='day-header';h.textContent=d;cal.appendChild(h);});
   var fy=currentDate.getFullYear(),fm=currentDate.getMonth(),lead=(new Date(fy,fm,1).getDay()+6)%7,n=new Date(fy,fm+1,0).getDate();
@@ -1220,6 +1407,7 @@ function renderCalendar(anim){
   for(var j=0;j<cnt;j++)days.push(new Date(s.getFullYear(),s.getMonth(),s.getDate()+j));
  }
  days.forEach(function(dt){if(dt)cal.appendChild(cell(dt,group));else{var e=document.createElement('div');e.className='day empty';cal.appendChild(e);}});
+ if(viewMode==='d1'&&days[0]){var inf=document.createElement('div');inf.className='dz-info';inf.innerHTML=dzInfoHtml(formatDateKey(days[0]),days[0],group);cal.appendChild(inf);}
  var a=days.filter(Boolean),f=a[0],l=a[a.length-1];
  $('monthDisplay').textContent=viewMode==='month'?monthNames[f.getMonth()]+' '+f.getFullYear():f.getDate()+'.'+(f.getMonth()+1)+'.'+(viewMode==='d1'?f.getFullYear():' \u2013 '+l.getDate()+'.'+(l.getMonth()+1)+'.');
  if(anim)cal.classList.add(anim);
@@ -1318,22 +1506,46 @@ function renderDz(){
  h+=es.length?es.map(function(e){return '<br>'+e.icon+' '+(e.time?e.time+' ':'')+esc(e.text||'Termin');}).join(''):'<br><i>Keine Termine \u2013 auf den Tag tippen, um einen anzulegen.</i>';
  var info=document.createElement('div');info.className='dz-info';info.innerHTML=h;wrap.appendChild(info);
 }
-function dzXf(card,src){
- var a=src.getBoundingClientRect(),b=card.getBoundingClientRect();
- return 'translate('+(a.left+a.width/2-b.left-b.width/2)+'px,'+(a.top+a.height/2-b.top-b.height/2)+'px) scale('+(a.width/b.width)+','+(a.height/b.height)+')';
+function dzCard(){var w=$('dzHost').firstChild;return w?w.firstChild:null;}
+function dzSet(c,v){c.style.clipPath=v;c.style.webkitClipPath=v;}
+function dzGeo(card,a,r0){
+ var b=card.getBoundingClientRect(),s=a.width/b.width,vis=Math.min(1,a.height/(b.height*s)),cut=(1-vis)/2*100,
+ day=card.querySelector('.day'),rf=parseFloat(getComputedStyle(day).borderTopLeftRadius)||12;
+ return{tf:'translate('+(a.left+a.width/2-b.left-b.width/2)+'px,'+(a.top+a.height/2-b.top-b.height/2)+'px) scale('+s+')',
+  c0:'inset('+cut+'% 0% '+cut+'% 0% round '+(r0/s)+'px)',c1:'inset(0% 0% 0% 0% round '+rf+'px)'};
 }
-function openDayZoom(k,src){
+function openDayZoom(k,src,ra,sc){
  dz.k=k;dz.open=true;renderDz();
- var ov=$('dayZoom');ov.style.transition='';ov.style.opacity='';ov.classList.add('active');
- var card=$('dzHost').firstChild.firstChild;
- if(src&&card){card.style.transition='none';card.style.transform=dzXf(card,src);card.getBoundingClientRect();card.style.transition='transform .3s cubic-bezier(.2,.8,.3,1)';card.style.transform='';}
+ var ov=$('dayZoom');ov.style.transition='';ov.style.backgroundColor='';ov.classList.add('active');
+ var card=dzCard();
+ if(src&&card){
+  var a=ra||src.getBoundingClientRect(),r0=(parseFloat(getComputedStyle(src).borderTopLeftRadius)||8)*(sc||1),g=dzGeo(card,a,r0);
+  src.style.visibility='hidden';
+  card.style.transition='none';card.style.transform=g.tf;dzSet(card,g.c0);card.getBoundingClientRect();
+  var tr='.36s cubic-bezier(.2,.8,.3,1)';
+  card.style.transition='transform '+tr+',clip-path '+tr+',-webkit-clip-path '+tr;
+  card.style.transform='';dzSet(card,g.c1);
+  setTimeout(function(){if(dz.open)dzSet(card,'');},420);
+ }
 }
 function closeDayZoom(){
  if(!dz.open)return;dz.open=false;
- var ov=$('dayZoom'),card=$('dzHost').firstChild.firstChild,src=$('calendar').querySelector('[data-k="'+dz.k+'"]');
- if(card&&src){card.style.transition='none';card.style.transform='';var x=dzXf(card,src);card.getBoundingClientRect();card.style.transition='transform .28s cubic-bezier(.4,0,.6,1)';card.style.transform=x;}
- ov.style.transition='opacity .28s ease';ov.style.opacity='0';
- setTimeout(function(){if(dz.open)return;ov.classList.remove('active');ov.style.opacity='';ov.style.transition='';$('dzHost').innerHTML='';},300);
+ var ov=$('dayZoom'),card=dzCard(),src=$('calendar').querySelector('[data-k="'+dz.k+'"]');
+ if(card&&src){
+  card.style.transition='none';card.style.transform='';dzSet(card,'');
+  var g=dzGeo(card,src.getBoundingClientRect(),parseFloat(getComputedStyle(src).borderTopLeftRadius)||8);
+  dzSet(card,g.c1);card.getBoundingClientRect();
+  var tr='.3s cubic-bezier(.4,0,.2,1)';
+  card.style.transition='transform '+tr+',clip-path '+tr+',-webkit-clip-path '+tr;
+  card.style.transform=g.tf;dzSet(card,g.c0);
+ }
+ var info=$('dzHost').querySelector('.dz-info');if(info){info.style.transition='opacity .15s';info.style.opacity='0';}
+ ov.style.transition='background-color .3s ease';ov.style.backgroundColor='rgba(0,0,0,0)';
+ setTimeout(function(){
+  if(dz.open)return;
+  ov.classList.remove('active');ov.style.transition='';ov.style.backgroundColor='';$('dzHost').innerHTML='';
+  [].forEach.call($('calendar').querySelectorAll('.day'),function(d){d.style.visibility='';});
+ },340);
 }
 function wireZoom(){
  var cal=$('calendar'),ov=$('dayZoom'),pz=null,oz=null,card=null;
@@ -1356,7 +1568,7 @@ function wireZoom(){
   if(!pz||e.touches.length>=2)return;
   var p=pz,c=p.c;pz=null;lastPinch=Date.now();
   if(!c)return;
-  if(p.r>1.3){c.style.transition='';c.style.transform='';c.style.zIndex='';openDayZoom(c.getAttribute('data-k'),c);}
+  if(p.r>1.3){var ra=c.getBoundingClientRect(),sc=ra.width/c.offsetWidth;c.style.transition='';c.style.transform='';c.style.zIndex='';openDayZoom(c.getAttribute('data-k'),c,ra,sc);}
   else{c.style.transition='transform .2s ease';c.style.transform='';setTimeout(function(){c.style.transition='';c.style.zIndex='';},220);}
  }
  cal.addEventListener('touchend',endCal,{passive:true});
@@ -1395,6 +1607,37 @@ function wireZoom(){
   var now=Date.now();if(now-wz<350)return;wz=now;
   if(e.deltaY>0)closeDayZoom();
  },{passive:false});
+}
+function syncSeg(){
+ [].forEach.call(document.querySelectorAll('.seg'),function(s){var sel=$(s.getAttribute('data-for'));[].forEach.call(s.children,function(b){b.classList.toggle('active',!!sel&&b.getAttribute('data-v')===sel.value);});});
+}
+var mpYear=2026;
+function renderMP(){
+ $('mpYear').textContent=mpYear;var g=$('mpGrid');g.innerHTML='';
+ monthNames.forEach(function(n,i){
+  var b=document.createElement('button');b.type='button';b.textContent=n;
+  if(mpYear===currentDate.getFullYear()&&i===currentDate.getMonth())b.classList.add('sel');
+  if(mpYear===actualToday.getFullYear()&&i===actualToday.getMonth())b.classList.add('now');
+  b.addEventListener('click',function(){setCursor(new Date(mpYear,i,1));closeMP();if(viewMode==='year')setView('month');else refresh();});
+  g.appendChild(b);
+ });
+}
+function openMP(){mpYear=currentDate.getFullYear();renderMP();$('monthPicker').classList.add('active');}
+function closeMP(){$('monthPicker').classList.remove('active');}
+function wireMP(){
+ $('monthDisplay').addEventListener('click',openMP);
+ $('mpPrev').addEventListener('click',function(){mpYear--;renderMP();});
+ $('mpNext').addEventListener('click',function(){mpYear++;renderMP();});
+ $('mpClose').addEventListener('click',closeMP);
+ $('monthPicker').addEventListener('click',function(e){if(e.target===this)closeMP();});
+ $('mpToday').addEventListener('click',function(){setCursor(new Date(actualToday.getTime()));closeMP();refresh();});
+ $('mpYearView').addEventListener('click',function(){setCursor(new Date(mpYear,currentDate.getMonth(),1));closeMP();setView('year');});
+}
+function wireSettings(){
+ [].forEach.call(document.querySelectorAll('.seg'),function(s){[].forEach.call(s.children,function(b){b.addEventListener('click',function(){var sel=$(s.getAttribute('data-for'));if(sel){sel.value=b.getAttribute('data-v');syncSeg();}});});});
+ function bump(d){var i=$('vacQuotaInput'),v=parseInt(i.value,10);if(isNaN(v))v=0;i.value=Math.max(0,Math.min(365,v+d));}
+ $('vqMinus').addEventListener('click',function(){bump(-1);});
+ $('vqPlus').addEventListener('click',function(){bump(1);});
 }
 function wireExtra(){
  if(wired)return;wired=true;
@@ -1450,7 +1693,7 @@ function wireExtra(){
  var sx=0,sy=0,cal=$('calendar');
  cal.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
  cal.addEventListener('touchend',function(e){if(pinchBusy){if(!e.touches.length)pinchBusy=false;return;}var t=e.changedTouches[0],dx=t.clientX-sx;if(Math.abs(dx)>70&&Math.abs(t.clientY-sy)<45)step(dx<0?1:-1);},{passive:true});
- ['click','touchstart'].forEach(function(n){document.addEventListener(n,unlockAudio,{once:true,passive:true});});document.addEventListener('visibilitychange',function(){if(!document.hidden)checkReminders();});wireZoom();wirePlans();setInterval(checkReminders,30000);checkReminders();refresh();applyEffects();importPlanFromHash();
+ ['click','touchstart'].forEach(function(n){document.addEventListener(n,unlockAudio,{once:true,passive:true});});document.addEventListener('visibilitychange',function(){if(!document.hidden)checkReminders();});wireSettings();wireMP();wireZoom();wirePlans();setInterval(checkReminders,30000);checkReminders();refresh();applyEffects();importPlanFromHash();
 }
 
 function rnd(a){return a[0]+Math.random()*(a[1]-a[0]);}
